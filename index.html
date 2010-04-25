@@ -1,0 +1,562 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>Pines Grid</title>
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+		<!-- jQuery UI -->
+		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
+		<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.js"></script>
+		Theme Switcher Widget -->
+		<link type="text/css" rel="stylesheet" href="http://jqueryui.com/themes/base/ui.all.css" />
+		<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+		<!-- Pines Grid -->
+		<script type="text/javascript" src="jquery.pgrid.js"></script>
+		<link href="jquery.pgrid.default.css" rel="stylesheet" type="text/css" />
+		<link href="jquery.pgrid.default.icons.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+			/* <![CDATA[ */
+			html, body {
+				font-family: 'Palatino Linotype','Book Antiqua',Palatino,serif;
+				font-size: .92em;
+			}
+			.wrapper {
+				background: transparent url(includes/watermark-small.png) no-repeat fixed bottom right;
+				padding: 10px;
+			}
+			#header {
+				height: 68px;
+				position: relative;
+			}
+			#switcher-container {
+				position: absolute;
+				top: 5px;
+				right: 5px;
+			}
+			#header img.header {
+				position: absolute;
+			}
+			#header h1.header {
+				text-align: center;
+			}
+			.main-description {
+				font-size: 1.2em;
+			}
+			h2 {
+				margin: .83em 0 .1em 0;
+			}
+			p {
+				margin: 1em 0 .5em 0;
+			}
+			.featurelist {
+				background: transparent none no-repeat 0 0 !important;
+				margin: .5em 10px .5em 0;
+				padding: .5em;
+				float: left;
+			}
+			.featurelist ul {
+				margin: 0;
+				padding: 0;
+				list-style-type: none;
+			}
+			.featurelist ul a {
+				text-decoration: underline !important;
+			}
+			.featurelist ul .ui-icon {
+				display: inline-block;
+				position: relative;
+				top: 4px;
+				margin-right: .3em;
+			}
+			.featurelist ul img {
+				vertical-align: middle;
+				border: none 0;
+			}
+			.ui-widget {
+				font-size: .9em !important;
+			}
+			.ui-pgrid tbody td.col_4, .ui-pgrid tbody td.col_5 {
+				padding-left: 2px !important;
+			}
+			/* ]]> */
+		</style>
+		<!--[if lt IE 8]>
+		<style type="text/css">
+			.featurelist ul {
+				padding-left: 1em;
+				list-style-type: disc;
+			}
+			.featurelist ul .ui-icon {
+				display: none;
+			}
+		</style>
+		<![endif]-->
+		<!--[if lt IE 8]>
+		<style type="text/css">
+			.pgrid {
+				border-collapse: collapse;
+			}
+		</style>
+		<![endif]-->
+		<script type="text/javascript">
+			// <![CDATA[
+
+			// Change defaults like this:
+			//$.fn.pgrid.defaults.pgrid_perpage = 12;
+
+			var stateful_grid;
+			var saved_state;
+
+			$(document).ready(function(){
+				// This is how to change the default settings for the entire page.
+				//$.fn.pgrid.defaults.pgrid_view_height = "290px";
+
+				stateful_grid = $("#test1").pgrid({
+					pgrid_toolbar: true,
+					pgrid_toolbar_contents: [
+						{type: 'button', text: 'New', extra_class: 'icon picon_16x16_actions_document-new', selection_optional: true, url: 'includes/new.html'},
+						{type: 'button', text: 'View', extra_class: 'icon picon_16x16_mimetypes_text-x-generic', url: 'includes/view.html?username=__title__'},
+						{type: 'button', text: 'Edit', extra_class: 'icon picon_16x16_actions_document-open', double_click: true, click: function(e, rows){
+							alert('Editing '+rows.attr('title')+'.');
+						}},
+						{type: 'separator'},
+						{type: 'button', text: 'Google', extra_class: 'icon picon_16x16_actions_system-search', multi_select: true, url: 'http://google.com/search?q=__col_1__', delimiter: '+', new_window: true},
+						{type: 'button', text: 'Email', extra_class: 'icon picon_16x16_actions_mail-message-new', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
+						{type: 'button', text: 'All', extra_class: 'icon picon_16x16_actions_mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
+						{type: 'separator'},
+						{type: 'text', label: 'SMS: ', extra_class: 'icon picon_16x16_stock_generic_stock_cell-phone', attributes: {size: 15}, load: function(textbox){
+							textbox.focus(function(){
+								textbox.select();
+							}).keydown(function(e){
+								if (e.keyCode == 13) {
+									var rows = stateful_grid.pgrid_get_selected_rows().pgrid_export_rows();
+									var people = [];
+									$.each(rows, function(){
+										people.push(this.values[0]);
+									});
+									if (!people[0]) {
+										alert("Please select recipients.");
+									} else {
+										alert("Sending SMS...\nTo: "+people.join(", ")+"\nMessage: "+textbox.val());
+									}
+								}
+							});
+						}},
+						{type: 'text', label: 'Raise: ', extra_class: 'icon picon_16x16_stock_form_stock_form-currency-field', attributes: {size: 10}, load: function(textbox){
+							textbox.css("text-align", "right").keydown(function(e){
+								if (e.keyCode == 13) {
+									var rows = stateful_grid.pgrid_get_selected_rows();
+									if (!rows.length) {
+										alert("Please select at least one person.");
+										return;
+									}
+									rows.each(function(){
+										var cur_row = $(this);
+										var cur_salary = cur_row.pgrid_get_value(4);
+										if (!cur_salary)
+											return;
+										cur_salary = parseFloat(cur_salary.replace(/[^0-9.-]/g, ""));
+										var cur_raise = parseFloat(textbox.val());
+										cur_raise = isNaN(cur_raise) ? 0 : cur_raise;
+										var new_salary = new String((cur_salary+cur_raise).toFixed(2));
+										while (new_salary.match(/\d+\d{3}/))
+											new_salary = new_salary.replace(/(\d+)(\d{3})/, "$1,$2");
+										cur_row.pgrid_set_value(4, "$"+new_salary);
+									});
+								}
+							}).change(function(){
+								var value = parseFloat(textbox.val());
+								textbox.val(isNaN(value) ? "" : value);
+							});
+						}},
+						{type: 'separator'},
+						{type: 'button', text: 'Delete', extra_class: 'icon picon_16x16_actions_edit-delete', confirm: true, multi_select: true, click: function(e, rows){
+							$("#test1").pgrid_delete(rows);
+						}},
+						{type: 'button', text: 'Clear All', extra_class: 'icon picon_16x16_actions_edit-delete', confirm: true, multi_select: true, return_all_rows: true, click: function(e, rows){
+							$("#test1").pgrid_delete(rows);
+						}},
+						{type: 'separator'},
+						{type: 'button', text: 'All', extra_class: 'icon picon_16x16_actions_list-add', select_all: true},
+						{type: 'button', text: 'None', extra_class: 'icon picon_16x16_actions_list-remove', select_none: true},
+						{type: 'separator'},
+						{type: 'button', text: '', extra_class: 'icon picon_16x16_mimetypes_x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
+							window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
+						}}
+					],
+					pgrid_double_click: function(e, rows) {
+						alert("Hey, you "+(e.ctrlKey ? "control " : "")+(e.shiftKey ? "shift " : "")+"doubleclicked "+rows.length+" item(s). I assume you want to edit...");
+					},
+					pgrid_sort_col: 5,
+					pgrid_state_change: function(state) {
+						if ($('#auto-save').attr("checked")) {
+							saved_state = state;
+							$('#saved-notice').show().fadeOut('slow');
+						}
+					}
+				});
+
+				$("#test1").pgrid_add([
+					{
+						key: "giovanni",
+						values: [
+							"Giovanni",
+							"giovanni@example.com",
+							"Athlete",
+							"$28,000.00",
+							"-1",
+							"I was added dynamically after this table was loaded."
+						]
+					},
+					{
+						key: "edward",
+						values: [
+							"Edward",
+							"edward@example.com",
+							"Anchorman",
+							"$35,000.00",
+							"-2",
+							"I was added dynamically after this table was loaded."
+						]
+					}
+				]);
+
+				$(":button.ui-state-default").hover(function(){
+					$(this).addClass('ui-state-hover');
+				}, function(){
+					$(this).removeClass('ui-state-hover');
+				});
+
+				$('#switcher').themeswitcher();
+			});
+
+			function save_state() {
+				saved_state = stateful_grid.pgrid_export_state();
+			}
+
+			function load_state() {
+				stateful_grid.pgrid_import_state(saved_state);
+			}
+
+			// ]]>
+		</script>
+	</head>
+	<body>
+		<div class="ui-widget-content ui-corner-all ui-helper-clearfix">
+			<div class="wrapper">
+				<div id="header" class="ui-widget-header ui-corner-all">
+					<div id="switcher-container"><div id="switcher"></div></div>
+					<img class="header" src="includes/default_logo.png" alt="Pines Logo" />
+					<h1 class="header">Pines Grid jQuery Plugin</h1>
+				</div>
+				<p class="main-description">
+					Pines Grid is a JavaScript data grid plugin for the jQuery
+					JavaScript library, developed by Hunter Perrin as part
+					of <a href="http://sourceforge.net/projects/pines/">Pines</a>.
+					It is licensed under the
+					<a href="http://www.gnu.org/licenses/agpl-3.0.html">GNU Affero GPL</a>.
+					It is designed to provide maximum flexibility, while
+					still being easy to use and easy to implement. Try out
+					different themes using the selector in the top right corner
+					of this page.
+				</p>
+				<h2>Features</h2>
+				<div class="ui-helper-clearfix">
+					<div class="featurelist ui-widget-content ui-corner-all">
+						<ul>
+							<li><span class="ui-icon ui-icon-bullet"></span>Pagination.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Filtering.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Sorting.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Customizeable toolbar.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Column resizing.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Column hiding.</li>
+						</ul>
+					</div>
+					<div class="featurelist ui-widget-content ui-corner-all">
+						<ul>
+							<li><span class="ui-icon ui-icon-bullet"></span>Hierarchical data.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Selecting.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Saving and loading state. (Current page, filter, etc.)</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Adding and removing items dynamically.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Selecting and deselecting items dynamically.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span><a href="http://validator.w3.org/check?uri=referer">XHTML 1.0 Strict compliance.</a></li>
+						</ul>
+					</div>
+					<div class="featurelist ui-widget-content ui-corner-all">
+						<ul>
+							<li><span class="ui-icon ui-icon-bullet"></span>Clean, sensible, easy markup.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>Population either statically or dynamically.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span><a href="http://jqueryui.com/themeroller/"><img src="includes/themeroller-ready.png" alt="ThemeRoller Ready" /></a></li>
+						</ul>
+					</div>
+				</div>
+				<h2>Demos</h2>
+				<p>This table was gridified on $(document).ready() with a toolbar:</p>
+				<p>
+					<label><input type="checkbox" id="auto-save" />Auto Save</label>
+					<button class="ui-state-default ui-corner-all" onclick="save_state(); $('#saved-notice').show().fadeOut('slow');">Save State</button>
+					<button class="ui-state-default ui-corner-all" onclick="load_state();">Load State</button>
+					<span id="saved-notice" class="ui-state-highlight ui-corner-all" style="display: none;">State saved.</span>
+				</p>
+				<table id="test1">
+					<thead>
+						<tr><th>Name</th><th>E-Mail</th><th>Occupation</th><th>Salary</th><th>Number</th><th>Description</th></tr>
+					</thead>
+					<tbody>
+						<tr title="bob"><td>Bob</td><td>bob@example.com</td><td>Builder</td><td>$25,000.00</td><td>1</td><td>Mauris eget dolor arcu, in aliquet eros.</td></tr>
+						<tr title="joe"><td>Joe</td><td>joe@example.com</td><td>Wrecker</td><td>$20,000.00</td><td>2</td><td>Etiam ultrices vulputate venenatis.</td></tr>
+						<tr title="steve"><td>Steve</td><td>steve@example.com</td><td>Baker</td><td>$23,000.00</td><td>3</td><td>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr>
+						<tr title="jane"><td>Jane</td><td>jane@example.com</td><td>Mailman</td><td>$23,000.00</td><td>4</td><td>Nunc ut urna ac neque malesuada tempus sit amet at felis. Nulla facilisi. Nullam varius ornare lacus id vestibulum.</td></tr>
+						<tr title="willie" class="parent"><td>Willie</td><td>willie@example.com</td><td>Retired</td><td>$0.00</td><td>5</td><td>Pellentesque ornare tellus nulla, quis rhoncus lorem.</td></tr>
+						<tr title="bobo" class="willie child parent"><td>Bobo</td><td>bobo@example.com</td><td>Salesman</td><td>$40,000.00</td><td>7</td><td>Duis ut augue tellus. Fusce nisl nulla, blandit vel rutrum vel, commodo quis felis.</td></tr>
+						<tr title="chris" class="bobo child"><td>Chris</td><td>chris@example.com</td><td>Student</td><td>$0.00</td><td>10</td><td>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque iaculis pharetra turpis.</td></tr>
+						<tr title="steph" class="bobo child"><td>Steph</td><td>steph@example.com</td><td>Student</td><td>$0.00</td><td>11</td><td>Sed suscipit quam ut arcu iaculis pretium.</td></tr>
+						<tr title="karen" class="willie child"><td>Karen</td><td>karen@example.com</td><td>Singer</td><td>$30,000.00</td><td>9</td><td>Nam et sem quam, eu iaculis risus.</td></tr>
+						<tr title="arnold" class="parent"><td>Arnold</td><td>arnold@example.com</td><td>Governor</td><td>$60,000.00</td><td>6</td><td>Nulla at orci leo, id egestas felis.</td></tr>
+						<tr title="bach" class="arnold child"><td>Bach</td><td>bach@example.com</td><td>I'll be</td><td>$18,000.00</td><td>8</td><td>In enim lectus, tincidunt quis dapibus nec, feugiat ac enim.</td></tr>
+						<tr title="james"><td>James</td><td>james@example.com</td><td>Teacher</td><td>$33,000.00</td><td>12</td><td>Mauris ac odio mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</td></tr>
+						<tr title="billy"><td>Billy</td><td>billy@example.com</td><td>Judge</td><td>$28,000.01</td><td>13</td><td>Nullam gravida velit sed leo viverra venenatis. Morbi vulputate nibh dui. Sed tincidunt ligula nulla, sit amet adipiscing quam.</td></tr>
+						<tr title="rick"><td>Rick</td><td>rick@example.com</td><td>Sheriff</td><td>$28,000.00</td><td>14</td><td>Nam dolor nisl, accumsan a cursus et, blandit ac dolor. Morbi dui ligula, pulvinar nec malesuada id, blandit et eros. Pellentesque ut elit nulla, a ultricies tellus.</td></tr>
+						<tr title="josh"><td>Josh</td><td>josh@example.com</td><td>Shopkeep</td><td>$19,000.00</td><td>15</td><td>Morbi dictum velit vitae est ornare at lobortis nunc venenatis. Pellentesque non neque eget dui volutpat varius et non nibh.</td></tr>
+						<tr title="buck"><td>Buck</td><td>buck@example.com</td><td>Pilot</td><td>$26,000.00</td><td>16</td><td>Vestibulum fringilla cursus nulla, vitae euismod nulla laoreet non. Sed tincidunt facilisis hendrerit. Nulla facilisi. Aliquam laoreet vestibulum tempus.</td></tr>
+						<tr title="jason"><td>Jason</td><td>jason@example.com</td><td>King</td><td>$70,000.00</td><td>17</td><td>Ut faucibus gravida mauris, in auctor elit gravida sit amet.</td></tr>
+						<tr title="geoffrey" class="parent"><td>Geoffrey</td><td>geoffrey@example.com</td><td>Undertaker</td><td>$19,000.00</td><td>18</td><td>Proin a mi vulputate arcu ultricies sodales. Aliquam nec turpis lacus, ac lobortis nunc. In leo justo, varius non dignissim in, pellentesque non velit.</td></tr>
+						<tr title="nate" class="geoffrey child"><td>Nate</td><td>nate@example.com</td><td>Worker</td><td>$17,000.00</td><td>19</td><td>Sed id turpis ante. Mauris ac massa dui. Fusce consectetur magna quis dui mattis in fermentum sem commodo. Quisque semper pellentesque dictum.</td></tr>
+						<tr title="alex"><td>Alex</td><td>alex@example.com</td><td>Fisherman</td><td>$18,000.00</td><td>20</td><td>Donec sed sem vitae urna commodo porttitor ut sit amet neque. Cras massa lectus, fringilla id varius in, mollis vel tellus. Quisque mollis neque vel metus laoreet pellentesque. Praesent ornare cursus convallis.</td></tr>
+						<tr title="barbara"><td>Barbara</td><td>barbara@example.com</td><td>Engineer</td><td>$38,000.00</td><td>21</td><td>Nunc ut lectus diam. Duis feugiat nulla quis metus sagittis in semper libero tincidunt. Vivamus pulvinar suscipit sagittis.</td></tr>
+						<tr title="gerald"><td>Gerald</td><td>gerald@example.com</td><td>Librarian</td><td>$18,000.00</td><td>22</td><td>Nullam volutpat mi vitae velit luctus ultrices vel in felis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr>
+						<tr title="janet"><td>Janet</td><td>janet@example.com</td><td>Machine Setter</td><td>$20,000.00</td><td>23</td><td>Cras nisi velit, gravida quis lacinia ut, condimentum vitae ligula. Quisque id quam vitae massa aliquam suscipit euismod ac metus.</td></tr>
+						<tr title="eric"><td>Eric</td><td>eric@example.com</td><td>Groomer</td><td>$18,000.00</td><td>24</td><td>Curabitur blandit ornare turpis, nec consequat nisi suscipit in. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</td></tr>
+						<tr title="daniel"><td>Daniel</td><td>daniel@example.com</td><td>Flight Service Specialist</td><td>$32,000.00</td><td>25</td><td>Aenean neque quam, mollis vitae rhoncus non, sollicitudin vel quam. Donec lectus arcu, viverra eget tristique sed, venenatis id sem.</td></tr>
+					</tbody>
+				</table>
+				<br /><br />
+				<div>
+					<button class="ui-state-default ui-corner-all" onclick="set_up_switcher();">Try out a list switcher.</button>
+					<script type="text/javascript">
+						// <![CDATA[
+						function set_up_switcher() {
+							var switcher_left = $('#switcher_left').pgrid({
+								pgrid_toolbar: true,
+								pgrid_toolbar_contents: [
+									{
+										type: 'button',
+										text: 'Transfer &gt;&gt;',
+										multi_select: true,
+										double_click: true,
+										click: function(e, rows) {
+											switcher_right.pgrid_add(rows.pgrid_add_descendent_rows().pgrid_export_rows());
+											rows.pgrid_delete();
+										}
+									}
+								],
+								pgrid_paginate: false,
+								pgrid_filtering: false,
+								pgrid_resize: false
+							});
+							var switcher_right = $('#switcher_right').pgrid({
+								pgrid_toolbar: true,
+								pgrid_toolbar_contents: [
+									{
+										type: 'button',
+										text: '&lt;&lt; Transfer',
+										multi_select: true,
+										double_click: true,
+										click: function(e, rows) {
+											switcher_left.pgrid_add(rows.pgrid_add_descendent_rows().pgrid_export_rows());
+											rows.pgrid_delete();
+										}
+									},
+									{
+										type: 'button',
+										text: 'Export Selected',
+										multi_select: true,
+										click: function() {
+											// Possible to use the arguments of this function, instead.
+											alert(JSON.stringify(switcher_right.pgrid_get_selected_rows().pgrid_export_rows()));
+										}
+									},
+									{
+										type: 'button',
+										text: 'Export All',
+										selection_optional: true,
+										click: function() {
+											alert(JSON.stringify(switcher_right.pgrid_get_all_rows().pgrid_export_rows()));
+										}
+									}
+								],
+								pgrid_paginate: false,
+								pgrid_filtering: false,
+								pgrid_resize: false
+							});
+						}
+						// ]]>
+					</script>
+				</div>
+				<div style="clear: left; float: left; width: 49%;">
+					<table id="switcher_left">
+						<thead>
+							<tr><th>Name</th><th>E-Mail</th></tr>
+						</thead>
+						<tbody>
+							<tr title="bob"><td>Bob</td><td>bob@example.com</td></tr>
+							<tr title="joe"><td>Joe</td><td>joe@example.com</td></tr>
+							<tr title="steve"><td>Steve</td><td>steve@example.com</td></tr>
+							<tr title="jane"><td>Jane</td><td>jane@example.com</td></tr>
+							<tr title="willie" class="parent"><td>Willie</td><td>willie@example.com</td></tr>
+							<tr title="bobo" class="willie child parent"><td>Bobo</td><td>bobo@example.com</td></tr>
+							<tr title="chris" class="bobo child"><td>Chris</td><td>chris@example.com</td></tr>
+							<tr title="steph" class="bobo child"><td>Steph</td><td>steph@example.com</td></tr>
+							<tr title="karen" class="willie child"><td>Karen</td><td>karen@example.com</td></tr>
+							<tr title="arnold" class="parent"><td>Arnold</td><td>arnold@example.com</td></tr>
+							<tr title="bach" class="arnold child"><td>Bach</td><td>bach@example.com</td></tr>
+							<tr title="james"><td>James</td><td>james@example.com</td></tr>
+							<tr title="billy"><td>Billy</td><td>billy@example.com</td></tr>
+							<tr title="rick"><td>Rick</td><td>rick@example.com</td></tr>
+							<tr title="josh"><td>Josh</td><td>josh@example.com</td></tr>
+							<tr title="buck"><td>Buck</td><td>buck@example.com</td></tr>
+							<tr title="jason"><td>Jason</td><td>jason@example.com</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<div style="float: left; width: 49%;">
+					<table id="switcher_right">
+						<thead>
+							<tr><th>Name</th><th>E-Mail</th></tr>
+						</thead>
+						<tbody>
+							<tr title="geoffrey" class="parent"><td>Geoffrey</td><td>geoffrey@example.com</td></tr>
+							<tr title="nate" class="geoffrey child"><td>Nate</td><td>nate@example.com</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<br style="clear: both;" /><br />
+				<button class="ui-state-default ui-corner-all" onclick="$('#test2').pgrid();">Gridify this table with default options.</button> <pre>$('#test2').pgrid();</pre>
+				<table id="test2">
+					<thead>
+						<tr><th>Name</th><th>E-Mail</th><th>Occupation</th><th>Salary</th><th>Number</th><th>Description</th></tr>
+					</thead>
+					<tbody>
+						<tr title="bob"><td>Bob</td><td>bob@example.com</td><td>Builder</td><td>$25,000.00</td><td>1</td><td>Mauris eget dolor arcu, in aliquet eros.</td></tr>
+						<tr title="joe"><td>Joe</td><td>joe@example.com</td><td>Wrecker</td><td>$20,000.00</td><td>2</td><td>Etiam ultrices vulputate venenatis.</td></tr>
+						<tr title="steve"><td>Steve</td><td>steve@example.com</td><td>Baker</td><td>$23,000.00</td><td>3</td><td>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr>
+						<tr title="jane"><td>Jane</td><td>jane@example.com</td><td>Mailman</td><td>$23,000.00</td><td>4</td><td>Nunc ut urna ac neque malesuada tempus sit amet at felis. Nulla facilisi. Nullam varius ornare lacus id vestibulum.</td></tr>
+						<tr title="willie" class="parent"><td>Willie</td><td>willie@example.com</td><td>Retired</td><td>$0.00</td><td>5</td><td>Pellentesque ornare tellus nulla, quis rhoncus lorem.</td></tr>
+						<tr title="bobo" class="willie child parent"><td>Bobo</td><td>bobo@example.com</td><td>Salesman</td><td>$40,000.00</td><td>7</td><td>Duis ut augue tellus. Fusce nisl nulla, blandit vel rutrum vel, commodo quis felis.</td></tr>
+						<tr title="chris" class="bobo child"><td>Chris</td><td>chris@example.com</td><td>Student</td><td>$0.00</td><td>10</td><td>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque iaculis pharetra turpis.</td></tr>
+						<tr title="steph" class="bobo child"><td>Steph</td><td>steph@example.com</td><td>Student</td><td>$0.00</td><td>11</td><td>Sed suscipit quam ut arcu iaculis pretium.</td></tr>
+						<tr title="karen" class="willie child"><td>Karen</td><td>karen@example.com</td><td>Singer</td><td>$30,000.00</td><td>9</td><td>Nam et sem quam, eu iaculis risus.</td></tr>
+						<tr title="arnold" class="parent"><td>Arnold</td><td>arnold@example.com</td><td>Governor</td><td>$60,000.00</td><td>6</td><td>Nulla at orci leo, id egestas felis.</td></tr>
+						<tr title="bach" class="arnold child"><td>Bach</td><td>bach@example.com</td><td>I'll be</td><td>$18,000.00</td><td>8</td><td>In enim lectus, tincidunt quis dapibus nec, feugiat ac enim.</td></tr>
+						<tr title="james"><td>James</td><td>james@example.com</td><td>Teacher</td><td>$33,000.00</td><td>12</td><td>Mauris ac odio mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</td></tr>
+						<tr title="billy"><td>Billy</td><td>billy@example.com</td><td>Judge</td><td>$28,000.01</td><td>13</td><td>Nullam gravida velit sed leo viverra venenatis. Morbi vulputate nibh dui. Sed tincidunt ligula nulla, sit amet adipiscing quam.</td></tr>
+						<tr title="rick"><td>Rick</td><td>rick@example.com</td><td>Sheriff</td><td>$28,000.00</td><td>14</td><td>Nam dolor nisl, accumsan a cursus et, blandit ac dolor. Morbi dui ligula, pulvinar nec malesuada id, blandit et eros. Pellentesque ut elit nulla, a ultricies tellus.</td></tr>
+						<tr title="josh"><td>Josh</td><td>josh@example.com</td><td>Shopkeep</td><td>$19,000.00</td><td>15</td><td>Morbi dictum velit vitae est ornare at lobortis nunc venenatis. Pellentesque non neque eget dui volutpat varius et non nibh.</td></tr>
+						<tr title="buck"><td>Buck</td><td>buck@example.com</td><td>Pilot</td><td>$26,000.00</td><td>16</td><td>Vestibulum fringilla cursus nulla, vitae euismod nulla laoreet non. Sed tincidunt facilisis hendrerit. Nulla facilisi. Aliquam laoreet vestibulum tempus.</td></tr>
+						<tr title="jason"><td>Jason</td><td>jason@example.com</td><td>King</td><td>$70,000.00</td><td>17</td><td>Ut faucibus gravida mauris, in auctor elit gravida sit amet.</td></tr>
+						<tr title="geoffrey" class="parent"><td>Geoffrey</td><td>geoffrey@example.com</td><td>Undertaker</td><td>$19,000.00</td><td>18</td><td>Proin a mi vulputate arcu ultricies sodales. Aliquam nec turpis lacus, ac lobortis nunc. In leo justo, varius non dignissim in, pellentesque non velit.</td></tr>
+						<tr title="nate" class="geoffrey child"><td>Nate</td><td>nate@example.com</td><td>Worker</td><td>$17,000.00</td><td>19</td><td>Sed id turpis ante. Mauris ac massa dui. Fusce consectetur magna quis dui mattis in fermentum sem commodo. Quisque semper pellentesque dictum.</td></tr>
+						<tr title="alex"><td>Alex</td><td>alex@example.com</td><td>Fisherman</td><td>$18,000.00</td><td>20</td><td>Donec sed sem vitae urna commodo porttitor ut sit amet neque. Cras massa lectus, fringilla id varius in, mollis vel tellus. Quisque mollis neque vel metus laoreet pellentesque. Praesent ornare cursus convallis.</td></tr>
+						<tr title="barbara"><td>Barbara</td><td>barbara@example.com</td><td>Engineer</td><td>$38,000.00</td><td>21</td><td>Nunc ut lectus diam. Duis feugiat nulla quis metus sagittis in semper libero tincidunt. Vivamus pulvinar suscipit sagittis.</td></tr>
+						<tr title="gerald"><td>Gerald</td><td>gerald@example.com</td><td>Librarian</td><td>$18,000.00</td><td>22</td><td>Nullam volutpat mi vitae velit luctus ultrices vel in felis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr>
+						<tr title="janet"><td>Janet</td><td>janet@example.com</td><td>Machine Setter</td><td>$20,000.00</td><td>23</td><td>Cras nisi velit, gravida quis lacinia ut, condimentum vitae ligula. Quisque id quam vitae massa aliquam suscipit euismod ac metus.</td></tr>
+						<tr title="eric"><td>Eric</td><td>eric@example.com</td><td>Groomer</td><td>$18,000.00</td><td>24</td><td>Curabitur blandit ornare turpis, nec consequat nisi suscipit in. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</td></tr>
+						<tr title="daniel"><td>Daniel</td><td>daniel@example.com</td><td>Flight Service Specialist</td><td>$32,000.00</td><td>25</td><td>Aenean neque quam, mollis vitae rhoncus non, sollicitudin vel quam. Donec lectus arcu, viverra eget tristique sed, venenatis id sem.</td></tr>
+					</tbody>
+				</table>
+				<br /><br />
+				<button class="ui-state-default ui-corner-all" onclick="$('#test3').pgrid({
+					pgrid_footer: false,
+					pgrid_count: false,
+					pgrid_select: false,
+					pgrid_multi_select: false,
+					pgrid_paginate: false,
+					pgrid_page: 2,
+					pgrid_perpage: 5,
+					pgrid_filtering: false,
+					pgrid_filter: '',
+					pgrid_hidden_cols: [2, 3],
+					pgrid_resize_cols: false,
+					pgrid_sortable: false,
+					pgrid_sort_col: false,
+					pgrid_sort_ord: 'asc',
+					pgrid_stripe_rows: false,
+					pgrid_row_hover_effect: false,
+					pgrid_view_height: 'auto',
+					pgrid_resize: false
+				});">Gridify this table with custom options and disabled features.</button>
+				<table id="test3">
+					<thead>
+						<tr><th>Name</th><th>E-Mail</th><th>Occupation</th><th>Salary</th><th>Number</th><th>Description</th></tr>
+					</thead>
+					<tbody>
+						<tr title="bob"><td>Bob</td><td>bob@example.com</td><td>Builder</td><td>$25,000.00</td><td>1</td><td>Mauris eget dolor arcu, in aliquet eros.</td></tr>
+						<tr title="joe"><td>Joe</td><td>joe@example.com</td><td>Wrecker</td><td>$20,000.00</td><td>2</td><td>Etiam ultrices vulputate venenatis.</td></tr>
+						<tr title="steve"><td>Steve</td><td>steve@example.com</td><td>Baker</td><td>$23,000.00</td><td>3</td><td>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr>
+						<tr title="jane"><td>Jane</td><td>jane@example.com</td><td>Mailman</td><td>$23,000.00</td><td>4</td><td>Nunc ut urna ac neque malesuada tempus sit amet at felis. Nulla facilisi. Nullam varius ornare lacus id vestibulum.</td></tr>
+						<tr title="willie" class="parent"><td>Willie</td><td>willie@example.com</td><td>Retired</td><td>$0.00</td><td>5</td><td>Pellentesque ornare tellus nulla, quis rhoncus lorem.</td></tr>
+						<tr title="bobo" class="willie child parent"><td>Bobo</td><td>bobo@example.com</td><td>Salesman</td><td>$40,000.00</td><td>7</td><td>Duis ut augue tellus. Fusce nisl nulla, blandit vel rutrum vel, commodo quis felis.</td></tr>
+						<tr title="chris" class="bobo child"><td>Chris</td><td>chris@example.com</td><td>Student</td><td>$0.00</td><td>10</td><td>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque iaculis pharetra turpis.</td></tr>
+						<tr title="steph" class="bobo child"><td>Steph</td><td>steph@example.com</td><td>Student</td><td>$0.00</td><td>11</td><td>Sed suscipit quam ut arcu iaculis pretium.</td></tr>
+						<tr title="karen" class="willie child"><td>Karen</td><td>karen@example.com</td><td>Singer</td><td>$30,000.00</td><td>9</td><td>Nam et sem quam, eu iaculis risus.</td></tr>
+						<tr title="arnold" class="parent"><td>Arnold</td><td>arnold@example.com</td><td>Governor</td><td>$60,000.00</td><td>6</td><td>Nulla at orci leo, id egestas felis.</td></tr>
+						<tr title="bach" class="arnold child"><td>Bach</td><td>bach@example.com</td><td>I'll be</td><td>$18,000.00</td><td>8</td><td>In enim lectus, tincidunt quis dapibus nec, feugiat ac enim.</td></tr>
+						<tr title="james"><td>James</td><td>james@example.com</td><td>Teacher</td><td>$33,000.00</td><td>12</td><td>Mauris ac odio mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</td></tr>
+						<tr title="billy"><td>Billy</td><td>billy@example.com</td><td>Judge</td><td>$28,000.01</td><td>13</td><td>Nullam gravida velit sed leo viverra venenatis. Morbi vulputate nibh dui. Sed tincidunt ligula nulla, sit amet adipiscing quam.</td></tr>
+						<tr title="rick"><td>Rick</td><td>rick@example.com</td><td>Sheriff</td><td>$28,000.00</td><td>14</td><td>Nam dolor nisl, accumsan a cursus et, blandit ac dolor. Morbi dui ligula, pulvinar nec malesuada id, blandit et eros. Pellentesque ut elit nulla, a ultricies tellus.</td></tr>
+						<tr title="josh"><td>Josh</td><td>josh@example.com</td><td>Shopkeep</td><td>$19,000.00</td><td>15</td><td>Morbi dictum velit vitae est ornare at lobortis nunc venenatis. Pellentesque non neque eget dui volutpat varius et non nibh.</td></tr>
+						<tr title="buck"><td>Buck</td><td>buck@example.com</td><td>Pilot</td><td>$26,000.00</td><td>16</td><td>Vestibulum fringilla cursus nulla, vitae euismod nulla laoreet non. Sed tincidunt facilisis hendrerit. Nulla facilisi. Aliquam laoreet vestibulum tempus.</td></tr>
+						<tr title="jason"><td>Jason</td><td>jason@example.com</td><td>King</td><td>$70,000.00</td><td>17</td><td>Ut faucibus gravida mauris, in auctor elit gravida sit amet.</td></tr>
+						<tr title="geoffrey" class="parent"><td>Geoffrey</td><td>geoffrey@example.com</td><td>Undertaker</td><td>$19,000.00</td><td>18</td><td>Proin a mi vulputate arcu ultricies sodales. Aliquam nec turpis lacus, ac lobortis nunc. In leo justo, varius non dignissim in, pellentesque non velit.</td></tr>
+						<tr title="nate" class="geoffrey child"><td>Nate</td><td>nate@example.com</td><td>Worker</td><td>$17,000.00</td><td>19</td><td>Sed id turpis ante. Mauris ac massa dui. Fusce consectetur magna quis dui mattis in fermentum sem commodo. Quisque semper pellentesque dictum.</td></tr>
+						<tr title="alex"><td>Alex</td><td>alex@example.com</td><td>Fisherman</td><td>$18,000.00</td><td>20</td><td>Donec sed sem vitae urna commodo porttitor ut sit amet neque. Cras massa lectus, fringilla id varius in, mollis vel tellus. Quisque mollis neque vel metus laoreet pellentesque. Praesent ornare cursus convallis.</td></tr>
+						<tr title="barbara"><td>Barbara</td><td>barbara@example.com</td><td>Engineer</td><td>$38,000.00</td><td>21</td><td>Nunc ut lectus diam. Duis feugiat nulla quis metus sagittis in semper libero tincidunt. Vivamus pulvinar suscipit sagittis.</td></tr>
+						<tr title="gerald"><td>Gerald</td><td>gerald@example.com</td><td>Librarian</td><td>$18,000.00</td><td>22</td><td>Nullam volutpat mi vitae velit luctus ultrices vel in felis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr>
+						<tr title="janet"><td>Janet</td><td>janet@example.com</td><td>Machine Setter</td><td>$20,000.00</td><td>23</td><td>Cras nisi velit, gravida quis lacinia ut, condimentum vitae ligula. Quisque id quam vitae massa aliquam suscipit euismod ac metus.</td></tr>
+						<tr title="eric"><td>Eric</td><td>eric@example.com</td><td>Groomer</td><td>$18,000.00</td><td>24</td><td>Curabitur blandit ornare turpis, nec consequat nisi suscipit in. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</td></tr>
+						<tr title="daniel"><td>Daniel</td><td>daniel@example.com</td><td>Flight Service Specialist</td><td>$32,000.00</td><td>25</td><td>Aenean neque quam, mollis vitae rhoncus non, sollicitudin vel quam. Donec lectus arcu, viverra eget tristique sed, venenatis id sem.</td></tr>
+					</tbody>
+				</table>
+				<br /><br />
+				<script type="text/javascript">
+					// <![CDATA[
+					function make_table() {
+						var row_count = parseInt($("#test4_rows").val());
+						if (isNaN(row_count) || row_count < 0) {
+							alert("Please enter a positive whole number for the row count.");
+							return;
+						}
+						var test_div = $("#test4").empty().html($("#test4_skel").html());
+						var tbody = test_div.find("tbody");
+						var row = tbody.children("tr").remove();
+						for (var i=1; i<=row_count; i++)
+							row.clone().find("td.row").html("#"+i).end().appendTo(tbody);
+					}
+
+					function gridify_table() {
+						var table = $('#test4').children('table');
+						var start_time = new Date().getTime();
+						var end_time;
+						table.pgrid();
+						end_time = new Date().getTime();
+						alert("Complete:\n\nTime: "+(end_time - start_time)+"ms ("+((end_time - start_time) / 1000)+"s)");
+					}
+					// ]]>
+				</script>
+				Insert <input type="text" id="test4_rows" value="500" size="5" /> rows. <button class="ui-state-default ui-corner-all" onclick="void make_table();">Make a table.</button> <button class="ui-state-default ui-corner-all" onclick="void gridify_table();">Gridify and time it.</button>
+				<div id="test4"></div>
+				<div id="test4_skel" style="display: none;">
+					<table>
+						<thead>
+							<tr><th>Row</th><th>Header 1</th><th>Header 2</th><th>Header 3</th><th>Header 4</th><th>Header 5</th><th>Data</th></tr>
+						</thead>
+						<tbody>
+							<tr><td class="row"></td><td>I'm in cell 1.</td><td>I'm in cell 2.</td><td>I'm in cell 3.</td><td>I'm in cell 4.</td><td>I'm in cell 5.</td><td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non lobortis nisl. Sed at nunc odio, vitae lacinia est.</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

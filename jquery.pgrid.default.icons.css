@@ -1,0 +1,17 @@
+/* 
+	Document   : jquery.pgrid.default.icons.css
+	Created on : Sep 25, 2009, 1:40:10 PM
+	Author     : Hunter Perrin
+	Description:
+		The default icon set for Pines Grid. (Tango)
+*/
+
+@import "tango-icon-theme/icons.css";
+
+.ui-pgrid-toolbar .icon {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding: 1px 1px 1px 17px !important;
+	min-height: 14px;
+}
