@@ -224,7 +224,7 @@
 		this.filter("table:not(.ui-pgrid-table)").each(function() {
 			var pgrid = $(this);
 			pgrid.pgrid_version = "1.0.0";
-			
+
 			pgrid.extend(pgrid, opts);
 
 			pgrid.pgrid_pages = null;
@@ -238,7 +238,7 @@
 			pgrid.pgrid_widget = pgrid.parent();
 			// Detach the table from the DOM, so we can work on it locally.
 			pgrid.detach();
-			
+
 			// Add the pgrid class to the container.
 			pgrid.pgrid_widget.addClass("ui-pgrid ui-widget ui-widget-content ui-corner-all");
 			// And the table container.
@@ -743,7 +743,7 @@
 				// Hide children.
 				jq_rows.filter("tr.child").addClass("ui-pgrid-table-row-hidden");
 			};
-			
+
 			pgrid.init_children = function(jq_rows) {
 				if (!jq_rows.length) return;
 				jq_rows.each(function(){
@@ -768,7 +768,7 @@
 					}
 				});
 			};
-			
+
 			// Add some coloring when hovering over rows.
 			if (pgrid.pgrid_row_hover_effect) {
 				// Can't use "hover" because of a bug in Firefox when the mouse moves onto a scrollbar.
@@ -1022,7 +1022,7 @@
 									return window.open(parsed_url);
 								else {
 									// If Pines is loaded, use its get method instead of setting location.
-									if (typeof pines != "undefined" && pines.get)
+									if ($.isFunction(pines.get))
 										return pines.get(parsed_url);
 									return (window.location = parsed_url);
 								}
