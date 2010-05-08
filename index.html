@@ -11,6 +11,8 @@
 		Theme Switcher Widget -->
 		<link type="text/css" rel="stylesheet" href="http://jqueryui.com/themes/base/ui.all.css" />
 		<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+		<!-- Tango Icons -->
+		<link href="tango/icons.css" rel="stylesheet" type="text/css" />
 		<!-- Pines Grid -->
 		<script type="text/javascript" src="jquery.pgrid.js"></script>
 		<link href="jquery.pgrid.default.css" rel="stylesheet" type="text/css" />
@@ -115,17 +117,17 @@
 				stateful_grid = $("#test1").pgrid({
 					pgrid_toolbar: true,
 					pgrid_toolbar_contents: [
-						{type: 'button', text: 'New', extra_class: 'icon picon_16x16_actions_document-new', selection_optional: true, url: 'includes/new.html'},
-						{type: 'button', text: 'View', extra_class: 'icon picon_16x16_mimetypes_text-x-generic', url: 'includes/view.html?username=__title__'},
-						{type: 'button', text: 'Edit', extra_class: 'icon picon_16x16_actions_document-open', double_click: true, click: function(e, rows){
+						{type: 'button', text: 'New', extra_class: 'icon picon_16x16_document-new', selection_optional: true, url: 'includes/new.html'},
+						{type: 'button', text: 'View', extra_class: 'icon picon_16x16_text-x-generic', url: 'includes/view.html?username=__title__'},
+						{type: 'button', text: 'Edit', extra_class: 'icon picon_16x16_document-open', double_click: true, click: function(e, rows){
 							alert('Editing '+rows.attr('title')+'.');
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'Google', extra_class: 'icon picon_16x16_actions_system-search', multi_select: true, url: 'http://google.com/search?q=__col_1__', delimiter: '+', new_window: true},
-						{type: 'button', text: 'Email', extra_class: 'icon picon_16x16_actions_mail-message-new', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
-						{type: 'button', text: 'All', extra_class: 'icon picon_16x16_actions_mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
+						{type: 'button', text: 'Google', extra_class: 'icon picon_16x16_system-search', multi_select: true, url: 'http://google.com/search?q=__col_1__', delimiter: '+', new_window: true},
+						{type: 'button', text: 'Email', extra_class: 'icon picon_16x16_mail-message-new', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
+						{type: 'button', text: 'All', extra_class: 'icon picon_16x16_mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
 						{type: 'separator'},
-						{type: 'text', label: 'SMS: ', extra_class: 'icon picon_16x16_stock_generic_stock_cell-phone', attributes: {size: 15}, load: function(textbox){
+						{type: 'text', label: 'SMS: ', extra_class: 'icon picon_16x16_stock_cell-phone', attributes: {size: 15}, load: function(textbox){
 							textbox.focus(function(){
 								textbox.select();
 							}).keydown(function(e){
@@ -143,7 +145,7 @@
 								}
 							});
 						}},
-						{type: 'text', label: 'Raise: ', extra_class: 'icon picon_16x16_stock_form_stock_form-currency-field', attributes: {size: 10}, load: function(textbox){
+						{type: 'text', label: 'Raise: ', extra_class: 'icon picon_16x16_stock_form-currency-field', attributes: {size: 10}, load: function(textbox){
 							textbox.css("text-align", "right").keydown(function(e){
 								if (e.keyCode == 13) {
 									var rows = stateful_grid.pgrid_get_selected_rows();
@@ -171,17 +173,17 @@
 							});
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'Delete', extra_class: 'icon picon_16x16_actions_edit-delete', confirm: true, multi_select: true, click: function(e, rows){
+						{type: 'button', text: 'Delete', extra_class: 'icon picon_16x16_edit-delete', confirm: true, multi_select: true, click: function(e, rows){
 							$("#test1").pgrid_delete(rows);
 						}},
-						{type: 'button', text: 'Clear All', extra_class: 'icon picon_16x16_actions_edit-delete', confirm: true, multi_select: true, return_all_rows: true, click: function(e, rows){
+						{type: 'button', text: 'Clear All', extra_class: 'icon picon_16x16_edit-delete', confirm: true, multi_select: true, return_all_rows: true, click: function(e, rows){
 							$("#test1").pgrid_delete(rows);
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'All', extra_class: 'icon picon_16x16_actions_list-add', select_all: true},
-						{type: 'button', text: 'None', extra_class: 'icon picon_16x16_actions_list-remove', select_none: true},
+						{type: 'button', text: 'All', extra_class: 'icon picon_16x16_list-add', select_all: true},
+						{type: 'button', text: 'None', extra_class: 'icon picon_16x16_list-remove', select_none: true},
 						{type: 'separator'},
-						{type: 'button', text: '', extra_class: 'icon picon_16x16_mimetypes_x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
+						{type: 'button', text: '', extra_class: 'icon picon_16x16_x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
 							window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
 						}}
 					],
