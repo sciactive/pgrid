@@ -300,6 +300,9 @@
 					<button class="ui-state-default ui-corner-all" onclick="save_state(); $('#saved-notice').show().fadeOut('slow');">Save State</button>
 					<button class="ui-state-default ui-corner-all" onclick="load_state();">Load State</button>
 					<span id="saved-notice" class="ui-state-highlight ui-corner-all" style="display: none;">State saved.</span>
+					<br /><br />
+					<button class="ui-state-default ui-corner-all" onclick="stateful_grid.pgrid_get_all_rows().filter('[title=bob]').pgrid_select_rows();">Select Bob</button>
+					<button class="ui-state-default ui-corner-all" onclick="stateful_grid.pgrid_get_all_rows().filter('.parent').pgrid_select_rows();">Select Parents</button>
 				</p>
 				<table id="test1">
 					<thead>
