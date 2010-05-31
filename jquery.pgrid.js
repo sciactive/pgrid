@@ -1049,7 +1049,7 @@
 								// Call any previous double click functions.
 								if (_old_double_click_tb)
 									_old_double_click_tb();
-								cur_button.click();
+								cur_button.mouseup();
 							};
 						}
 						pgrid.toolbar.append(cur_button);
