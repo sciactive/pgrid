@@ -117,7 +117,7 @@
 				stateful_grid = $("#test1").pgrid({
 					pgrid_toolbar: true,
 					pgrid_toolbar_contents: [
-						{type: 'button', text: 'New', extra_class: 'picon picon_16x16_document-new', selection_optional: true, url: 'includes/new.html'},
+						{type: 'button', text: 'New', extra_class: 'picon picon_16x16_document-new', selection_optional: true, url: 'includes/new.html', target: '_blank'},
 						{type: 'button', text: 'View', extra_class: 'picon picon_16x16_text-x-generic', url: 'includes/view.html?username=__title__'},
 						{type: 'button', text: 'Edit', extra_class: 'picon picon_16x16_document-edit', double_click: true, click: function(e, rows){
 							alert('Editing '+rows.attr('title')+'.');

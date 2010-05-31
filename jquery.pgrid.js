@@ -942,7 +942,9 @@
 								if (val.extra_class)
 									$(this).addClass(val.extra_class);
 							})
-						).click(function(e){
+						).mouseup(function(e){
+							if (e.button == 2)
+								return true;
 							var selected_rows = (val.return_all_rows ? pgrid.children("tbody").children("tr:not(.ui-helper-hidden)") : pgrid.children("tbody").children("tr.ui-pgrid-table-row-selected"));
 							if (!val.selection_optional && !val.select_all && !val.select_none && selected_rows.length === 0) {
 								alert("Please make a selection before performing this operation.");
@@ -1019,9 +1021,11 @@
 									if (isNaN(i)) continue;
 									parsed_url = parsed_url.replace("__col_"+i+"__", cur_cols_text[i]);
 								}
-								if (val.new_window)
-									return window.open(parsed_url);
-								else {
+								if (e.button == 1 || (val.target && val.target != "_self")) {
+									if (val.windowFeatures)
+										return window.open(parsed_url, val.target, val.windowFeatures);
+									return window.open(parsed_url, val.target);
+								} else {
 									// If Pines is loaded, use its get method instead of setting location.
 									if ($.isFunction(pines.get))
 										return pines.get(parsed_url);
