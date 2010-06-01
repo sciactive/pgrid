@@ -88,7 +88,7 @@
 	margin-left: 5px;
 	font-weight: normal;
 }
-.ui-pgrid-footer .ui-pgrid-footer-filter-container input {
+.ui-pgrid-footer input.ui-pgrid-footer-filter-input {
 	margin-right: .2em;
 }
 .ui-pgrid-footer button {

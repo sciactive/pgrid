@@ -428,7 +428,7 @@
 
 			pgrid.paginate = function(loading) {
 				if (pgrid.pgrid_paginate) {
-					var all_rows = pgrid.children("tbody").children("tr:not(.child):not(.ui-helper-hidden)");
+					var all_rows = pgrid.children("tbody").children("tr:not(.ui-helper-hidden):not(.child)");
 					// Calculate the total number of pages.
 					pgrid.pgrid_pages = Math.ceil(all_rows.length / pgrid.pgrid_perpage);
 
@@ -470,9 +470,20 @@
 				pgrid.paginate_timout = window.setTimeout(pgrid.paginate, 50);
 			};
 
+			pgrid.animate_filter = function(stop) {
+				if (stop)
+					pgrid.footer_input.stop(true).fadeTo(400, 1);
+				else
+					pgrid.footer_input.fadeTo(1000, .7).fadeTo(1000, .8, pgrid.animate_filter);
+			};
+
 			pgrid.do_filter = function(filter, loading) {
 				// Filter if filtering is allowed, or if this is an initial filter.
 				if (pgrid.pgrid_filtering || loading) {
+					if (pgrid.footer_input) {
+						pgrid.footer_input.addClass("ui-state-highlight");
+						pgrid.animate_filter();
+					}
 					if (pgrid.filter_timer)
 						window.clearInterval(pgrid.filter_timer);
 					if (typeof filter == "string")
@@ -489,6 +500,10 @@
 								cur_row = rows.eq(cur_index);
 								if (!cur_row.length) {
 									window.clearInterval(pgrid.filter_timer);
+									if (pgrid.footer_input) {
+										pgrid.footer_input.removeClass("ui-state-highlight");
+										pgrid.animate_filter(true);
+									}
 									break;
 								}
 								cur_index++;
@@ -531,6 +546,10 @@
 					} else {
 						// If the user enters nothing, all records should be shown.
 						pgrid.children("tbody").children("tr.ui-helper-hidden").removeClass("ui-helper-hidden");
+						if (pgrid.footer_input) {
+							pgrid.footer_input.removeClass("ui-state-highlight");
+							pgrid.animate_filter(true);
+						}
 						// Only do this if we're not loading, to speed up initialization.
 						if (!loading) {
 							// Paginate, since we may have disabled rows.
@@ -1100,7 +1119,7 @@
 					pgrid.footer.append(
 						$("<div />").addClass("ui-pgrid-footer-filter-container").each(function(){
 							$(this).append($("<span>Filter: </span>").append(
-								$("<input />").addClass("ui-widget ui-widget-content ui-corner-all").attr({
+								$("<input />").addClass("ui-pgrid-footer-filter-input ui-widget ui-widget-content ui-corner-all").attr({
 									type: "text",
 									value: pgrid.pgrid_filter,
 									size: "10"
@@ -1114,6 +1133,7 @@
 							));
 						})
 					);
+					pgrid.footer_input = pgrid.footer.find("input.ui-pgrid-footer-filter-input");
 				}
 			}
 			// Filter the grid.
