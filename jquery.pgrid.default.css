@@ -201,8 +201,11 @@
 .ui-pgrid-table thead th .ui-pgrid-table-header-text.ui-pgrid-table-header-sortable {
 	cursor: pointer;
 }
-.ui-pgrid-table tbody tr.ui-pgrid-table-row-hidden {
+.ui-pgrid-table.ui-pgrid-paginated tbody tr, .ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible.ui-helper-hidden {
 	display: none;
+}
+.ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible {
+	display: table-row;
 }
 .ui-pgrid-table tbody tr td.ui-pgrid-table-cell-sorted {
 	font-style: italic;
