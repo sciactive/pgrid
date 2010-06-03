@@ -201,10 +201,10 @@
 .ui-pgrid-table thead th .ui-pgrid-table-header-text.ui-pgrid-table-header-sortable {
 	cursor: pointer;
 }
-.ui-pgrid-table.ui-pgrid-paginated tbody tr, .ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible.ui-helper-hidden {
+.ui-pgrid-table tbody tr.child, .ui-pgrid-table.ui-pgrid-paginated tbody tr, .ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible.ui-helper-hidden {
 	display: none;
 }
-.ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible {
+.ui-pgrid-table tbody tr.child.ui-pgrid-table-row-visible, .ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible {
 	display: table-row;
 }
 .ui-pgrid-table tbody tr td.ui-pgrid-table-cell-sorted {
