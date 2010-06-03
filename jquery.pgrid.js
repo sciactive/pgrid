@@ -763,8 +763,6 @@
 				jq_rows.addClass("ui-state-default");
 				// Style children.
 				pgrid.init_children(jq_rows.filter("tr.parent:not(.child)"));
-				// Hide children.
-				jq_rows.filter("tr.child").addClass("ui-pgrid-table-row-hidden");
 			};
 
 			pgrid.init_children = function(jq_rows) {
