@@ -116,17 +116,17 @@
 				stateful_grid = $("#test1").pgrid({
 					pgrid_toolbar: true,
 					pgrid_toolbar_contents: [
-						{type: 'button', text: 'New', extra_class: 'picon picon_16x16_document-new', selection_optional: true, url: 'includes/new.html', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
-						{type: 'button', text: 'View', extra_class: 'picon picon_16x16_document-open', url: 'includes/view.html?username=__title__', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
-						{type: 'button', text: 'Edit', extra_class: 'picon picon_16x16_document-edit', double_click: true, click: function(e, rows){
+						{type: 'button', text: 'New', extra_class: 'picon picon-document-new', selection_optional: true, url: 'includes/new.html', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
+						{type: 'button', text: 'View', extra_class: 'picon picon-document-open', url: 'includes/view.html?username=__title__', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
+						{type: 'button', text: 'Edit', extra_class: 'picon picon-document-edit', double_click: true, click: function(e, rows){
 							alert('Editing '+rows.attr('title')+'.');
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'Google', extra_class: 'picon picon_16x16_internet-web-browser', multi_select: true, url: 'http://google.com/search?q=__col_1__', delimiter: '+', target: "_blank"},
-						{type: 'button', text: 'Email', extra_class: 'picon picon_16x16_mail-message', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
-						{type: 'button', text: 'All', extra_class: 'picon picon_16x16_mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
+						{type: 'button', text: 'Google', extra_class: 'picon picon-internet-web-browser', multi_select: true, url: 'http://google.com/search?q=__col_1__', delimiter: '+', target: "_blank"},
+						{type: 'button', text: 'Email', extra_class: 'picon picon-mail-message', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
+						{type: 'button', text: 'All', extra_class: 'picon picon-mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
 						{type: 'separator'},
-						{type: 'text', label: 'SMS: ', extra_class: 'picon picon_16x16_phone', attributes: {size: 15}, load: function(textbox){
+						{type: 'text', label: 'SMS: ', extra_class: 'picon picon-phone', attributes: {size: 15}, load: function(textbox){
 							textbox.focus(function(){
 								textbox.select();
 							}).keydown(function(e){
@@ -144,7 +144,7 @@
 								}
 							});
 						}},
-						{type: 'text', label: 'Raise: ', extra_class: 'picon picon_16x16_office-chart-bar', attributes: {size: 10}, load: function(textbox){
+						{type: 'text', label: 'Raise: ', extra_class: 'picon picon-office-chart-bar', attributes: {size: 10}, load: function(textbox){
 							textbox.css("text-align", "right").keydown(function(e){
 								if (e.keyCode == 13) {
 									var rows = stateful_grid.pgrid_get_selected_rows();
@@ -172,17 +172,17 @@
 							});
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'Delete', extra_class: 'picon picon_16x16_edit-delete', confirm: true, multi_select: true, click: function(e, rows){
+						{type: 'button', text: 'Delete', extra_class: 'picon picon-edit-delete', confirm: true, multi_select: true, click: function(e, rows){
 							rows.pgrid_delete();
 						}},
-						{type: 'button', text: 'Clear All', extra_class: 'picon picon_16x16_edit-clear', confirm: true, multi_select: true, return_all_rows: true, click: function(e, rows){
+						{type: 'button', text: 'Clear All', extra_class: 'picon picon-edit-clear', confirm: true, multi_select: true, return_all_rows: true, click: function(e, rows){
 							rows.pgrid_delete();
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'All', extra_class: 'picon picon_16x16_list-add', select_all: true},
-						{type: 'button', text: 'None', extra_class: 'picon picon_16x16_list-remove', select_none: true},
+						{type: 'button', text: 'All', extra_class: 'picon picon-list-add', select_all: true},
+						{type: 'button', text: 'None', extra_class: 'picon picon-list-remove', select_none: true},
 						{type: 'separator'},
-						{type: 'button', text: '', extra_class: 'picon picon_16x16_x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
+						{type: 'button', text: '', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
 							window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
 						}}
 					],
