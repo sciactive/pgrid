@@ -1,0 +1,228 @@
+/* 
+	Document   : jquery.pgrid.touch.css
+	Created on : Jun 11, 2010, 5:33:30 PM
+	Author     : Hunter Perrin
+	Description:
+		Touch friendly styling for Pines Grid jQuery plugin.
+*/
+
+/* Grid container
+----------------------------------*/
+.ui-pgrid {
+	padding: 0em;
+	position: relative;
+}
+
+/* Table viewport
+----------------------------------*/
+.ui-pgrid-table-viewport {
+	position: relative;
+}
+
+/* Table container
+----------------------------------*/
+.ui-pgrid-table-container {
+	overflow: auto;
+}
+
+/* Header selector
+----------------------------------*/
+.ui-pgrid .ui-pgrid-header-select {
+	float: left;
+	position: absolute;
+	display: none;
+	padding: 2px;
+}
+.ui-pgrid .ui-pgrid-header-select label {
+	display: block;
+	margin-top: 1px;
+	padding: 3px 5px;
+}
+.ui-pgrid .ui-pgrid-header-select label input {
+	margin-right: 3px;
+}
+
+/* Toolbar
+----------------------------------*/
+.ui-pgrid-toolbar {
+	padding: 4px 3px;
+	margin: 0;
+	font-weight: normal;
+	line-height: 2em;
+}
+.ui-pgrid-toolbar .ui-pgrid-toolbar-sep {
+	height: 1em;
+	width: 0;
+	padding: .3em 0;
+	margin: 1px 2px;
+}
+.ui-pgrid-toolbar .ui-pgrid-toolbar-button {
+	cursor: pointer;
+	padding: 6px 6px;
+	margin: 1px;
+}
+.ui-pgrid-toolbar .ui-pgrid-toolbar-button div {
+	padding: 0 1px;
+	white-space: pre;
+}
+.ui-pgrid-toolbar .ui-pgrid-toolbar-text {
+	padding: 2px;
+	margin: 1px;
+	white-space: pre;
+}
+.ui-pgrid-toolbar .ui-pgrid-toolbar-text input {
+	padding: 6px 6px;
+}
+.ui-pgrid-toolbar .ui-pgrid-toolbar-spacer {
+	font-size: 0;
+	line-height: 0;
+}
+
+/* Footer
+----------------------------------*/
+.ui-pgrid-footer {
+	padding: 3px;
+}
+.ui-pgrid-footer .ui-pgrid-footer-filter-container {
+	display: inline;
+	margin-left: 5px;
+	font-weight: normal;
+}
+.ui-pgrid-footer input.ui-pgrid-footer-filter-input {
+	margin-right: .2em;
+	padding: 6px 6px;
+}
+.ui-pgrid-footer button {
+	cursor: pointer;
+	padding: 6px 6px;
+	margin: 0;
+}
+.ui-pgrid-footer input {
+	padding: 2px;
+	margin: 0;
+}
+.ui-pgrid-footer .ui-pgrid-footer-pager-container {
+	display: inline;
+	margin-left: 5px;
+	font-weight: normal;
+}
+.ui-pgrid-footer .ui-pgrid-footer-pager-container input {
+	text-align: right;
+	padding: 6px 6px;
+}
+.ui-pgrid-footer .ui-pgrid-footer-count-container {
+	float: right;
+	margin-left: 5px;
+	margin-top: 3px;
+	font-weight: normal;
+}
+.ui-pgrid-footer .ui-pgrid-footer-resize-container {
+	clear: both;
+	text-align: center;
+	height: 12px;
+	overflow: hidden;
+	position: relative;
+	top: 3px;
+	margin-top: 2px;
+	cursor: s-resize;
+}
+.ui-pgrid-footer .ui-pgrid-footer-resize-container span {
+	margin: 0 auto;
+	position: relative;
+	top: -4px;
+}
+
+/* Grid Itself
+----------------------------------*/
+.ui-pgrid-table {
+	white-space: nowrap;
+	padding: 0;
+	border-spacing: 0;
+	width: auto;
+	table-layout: fixed;
+}
+.ui-pgrid-table .ui-pgrid-table-sized-cell {
+	width: 1px; /* Allows cell resizing less than its content's width. */
+	overflow: hidden;
+	white-space: nowrap;
+}
+.ui-pgrid-table tbody {
+	overflow: auto;
+}
+.ui-pgrid-table tr {
+	overflow: hidden;
+	height: 1em;
+	cursor: default;
+}
+.ui-pgrid-table.ui-pgrid-selectable tr {
+	cursor: pointer;
+}
+.ui-pgrid-table.ui-pgrid-selectable tr td.ui-pgrid-table-expander {
+	cursor: default;
+}
+.ui-pgrid-table thead tr {
+	position: relative;
+}
+.ui-pgrid-table thead th {
+	border-width: 0 1px 1px 0;
+	border-style: solid;
+	vertical-align: middle;
+	text-align: left;
+	overflow: hidden;
+	min-height: 16px;
+	padding: 0 2px;
+}
+.ui-pgrid-table thead th.ui-pgrid-table-header-resizeable {
+	border-right-width: 2px;
+	cursor: e-resize;
+}
+.ui-pgrid-table thead th.ui-icon.ui-pgrid-table-icon-hidden {
+	background-image: none;
+}
+.ui-pgrid-table thead th .ui-icon {
+	display: block;
+	visibility: hidden;
+	position: absolute;
+	top: -6px;
+	cursor: pointer;
+}
+.ui-pgrid-table thead th.ui-pgrid-table-expander .ui-icon {
+	float: none;
+	visibility: visible;
+}
+.ui-pgrid-table thead th .ui-icon.ui-pgrid-table-header-sorted-desc {
+	visibility: visible;
+}
+.ui-pgrid-table thead th .ui-icon.ui-pgrid-table-header-sorted-asc {
+	visibility: visible;
+}
+.ui-pgrid-table thead th .ui-pgrid-table-header-text {
+	padding: 4px 2px;
+	cursor: default;
+}
+.ui-pgrid-table thead th .ui-pgrid-table-header-text.ui-pgrid-table-header-sortable {
+	cursor: pointer;
+}
+.ui-pgrid-table tbody tr.child, .ui-pgrid-table.ui-pgrid-paginated tbody tr, .ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible.ui-helper-hidden {
+	display: none;
+}
+.ui-pgrid-table tbody tr.child.ui-pgrid-table-row-visible, .ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible {
+	display: table-row;
+}
+.ui-pgrid-table tbody tr td.ui-pgrid-table-cell-sorted {
+	font-style: italic;
+}
+.ui-pgrid-table tbody td, .ui-pgrid-table tbody td.ui-state-highlight, .ui-pgrid-table tbody td.ui-state-default, .ui-pgrid-table tbody td.ui-state-hover {
+	border-width: 0 1px 1px 0;
+	border-style: solid;
+	padding: 4px 2px;
+	text-align: left;
+}
+.ui-pgrid-table tbody td.ui-pgrid-table-expander, .ui-pgrid-table thead th.ui-pgrid-table-expander {
+	min-width: 24px;
+	min-height: 24px;
+	width: auto;
+	height: auto;
+	display: table-cell;
+	padding: 0;
+}

@@ -1,0 +1,15 @@
+/* 
+	Document   : jquery.pgrid.touch.icons.css
+	Created on : Jun 11, 2010, 5:44:42 PM
+	Author     : Hunter Perrin
+	Description:
+		Pines Icon styling for Pines Grid Touch styling.
+*/
+
+.ui-pgrid-toolbar .picon {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding: 1px 1px 1px 18px !important;
+	min-height: 14px;
+}
