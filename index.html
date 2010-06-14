@@ -179,8 +179,8 @@
 							rows.pgrid_delete();
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'All', extra_class: 'picon picon-list-add', select_all: true},
-						{type: 'button', text: 'None', extra_class: 'picon picon-list-remove', select_none: true},
+						{type: 'button', text: 'All', extra_class: 'picon picon-edit-select', select_all: true},
+						{type: 'button', text: 'None', extra_class: 'picon picon-edit-select', select_none: true},
 						{type: 'separator'},
 						{type: 'button', text: '', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
 							window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
@@ -243,6 +243,16 @@
 				stateful_grid.pgrid_import_state(saved_state);
 			}
 
+			function toggle_touch_css() {
+				if (typeof touch_css == "undefined") {
+					touch_css = $("<link href=\"jquery.pgrid.touch.css\" rel=\"stylesheet\" type=\"text/css\" /><link href=\"jquery.pgrid.touch.icons.css\" rel=\"stylesheet\" type=\"text/css\" />");
+					touch_css.appendTo("head");
+				} else {
+					touch_css.remove();
+					delete touch_css;
+				}
+			}
+
 			// ]]>
 		</script>
 	</head>
@@ -291,6 +301,7 @@
 						<ul>
 							<li><span class="ui-icon ui-icon-bullet"></span>Clean, sensible, easy markup.</li>
 							<li><span class="ui-icon ui-icon-bullet"></span>Population either statically or dynamically.</li>
+							<li><span class="ui-icon ui-icon-bullet"></span><a href="#" onclick="toggle_touch_css(); $(this).prev().toggleClass('ui-icon-bullet').toggleClass('ui-icon-check'); return false;" title="Toggle Touch Styling">Touch styling, for touch-screen friendly operation.</a></li>
 							<li><span class="ui-icon ui-icon-bullet"></span><a href="http://jqueryui.com/themeroller/"><img src="includes/themeroller-ready.png" alt="ThemeRoller Ready" /></a></li>
 						</ul>
 					</div>

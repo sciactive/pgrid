@@ -48,7 +48,7 @@
 	padding: 4px 3px;
 	margin: 0;
 	font-weight: normal;
-	line-height: 2em;
+	line-height: 2.5em;
 }
 .ui-pgrid-toolbar .ui-pgrid-toolbar-sep {
 	height: 1em;
@@ -59,7 +59,7 @@
 .ui-pgrid-toolbar .ui-pgrid-toolbar-button {
 	cursor: pointer;
 	padding: 6px 6px;
-	margin: 1px;
+	margin: 1px 2px;
 }
 .ui-pgrid-toolbar .ui-pgrid-toolbar-button div {
 	padding: 0 1px;
