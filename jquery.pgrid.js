@@ -953,7 +953,7 @@
 
 			/* -- Toolbar -- */
 			if (pgrid.pgrid_toolbar) {
-				pgrid.toolbar = $("<div />").addClass("ui-pgrid-toolbar ui-helper-clearfix");
+				pgrid.toolbar = $("<div />").addClass("ui-pgrid-toolbar");
 
 				$.each(pgrid.pgrid_toolbar_contents, function(key, val){
 					if (val.type == "button") {

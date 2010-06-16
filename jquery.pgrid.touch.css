@@ -1,4 +1,4 @@
-/* 
+/*
 	Document   : jquery.pgrid.touch.css
 	Created on : Jun 11, 2010, 5:33:30 PM
 	Author     : Hunter Perrin
@@ -44,9 +44,6 @@
 
 /* Toolbar
 ----------------------------------*/
-.ui-pgrid-toolbar-container {
-	background-position: top;
-}
 .ui-pgrid-toolbar {
 	padding: .2em;
 	margin: 0;
