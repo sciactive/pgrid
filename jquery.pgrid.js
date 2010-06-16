@@ -953,12 +953,12 @@
 
 			/* -- Toolbar -- */
 			if (pgrid.pgrid_toolbar) {
-				pgrid.toolbar = $("<div />").addClass("ui-pgrid-toolbar");
+				pgrid.toolbar = $("<div />").addClass("ui-pgrid-toolbar ui-helper-clearfix");
 
 				$.each(pgrid.pgrid_toolbar_contents, function(key, val){
 					if (val.type == "button") {
-						var cur_button = $("<span />").addClass("ui-pgrid-toolbar-button ui-state-default ui-corner-all").append(
-							$("<span><span>"+val.text+"</span></span>").each(function(){
+						var cur_button = $("<div />").addClass("ui-pgrid-toolbar-button ui-state-default ui-corner-all").append(
+							$((typeof val.text == "undefined" || val.text == "") ? "<div><div class=\"ui-pgrid-toolbar-blank\">-</div></div>" : "<div>"+val.text+"</div>").each(function(){
 								if (val.extra_class)
 									$(this).addClass(val.extra_class);
 							})
@@ -1061,6 +1061,8 @@
 						}, function(){
 							$(this).removeClass("ui-state-hover");
 						});
+						if (typeof val.title != "undefined")
+							cur_button.attr("title", val.title);
 						if (val.double_click) {
 							// Save any previous double click functions.
 							if (pgrid.pgrid_double_click_tb)
@@ -1074,9 +1076,11 @@
 						}
 						pgrid.toolbar.append(cur_button);
 					} else if (val.type == "text") {
-						var wrapper = $("<span />").addClass("ui-pgrid-toolbar-text");
+						var wrapper = $("<div />").addClass("ui-pgrid-toolbar-text");
 						if (val.extra_class)
 							wrapper.addClass(val.extra_class);
+						if (typeof val.title != "undefined")
+							wrapper.attr("title", val.title);
 						if (val.label)
 							wrapper.append($("<span>"+val.label+"</span>").addClass("ui-pgrid-toolbar-text-label"));
 						var cur_text = $("<input type=\"text\" />").addClass("ui-widget ui-widget-content ui-corner-all");
@@ -1094,10 +1098,11 @@
 							val.load(cur_text);
 					} else if (val.type == "separator") {
 						pgrid.toolbar.append(
-							$("<span />").addClass("ui-pgrid-toolbar-sep ui-state-default")
+							$("<div />").addClass("ui-pgrid-toolbar-sep ui-state-default").append(
+								$("<div>-</div>").addClass("ui-pgrid-toolbar-blank")
+							)
 						);
 					}
-					pgrid.toolbar.append("<span class=\"ui-pgrid-toolbar-spacer\"> </span>");
 				});
 
 			}

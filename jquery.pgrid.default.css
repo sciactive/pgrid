@@ -44,38 +44,35 @@
 
 /* Toolbar
 ----------------------------------*/
+.ui-pgrid-toolbar-container {
+	background-position: top;
+}
 .ui-pgrid-toolbar {
-	padding: 2px;
+	padding: .2em;
 	margin: 0;
 	font-weight: normal;
-	line-height: 2em;
+}
+.ui-pgrid-toolbar .ui-pgrid-toolbar-sep, .ui-pgrid-toolbar .ui-pgrid-toolbar-button, .ui-pgrid-toolbar .ui-pgrid-toolbar-text {
+	display: inline-block;
+	padding: .4em;
+	margin: .1em;
+	white-space: pre;
 }
 .ui-pgrid-toolbar .ui-pgrid-toolbar-sep {
-	height: 1em;
-	width: 0;
-	padding: .3em 0;
-	margin: 1px 2px;
+	padding: .4em 0;
+}
+.ui-pgrid-toolbar .ui-pgrid-toolbar-text {
+	padding: 0 .4em;
+}
+.ui-pgrid-toolbar .ui-pgrid-toolbar-blank {
+	width: 1px;
+	visibility: hidden;
 }
 .ui-pgrid-toolbar .ui-pgrid-toolbar-button {
 	cursor: pointer;
-	padding: 3px;
-	margin: 1px;
-}
-.ui-pgrid-toolbar .ui-pgrid-toolbar-button div {
-	padding: 0 1px;
-	white-space: pre;
-}
-.ui-pgrid-toolbar .ui-pgrid-toolbar-text {
-	padding: 2px;
-	margin: 1px;
-	white-space: pre;
 }
 .ui-pgrid-toolbar .ui-pgrid-toolbar-text input {
-	padding: 3px;
-}
-.ui-pgrid-toolbar .ui-pgrid-toolbar-spacer {
-	font-size: 0;
-	line-height: 0;
+	padding: .3em;
 }
 
 /* Footer

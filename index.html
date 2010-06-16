@@ -126,7 +126,7 @@
 						{type: 'button', text: 'Email', extra_class: 'picon picon-mail-message', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
 						{type: 'button', text: 'All', extra_class: 'picon picon-mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
 						{type: 'separator'},
-						{type: 'text', label: 'SMS: ', extra_class: 'picon picon-phone', attributes: {size: 15}, load: function(textbox){
+						{type: 'text', label: 'SMS: ', title: 'Send a Text Message', extra_class: 'picon picon-phone', attributes: {size: 15}, load: function(textbox){
 							textbox.focus(function(){
 								textbox.select();
 							}).keydown(function(e){
@@ -144,7 +144,7 @@
 								}
 							});
 						}},
-						{type: 'text', label: 'Raise: ', extra_class: 'picon picon-office-chart-bar', attributes: {size: 10}, load: function(textbox){
+						{type: 'text', label: 'Raise: ', title: 'Raise Salary', extra_class: 'picon picon-office-chart-bar', attributes: {size: 10}, load: function(textbox){
 							textbox.css("text-align", "right").keydown(function(e){
 								if (e.keyCode == 13) {
 									var rows = stateful_grid.pgrid_get_selected_rows();
@@ -179,10 +179,10 @@
 							rows.pgrid_delete();
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'All', extra_class: 'picon picon-edit-select', select_all: true},
-						{type: 'button', text: 'None', extra_class: 'picon picon-edit-select', select_none: true},
+						{type: 'button', text: 'All', title: 'Select All', extra_class: 'picon picon-edit-select', select_all: true},
+						{type: 'button', text: 'None', title: 'Select None', extra_class: 'picon picon-edit-select', select_none: true},
 						{type: 'separator'},
-						{type: 'button', text: '', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
+						{type: 'button', text: '', title: 'Make a Spreadsheet', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
 							window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
 						}}
 					],
