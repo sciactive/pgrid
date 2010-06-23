@@ -642,6 +642,8 @@
 					// Calculate their sort keys and store them in their DOM objects.
 					$.each(rows, function() {
 						var children = this.children[pgrid.pgrid_sort_col];
+						if (typeof children == "undefined")
+							return;
 						if (children.innerText != undefined)
 							this.sortKey = children.innerText.toUpperCase();
 						else if (children.textContent != undefined)
