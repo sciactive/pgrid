@@ -955,16 +955,28 @@
 
 			/* -- Toolbar -- */
 			if (pgrid.pgrid_toolbar) {
-				pgrid.toolbar = $("<div />").addClass("ui-pgrid-toolbar");
+				pgrid.toolbar = $("<div />").addClass("ui-pgrid-toolbar").delegate("button", "focus", function(){
+					$(this).addClass("ui-state-focus");
+				}).delegate("button", "blur", function(){
+					$(this).removeClass("ui-state-focus ui-state-active");
+				}).delegate("button", "mousedown", function(){
+					$(this).addClass("ui-state-active");
+				}).delegate("button", "mouseup", function(){
+					$(this).removeClass("ui-state-active");
+				}).delegate("button", "mouseenter", function(){
+					$(this).addClass("ui-state-hover");
+				}).delegate("button", "mouseleave", function(){
+					$(this).removeClass("ui-state-hover");
+				});
 
 				$.each(pgrid.pgrid_toolbar_contents, function(key, val){
 					if (val.type == "button") {
-						var cur_button = $("<div />").addClass("ui-pgrid-toolbar-button ui-state-default ui-corner-all").append(
-							$((typeof val.text == "undefined" || val.text == "") ? "<div><div class=\"ui-pgrid-toolbar-blank\">-</div></div>" : "<div>"+val.text+"</div>").each(function(){
+						var cur_button = $("<button class=\"ui-pgrid-toolbar-button ui-state-default ui-corner-all\" type=\"button\" />").append(
+							$((typeof val.text == "undefined") ? "<span></span>" : "<span>"+val.text+"</span>").each(function(){
 								if (val.extra_class)
 									$(this).addClass(val.extra_class);
 							})
-						).mouseup(function(e){
+						).click(function(e){
 							if (e.button == 2)
 								return true;
 							var selected_rows = (val.return_all_rows ? pgrid.children("tbody").children("tr:not(.ui-helper-hidden)") : pgrid.children("tbody").children("tr.ui-pgrid-table-row-selected"));
@@ -1055,13 +1067,6 @@
 								}
 							}
 							return true;
-						}).mousedown(function(){
-							// Prevent text selection;
-							return false;
-						}).hover(function(){
-							$(this).addClass("ui-state-hover");
-						}, function(){
-							$(this).removeClass("ui-state-hover");
 						});
 						if (typeof val.title != "undefined")
 							cur_button.attr("title", val.title);
@@ -1112,7 +1117,15 @@
 			/* -- Footer -- */
 			// Build a footer to place some utilities.
 			if (pgrid.pgrid_footer) {
-				pgrid.footer = $("<div />").addClass("ui-pgrid-footer ui-widget-header ui-corner-bottom ui-helper-clearfix").delegate("button", "mouseenter", function(){
+				pgrid.footer = $("<div />").addClass("ui-pgrid-footer ui-widget-header ui-corner-bottom ui-helper-clearfix").delegate("button", "focus", function(){
+					$(this).addClass("ui-state-focus");
+				}).delegate("button", "blur", function(){
+					$(this).removeClass("ui-state-focus ui-state-active");
+				}).delegate("button", "mousedown", function(){
+					$(this).addClass("ui-state-active");
+				}).delegate("button", "mouseup", function(){
+					$(this).removeClass("ui-state-active");
+				}).delegate("button", "mouseenter", function(){
 					$(this).addClass("ui-state-hover");
 				}).delegate("button", "mouseleave", function(){
 					$(this).removeClass("ui-state-hover");
@@ -1176,10 +1189,9 @@
 							var footer_pager = $(this);
 							footer_pager.append("Display ")
 							.append(
-								$("<input />").addClass("ui-widget ui-widget-content ui-corner-all").attr({
+								$("<input />").addClass("ui-widget ui-widget-content ui-corner-all ui-pgrid-per-page").attr({
 									type: "text",
-									value: pgrid.pgrid_perpage,
-									size: "1"
+									value: pgrid.pgrid_perpage
 								}).change(function(){
 									var display_number = $(this);
 									pgrid.set_per_page(Math.abs(parseInt(display_number.val())));

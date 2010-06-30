@@ -99,7 +99,8 @@
 	margin-left: 5px;
 	font-weight: normal;
 }
-.ui-pgrid-footer .ui-pgrid-footer-pager-container input {
+.ui-pgrid-footer .ui-pgrid-footer-pager-container .ui-pgrid-per-page, .ui-pgrid-footer .ui-pgrid-footer-pager-container .ui-pgrid-page-number {
+	width: 2em;
 	text-align: right;
 }
 .ui-pgrid-footer .ui-pgrid-footer-count-container {
