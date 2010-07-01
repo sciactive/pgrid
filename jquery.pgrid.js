@@ -989,15 +989,20 @@
 								return false;
 							}
 							if (val.confirm) {
-								if (val.return_all_rows) {
-									if (!confirm("Are you sure you want to perform the operation \""+val.text+"\" on all items?"))
-										return false;
-								} else if (selected_rows.length === 0) {
-									if (!confirm("Are you sure you want to perform the operation \""+val.text+"\"?"))
+								if (typeof val.confirm == "function") {
+									if (!val.confirm(e, selected_rows))
 										return false;
 								} else {
-									if (!confirm("Are you sure you want to perform the operation \""+val.text+"\" on the "+selected_rows.length+" currently selected item(s)?"))
-										return false;
+									if (val.return_all_rows) {
+										if (!confirm("Are you sure you want to perform the operation \""+val.text+"\" on all items?"))
+											return false;
+									} else if (selected_rows.length === 0) {
+										if (!confirm("Are you sure you want to perform the operation \""+val.text+"\"?"))
+											return false;
+									} else {
+										if (!confirm("Are you sure you want to perform the operation \""+val.text+"\" on the "+selected_rows.length+" currently selected item(s)?"))
+											return false;
+									}
 								}
 							}
 							if (val.select_all) {

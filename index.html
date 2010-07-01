@@ -175,7 +175,9 @@
 						{type: 'button', text: 'Delete', extra_class: 'picon picon-edit-delete', confirm: true, multi_select: true, click: function(e, rows){
 							rows.pgrid_delete();
 						}},
-						{type: 'button', text: 'Clear All', extra_class: 'picon picon-edit-clear', confirm: true, multi_select: true, return_all_rows: true, click: function(e, rows){
+						{type: 'button', text: 'Clear All', extra_class: 'picon picon-edit-clear', multi_select: true, return_all_rows: true, confirm: function(e, rows){
+							return confirm("This will delete all "+rows.length+" rows! Are you sure you want to do this?");
+						}, click: function(e, rows){
 							rows.pgrid_delete();
 						}},
 						{type: 'separator'},
