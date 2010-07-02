@@ -106,6 +106,52 @@
 		});
 		return return_array;
 	};
+	$.fn.pgrid_expand_rows = function(keysorrows) {
+		var pgrid = null;
+		if (!keysorrows) {
+			keysorrows = this;
+			pgrid = keysorrows.closest(".ui-pgrid-table").get(0);
+			if (pgrid && pgrid.pines_grid)
+				pgrid = pgrid.pines_grid;
+		} else {
+			pgrid = this.get(0);
+			if (pgrid && pgrid.pines_grid)
+				pgrid = pgrid.pines_grid;
+		}
+		if (!pgrid)
+			return this;
+		if (!keysorrows.jquery) {
+			if (typeof keysorrows != "object")
+				return this;
+			keysorrows = pgrid.children("tbody").children("tr[title='" + keysorrows.join("'], tr[title='") + "']");
+		}
+		var parents = keysorrows.filter("tr.parent").addClass("ui-pgrid-table-row-expanded");
+		pgrid.show_children(parents);
+		return this;
+	};
+	$.fn.pgrid_collapse_rows = function(keysorrows) {
+		var pgrid = null;
+		if (!keysorrows) {
+			keysorrows = this;
+			pgrid = keysorrows.closest(".ui-pgrid-table").get(0);
+			if (pgrid && pgrid.pines_grid)
+				pgrid = pgrid.pines_grid;
+		} else {
+			pgrid = this.get(0);
+			if (pgrid && pgrid.pines_grid)
+				pgrid = pgrid.pines_grid;
+		}
+		if (!pgrid)
+			return this;
+		if (!keysorrows.jquery) {
+			if (typeof keysorrows != "object")
+				return this;
+			keysorrows = pgrid.children("tbody").children("tr[title='" + keysorrows.join("'], tr[title='") + "']");
+		}
+		var parents = keysorrows.filter("tr.parent").removeClass("ui-pgrid-table-row-expanded");
+		pgrid.hide_children(parents);
+		return this;
+	};
 	$.fn.pgrid_select_rows = function(keysorrows) {
 		var pgrid = null;
 		if (!keysorrows) {
@@ -375,6 +421,7 @@
 				// For each row, hide its children.
 				var parents = jq_rows.filter("tr.parent");
 				if (!parents.length) return;
+				parents.children("td.ui-pgrid-table-expander").children("span.ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-e");
 				parents.each(function() {
 					var cur_row = $(this);
 					cur_row.siblings("tr."+cur_row.attr("title")+".ui-pgrid-table-row-visible").removeClass("ui-pgrid-table-row-visible").filter("tr.parent").each(function(){
@@ -388,6 +435,7 @@
 				// For each row, unhide its children. (If it's expanded.)
 				var parents = jq_rows.filter("tr.parent.ui-pgrid-table-row-expanded");
 				if (!parents.length) return;
+				parents.children("td.ui-pgrid-table-expander").children("span.ui-icon").removeClass("ui-icon-triangle-1-e").addClass("ui-icon-triangle-1-s");
 				parents.each(function() {
 					var cur_row = $(this);
 					// If this row is expanded, its children should be shown.
@@ -776,21 +824,20 @@
 					pgrid.init_children(cur_row.siblings("."+cur_row.attr("title")).each(function(){
 						$(this).children("td:not(.ui-pgrid-table-expander)").css("padding-left", (cur_padding+10)+"px");
 					}).filter("tr.parent"));
-				}).children("td.ui-pgrid-table-expander").append($("<span />").addClass("ui-icon ui-icon-triangle-1-e")).click(function(){
-					// Bind to expander's click to toggle its children.
-					var cur_expander = $(this);
-					var cur_working_row = cur_expander.parent();
-					if (cur_working_row.hasClass("ui-pgrid-table-row-expanded")) {
-						cur_working_row.removeClass("ui-pgrid-table-row-expanded");
-						cur_expander.children("span.ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-e");
-						pgrid.hide_children(cur_working_row);
-					} else {
-						cur_working_row.addClass("ui-pgrid-table-row-expanded");
-						cur_expander.children("span.ui-icon").removeClass("ui-icon-triangle-1-e").addClass("ui-icon-triangle-1-s");
-						pgrid.show_children(cur_working_row);
-					}
-				});
+				}).children("td.ui-pgrid-table-expander").append($("<span />").addClass("ui-icon ui-icon-triangle-1-e"));
 			};
+
+			pgrid.children("tbody").delegate("tr.parent td.ui-pgrid-table-expander", "click", function(){
+				// Bind to expander's click to toggle its children.
+				var cur_working_row = $(this).parent();
+				if (cur_working_row.hasClass("ui-pgrid-table-row-expanded")) {
+					cur_working_row.removeClass("ui-pgrid-table-row-expanded");
+					pgrid.hide_children(cur_working_row);
+				} else {
+					cur_working_row.addClass("ui-pgrid-table-row-expanded");
+					pgrid.show_children(cur_working_row);
+				}
+			});
 
 			// Add some coloring when hovering over rows.
 			if (pgrid.pgrid_row_hover_effect) {
