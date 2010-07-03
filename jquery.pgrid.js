@@ -446,6 +446,19 @@
 				});
 			};
 
+			pgrid.place_children = function(jq_rows) {
+				// For each row, place its children.
+				var parents = jq_rows.filter("tr.parent");
+				if (!parents.length) return;
+				parents.each(function(){
+					var cur_row = $(this);
+					var children = cur_row.siblings("."+cur_row.attr("title"));
+					cur_row.after(children);
+					// And its descendants, if it's a parent.
+					pgrid.place_children(children.filter(".parent"));
+				});
+			};
+
 			pgrid.mark_for_delete_recursively = function(jq_rows) {
 				// For each row, mark its children.
 				jq_rows.each(function() {
@@ -633,16 +646,18 @@
 							column_class = column_class.replace(/\D/g, "");
 						column_class = parseInt(column_class);
 					}
-					// If they click the header again, change to descending order.
-					if (!loading && pgrid.pgrid_sort_col == column_class) {
-						if (pgrid.pgrid_sort_ord == "asc")
-							pgrid.pgrid_sort_ord = "desc";
-						else
-							pgrid.pgrid_sort_ord = "asc";
-					} else {
-						if (column_class) {
-							pgrid.pgrid_sort_col = column_class;
-							pgrid.pgrid_sort_ord = "asc";
+					if (!loading) {
+						if (pgrid.pgrid_sort_col == column_class) {
+							// If they click the header again, change to descending order.
+							if (pgrid.pgrid_sort_ord == "asc")
+								pgrid.pgrid_sort_ord = "desc";
+							else
+								pgrid.pgrid_sort_ord = "asc";
+						} else {
+							if (column_class) {
+								pgrid.pgrid_sort_col = column_class;
+								pgrid.pgrid_sort_ord = "asc";
+							}
 						}
 					}
 
@@ -714,12 +729,8 @@
 					if (pgrid.pgrid_sort_ord == "desc")
 						rows.reverse();
 					// Insert the rows into the tbody in the correct order.
-					pgrid.children("tbody").append(rows);
-					// Place children under their parents.
-					all_rows.filter("tr.parent").each(function(){
-						var cur_row = $(this);
-						cur_row.after(cur_row.siblings("."+cur_row.attr("title")));
-					});
+					// Place children under their parents, starting with top level parents.
+					pgrid.place_children($(rows).appendTo(pgrid.children("tbody")).filter("tr.parent:not(.child)"));
 					// Paginate, since we changed the order, but only if we're not loading, to speed up initialization.
 					if (!loading)
 						pgrid.paginate();
@@ -1216,12 +1227,9 @@
 				if (typeof pgrid.pgrid_sort_col == "string")
 					pgrid.pgrid_sort_col = pgrid.pgrid_sort_col.replace(/\D/g, "");
 				pgrid.pgrid_sort_col = parseInt(pgrid.pgrid_sort_col);
-				// Since the order is switched if the column is already set, we need to set the order to the opposite.
-				// This also works as a validator. Anything other than "desc" will become "asc" when it's switched.
-				if (pgrid.pgrid_sort_ord == "desc")
+				// This is a validator. Anything other than "desc" will become "asc".
+				if (pgrid.pgrid_sort_ord != "desc")
 					pgrid.pgrid_sort_ord = "asc";
-				else
-					pgrid.pgrid_sort_ord = "desc";
 				// Store the real sortable value in a temp val, and make sure it's true while we sort initially.
 				var tmp_col_val = pgrid.pgrid_sortable;
 				pgrid.pgrid_sortable = true;
