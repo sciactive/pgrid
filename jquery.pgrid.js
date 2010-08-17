@@ -489,7 +489,8 @@
 
 			pgrid.paginate = function(loading) {
 				if (pgrid.pgrid_paginate) {
-					var all_rows = pgrid.children("tbody").children("tr:not(.ui-helper-hidden):not(.child)");
+					var all_rows = pgrid.children("tbody").children().not(".ui-helper-hidden, .child");
+					
 					// Calculate the total number of pages.
 					pgrid.pgrid_pages = Math.ceil(all_rows.length / pgrid.pgrid_perpage);
 
@@ -500,9 +501,9 @@
 					else if ((pgrid.pgrid_page == -1) && (pgrid.pgrid_pages > 0))
 						pgrid.pgrid_page = 0;
 
-					// Hide the previous page's rows.
+					// Hide the previous page's rows and their children.
 					if (pgrid.cur_page_rows)
-						pgrid.cur_page_rows.removeClass("ui-pgrid-table-row-visible");
+						pgrid.hide_children(pgrid.cur_page_rows.removeClass("ui-pgrid-table-row-visible"));
 					// Select all rows on the current page.
 					var page_start = pgrid.pgrid_page * pgrid.pgrid_perpage;
 					var page_end = (pgrid.pgrid_page * pgrid.pgrid_perpage) + pgrid.pgrid_perpage;
@@ -664,10 +665,7 @@
 					// Stylize the currently sorted column header. (According to order.)
 					var headers = pgrid.children("thead").children().children();
 					headers.children("span.ui-pgrid-table-header-sorted-asc, span.ui-pgrid-table-header-sorted-desc")
-					.removeClass("ui-pgrid-table-header-sorted-asc")
-					.removeClass("ui-pgrid-table-header-sorted-desc")
-					.removeClass("ui-icon-triangle-1-s")
-					.removeClass("ui-icon-triangle-1-n");
+					.removeClass("ui-pgrid-table-header-sorted-asc ui-pgrid-table-header-sorted-desc ui-icon-triangle-1-s ui-icon-triangle-1-n");
 					if (pgrid.pgrid_sort_ord == "asc")
 						headers.filter("th.col_"+pgrid.pgrid_sort_col).children("span.ui-icon").addClass("ui-pgrid-table-header-sorted-desc ui-icon-triangle-1-n");
 					else
@@ -679,26 +677,26 @@
 					// Stylize the currently sorted column.
 					var cols = all_rows.children("td.col_"+pgrid.pgrid_sort_col).addClass("ui-pgrid-table-cell-sorted");
 
-					// Is this column only numbers, or is there a string?
-					var is_str = false;
-					// Match only numbers.
-					var num_match = new RegExp("^[¤$€£¥#-]?[0-9.,"+pgrid.pgrid_decimal_sep+"]+¢?$");
-					// Match only string characters.
-					var string_relace = new RegExp("[^0-9"+pgrid.pgrid_decimal_sep+"-]", "g");
-					cols.each(function(){
-						if (is_str)
-							return;
-						if (this.innerText != undefined) {
-							if (!this.innerText.match(num_match))
-								is_str = true;
-						} else if (this.textContent != undefined) {
-							if (!this.textContent.match(num_match))
-								is_str = true;
-						} else {
-							if (!$(this).text().match(num_match))
-								is_str = true;
-						}
-					});
+//					// Is this column only numbers, or is there a string?
+//					var is_str = false;
+//					// Match only numbers.
+//					var num_match = new RegExp("^[¤$€£¥#-]?[0-9.,"+pgrid.pgrid_decimal_sep+"]+¢?$");
+//					// Match only string characters.
+//					var string_relace = new RegExp("[^0-9"+pgrid.pgrid_decimal_sep+"-]", "g");
+//					cols.each(function(){
+//						if (is_str)
+//							return;
+//						if (this.innerText != undefined) {
+//							if (!this.innerText.match(num_match))
+//								is_str = true;
+//						} else if (this.textContent != undefined) {
+//							if (!this.textContent.match(num_match))
+//								is_str = true;
+//						} else {
+//							if (!$(this).text().match(num_match))
+//								is_str = true;
+//						}
+//					});
 
 					var rows = all_rows.get();
 
@@ -707,23 +705,41 @@
 						var children = this.children[pgrid.pgrid_sort_col];
 						if (typeof children == "undefined")
 							return;
+						var t;
 						if (children.innerText != undefined)
-							this.sortKey = children.innerText.toUpperCase();
+							t = children.innerText.toLowerCase();
 						else if (children.textContent != undefined)
-							this.sortKey = children.textContent.toUpperCase();
+							t = children.textContent.toLowerCase();
 						else
-							this.sortKey = $(children).text().toUpperCase(); //.replace("├ ", "").replace("└ ", "").toUpperCase();
-						if (!is_str) {
-							// If this column contains only numbers (currency signs and # included), parse it as floats.
-							// Strip non numerical characters except for the decimal separator. Replace that with a period, then parse it.
-							this.sortKey = parseFloat(this.sortKey.replace(string_relace, "").replace(pgrid.pgrid_decimal_sep, "."));
+							t = $(children).text().toLowerCase(); //.replace("├ ", "").replace("└ ", "").toUpperCase();
+//						if (!is_str) {
+//							// If this column contains only numbers (currency signs and # included), parse it as floats.
+//							// Strip non numerical characters except for the decimal separator. Replace that with a period, then parse it.
+//							this.sortKey = parseFloat(this.sortKey.replace(string_relace, "").replace(pgrid.pgrid_decimal_sep, "."));
+//						}
+						this.sortKey = [];
+						var x = 0, y = -1, n = 0, i, j;
+						while (i = (j = t.charAt(x++)).charCodeAt(0)) {
+							var m = (i == 46 || (i >=48 && i <= 57));
+							if (m !== n) {
+								this.sortKey[++y] = "";
+								n = m;
+							}
+							this.sortKey[y] += j;
 						}
 					});
-					// Sort them by their keys.
-					rows.sort(function(a, b) {
-						if (a.sortKey < b.sortKey) return -1;
-						if (a.sortKey > b.sortKey) return 1;
-						return 0;
+					// Natural Sort http://my.opera.com/GreyWyvern/blog/show.dml/1671288
+					rows.sort(function(ae, be) {
+						var a = ae.sortKey, b = be.sortKey;
+						for (var x = 0, aa, bb; (aa = a[x]) && (bb = b[x]); x++) {
+							if (aa !== bb) {
+								var c = Number(aa), d = Number(bb);
+								if (c == aa && d == bb)
+									return c - d;
+								else return (aa > bb) ? 1 : -1;
+							}
+						}
+						return a.length - b.length;
 					});
 					// We need to reverse the order if it's descending.
 					if (pgrid.pgrid_sort_ord == "desc")
