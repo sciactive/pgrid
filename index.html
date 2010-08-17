@@ -181,17 +181,17 @@
 							rows.pgrid_delete();
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'Expand', title: 'Expand All', extra_class: 'picon picon-arrow-down', selection_optional: true, return_all_rows: true, click: function(e, rows){
+						{type: 'button', title: 'Expand All', extra_class: 'picon picon-arrow-down', selection_optional: true, return_all_rows: true, click: function(e, rows){
 							rows.pgrid_expand_rows();
 						}},
-						{type: 'button', text: 'Collapse', title: 'Collapse All', extra_class: 'picon picon-arrow-right', selection_optional: true, return_all_rows: true, click: function(e, rows){
+						{type: 'button', title: 'Collapse All', extra_class: 'picon picon-arrow-right', selection_optional: true, return_all_rows: true, click: function(e, rows){
 							rows.pgrid_collapse_rows();
 						}},
 						{type: 'separator'},
-						{type: 'button', text: 'All', title: 'Select All', extra_class: 'picon picon-edit-select', select_all: true},
-						{type: 'button', text: 'None', title: 'Select None', extra_class: 'picon picon-edit-select', select_none: true},
+						{type: 'button', title: 'Select All', extra_class: 'picon picon-document-multiple', select_all: true},
+						{type: 'button', title: 'Select None', extra_class: 'picon picon-document-close', select_none: true},
 						{type: 'separator'},
-						{type: 'button', text: '', title: 'Make a Spreadsheet', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
+						{type: 'button', title: 'Make a Spreadsheet', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
 							window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
 						}}
 					],

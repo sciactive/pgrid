@@ -242,10 +242,10 @@
 	$.fn.pgrid_get_value = function(column) {
 		// Only works on one row.
 		var cur_row = $(this).eq(0);
-		return cur_row.children(".col_"+column).html();
+		return cur_row.children(":nth-child("+(column+1)+")").html();
 	};
 	$.fn.pgrid_set_value = function(column, value) {
-		this.children(".col_"+column).html(value);
+		this.children(":nth-child("+(column+1)+")").html(value);
 	};
 	$.fn.pgrid_export_state = function() {
 		var pgrid = this.get(0);
@@ -667,36 +667,15 @@
 					headers.children(".ui-pgrid-table-header-sorted-asc, .ui-pgrid-table-header-sorted-desc")
 					.removeClass("ui-pgrid-table-header-sorted-asc ui-pgrid-table-header-sorted-desc ui-icon-triangle-1-s ui-icon-triangle-1-n");
 					if (pgrid.pgrid_sort_ord == "asc")
-						headers.filter(".col_"+pgrid.pgrid_sort_col).children(".ui-icon").addClass("ui-pgrid-table-header-sorted-desc ui-icon-triangle-1-n");
+						headers.filter(":nth-child("+(pgrid.pgrid_sort_col+1)+")").children(".ui-icon").addClass("ui-pgrid-table-header-sorted-desc ui-icon-triangle-1-n");
 					else
-						headers.filter(".col_"+pgrid.pgrid_sort_col).children(".ui-icon").addClass("ui-pgrid-table-header-sorted-asc ui-icon-triangle-1-s");
+						headers.filter(":nth-child("+(pgrid.pgrid_sort_col+1)+")").children(".ui-icon").addClass("ui-pgrid-table-header-sorted-asc ui-icon-triangle-1-s");
 
 					// Get all the rows.
 					var all_rows = pgrid.children("tbody").children();
 					all_rows.children(".ui-pgrid-table-cell-sorted").removeClass("ui-pgrid-table-cell-sorted");
 					// Stylize the currently sorted column.
-					var cols = all_rows.children(".col_"+pgrid.pgrid_sort_col).addClass("ui-pgrid-table-cell-sorted");
-
-//					// Is this column only numbers, or is there a string?
-//					var is_str = false;
-//					// Match only numbers.
-//					var num_match = new RegExp("^[¤$€£¥#-]?[0-9.,"+pgrid.pgrid_decimal_sep+"]+¢?$");
-//					// Match only string characters.
-//					var string_relace = new RegExp("[^0-9"+pgrid.pgrid_decimal_sep+"-]", "g");
-//					cols.each(function(){
-//						if (is_str)
-//							return;
-//						if (this.innerText != undefined) {
-//							if (!this.innerText.match(num_match))
-//								is_str = true;
-//						} else if (this.textContent != undefined) {
-//							if (!this.textContent.match(num_match))
-//								is_str = true;
-//						} else {
-//							if (!$(this).text().match(num_match))
-//								is_str = true;
-//						}
-//					});
+					all_rows.children(":nth-child("+(pgrid.pgrid_sort_col+1)+")").addClass("ui-pgrid-table-cell-sorted");
 
 					var rows = all_rows.get();
 
@@ -784,7 +763,7 @@
 					// First unhide all hidden columns.
 					h_rows.children(":hidden").each(function(){
 						var cur_header = $(this).show();
-						b_rows.children(".col_"+cur_header.prevAll().length).show();
+						b_rows.children(":nth-child("+(cur_header.prevAll().length+1)+")").show();
 					});
 				}
 				var checkboxes = pgrid.pgrid_header_select.children().children();
@@ -792,8 +771,8 @@
 				for (var cur_col in pgrid.pgrid_hidden_cols) {
 					if (isNaN(cur_col)) continue;
 					checkboxes.filter(".ui-pgrid-table-col-hider-"+pgrid.pgrid_hidden_cols[cur_col]).removeAttr("checked");
-					h_rows.children(".col_"+pgrid.pgrid_hidden_cols[cur_col]).hide();
-					b_rows.children(".col_"+pgrid.pgrid_hidden_cols[cur_col]).hide();
+					h_rows.children(":nth-child("+(pgrid.pgrid_hidden_cols[cur_col]+1)+")").hide();
+					b_rows.children(":nth-child("+(pgrid.pgrid_hidden_cols[cur_col]+1)+")").hide();
 				}
 				// The grid's state has probably changed.
 				if (!loading) pgrid.state_changed();
@@ -803,8 +782,8 @@
 				if (pgrid.pgrid_hidden_cols.indexOf(number) == -1) {
 					pgrid.pgrid_hidden_cols.push(number);
 					pgrid.pgrid_header_select.children().children(".ui-pgrid-table-col-hider-"+number).removeAttr("checked");
-					pgrid.children("thead").children().children(".col_"+number).hide();
-					pgrid.children("tbody").children().children(".col_"+number).hide();
+					pgrid.children("thead").children().children(":nth-child("+(number+1)+")").hide();
+					pgrid.children("tbody").children().children(":nth-child("+(number+1)+")").hide();
 					pgrid.state_changed();
 				}
 			};
@@ -813,31 +792,17 @@
 				if (pgrid.pgrid_hidden_cols.indexOf(number) != -1) {
 					pgrid.pgrid_hidden_cols.splice(pgrid.pgrid_hidden_cols.indexOf(number), 1);
 					pgrid.pgrid_header_select.children().children(".ui-pgrid-table-col-hider-"+number).attr("checked", true);
-					pgrid.children("thead").children().children(".col_"+number).show();
-					pgrid.children("tbody").children().children(".col_"+number).show();
+					pgrid.children("thead").children().children(":nth-child("+(number+1)+")").show();
+					pgrid.children("tbody").children().children(":nth-child("+(number+1)+")").show();
 					pgrid.state_changed();
 				}
 			};
 
 			pgrid.init_rows = function(jq_rows) {
 				if (!jq_rows) return;
-				// Get table cells ready.
-				var new_classes;
-				// If this table is resizable, we need its cells to have a width of 1px;
-				if (pgrid.pgrid_resize_cols)
-					new_classes = "ui-pgrid-table-cell-text ui-pgrid-table-sized-cell";
-				else
-					new_classes = "ui-pgrid-table-cell-text";
-				var col_count = jq_rows.eq(0).children().length;
-				var cur_children = jq_rows.children(":first-child");
-				for (var i=1; i<=col_count; i++) {
-					cur_children.addClass(new_classes+" col_"+i);
-					cur_children = cur_children.next();
-				}
-				// Add an expander to the rows, add hover events, and give child rows indentation.
-				jq_rows.prepend("<td class=\"ui-pgrid-table-expander\"></td>");
 				// Add some styling.
-				jq_rows.addClass("ui-state-default");
+				// Add an expander to the rows, add hover events, and give child rows indentation.
+				jq_rows.addClass("ui-state-default").prepend("<td class=\"ui-pgrid-table-expander\"></td>");
 				// Style children.
 				pgrid.init_children(jq_rows.filter(".parent").not(".child"));
 			};
@@ -966,10 +931,6 @@
 					return false;
 				});
 			}
-			h_headers.each(function(index){
-				// Add the column class to the cell.
-				$(this).addClass("col_"+(index+1));
-			});
 			delete h_headers;
 			// When the mouse moves over the pgrid, and a column is being resized, set its width.
 			if (pgrid.pgrid_resize_cols) {
