@@ -134,11 +134,6 @@
 	width: auto;
 	table-layout: fixed;
 }
-.ui-pgrid-table .ui-pgrid-table-sized-cell {
-	width: 1px; /* Allows cell resizing less than its content's width. */
-	overflow: hidden;
-	white-space: nowrap;
-}
 .ui-pgrid-table tbody {
 	overflow: auto;
 }

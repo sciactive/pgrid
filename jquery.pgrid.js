@@ -63,7 +63,7 @@
 						if (typeof cur_keyorrow == "object") {
 							pgrid.mark_for_delete_recursively($(this));
 						} else {
-							pgrid.children("tbody").children("tr[title="+cur_keyorrow+"]").each(function(){
+							pgrid.children("tbody").children("[title="+cur_keyorrow+"]").each(function(){
 								pgrid.mark_for_delete_recursively($(this));
 							});
 						}
@@ -95,7 +95,7 @@
 			var cur_title = cur_row.attr("title");
 			var cur_class = cur_row.attr("class");
 			var value_array = [];
-			cur_row.children("td:not(.ui-pgrid-table-expander)").each(function(){
+			cur_row.children().not(".ui-pgrid-table-expander").each(function(){
 				value_array = $.merge(value_array, [$(this).text()]);
 			});
 			return_array = $.merge(return_array, [{
@@ -123,9 +123,9 @@
 		if (!keysorrows.jquery) {
 			if (typeof keysorrows != "object")
 				return this;
-			keysorrows = pgrid.children("tbody").children("tr[title='" + keysorrows.join("'], tr[title='") + "']");
+			keysorrows = pgrid.children("tbody").children("[title='" + keysorrows.join("'], [title='") + "']");
 		}
-		var parents = keysorrows.filter("tr.parent").addClass("ui-pgrid-table-row-expanded");
+		var parents = keysorrows.filter(".parent").addClass("ui-pgrid-table-row-expanded");
 		pgrid.show_children(parents);
 		return this;
 	};
@@ -146,9 +146,9 @@
 		if (!keysorrows.jquery) {
 			if (typeof keysorrows != "object")
 				return this;
-			keysorrows = pgrid.children("tbody").children("tr[title='" + keysorrows.join("'], tr[title='") + "']");
+			keysorrows = pgrid.children("tbody").children("[title='" + keysorrows.join("'], [title='") + "']");
 		}
-		var parents = keysorrows.filter("tr.parent").removeClass("ui-pgrid-table-row-expanded");
+		var parents = keysorrows.filter(".parent").removeClass("ui-pgrid-table-row-expanded");
 		pgrid.hide_children(parents);
 		return this;
 	};
@@ -169,10 +169,10 @@
 		if (!keysorrows.jquery) {
 			if (typeof keysorrows != "object")
 				return this;
-			keysorrows = pgrid.children("tbody").children("tr[title='" + keysorrows.join("'], tr[title='") + "']");
+			keysorrows = pgrid.children("tbody").children("[title='" + keysorrows.join("'], [title='") + "']");
 		}
 		if (pgrid.pgrid_select) {
-			if ((pgrid.children("tbody").children("tr.ui-pgrid-table-row-selected").length || keysorrows.length > 1) && !pgrid.pgrid_multi_select)
+			if ((pgrid.children("tbody").children(".ui-pgrid-table-row-selected").length || keysorrows.length > 1) && !pgrid.pgrid_multi_select)
 				return this;
 			keysorrows.addClass("ui-pgrid-table-row-selected ui-state-active");
 			pgrid.update_selected();
@@ -196,10 +196,10 @@
 		if (!keysorrows.jquery) {
 			if (typeof keysorrows != "object")
 				return this;
-			keysorrows = pgrid.children("tbody").children("tr[title='" + keysorrows.join("'], tr[title='") + "']");
+			keysorrows = pgrid.children("tbody").children("[title='" + keysorrows.join("'], [title='") + "']");
 		}
 		if (pgrid.pgrid_select) {
-			keysorrows.removeClass("ui-pgrid-table-row-selected").removeClass("ui-state-active");
+			keysorrows.removeClass("ui-pgrid-table-row-selected ui-state-active");
 			pgrid.update_selected();
 		}
 		return this;
@@ -224,15 +224,15 @@
 				return;
 			var pgrid = this.pines_grid;
 			if (return_rows)
-				return_rows = return_rows.add(pgrid.children("tbody").children("tr.ui-pgrid-table-row-selected"));
+				return_rows = return_rows.add(pgrid.children("tbody").children(".ui-pgrid-table-row-selected"));
 			else
-				return_rows = pgrid.children("tbody").children("tr.ui-pgrid-table-row-selected");
+				return_rows = pgrid.children("tbody").children(".ui-pgrid-table-row-selected");
 		});
 		return return_rows;
 	};
 	$.fn.pgrid_add_descendent_rows = function() {
 		var rows = $(this);
-		this.filter("tr.parent").each(function(){
+		this.filter(".parent").each(function(){
 			var cur_row = $(this);
 			var children = cur_row.siblings("."+cur_row.attr("title"));
 			rows = rows.add(children.pgrid_add_descendent_rows());
@@ -242,10 +242,10 @@
 	$.fn.pgrid_get_value = function(column) {
 		// Only works on one row.
 		var cur_row = $(this).eq(0);
-		return cur_row.children("td.col_"+column).html();
+		return cur_row.children(".col_"+column).html();
 	};
 	$.fn.pgrid_set_value = function(column, value) {
-		this.children("td.col_"+column).html(value);
+		this.children(".col_"+column).html(value);
 	};
 	$.fn.pgrid_export_state = function() {
 		var pgrid = this.get(0);
@@ -268,7 +268,7 @@
 		var opts = $.extend({}, $.fn.pgrid.defaults, options);
 
 		// Iterate and gridify each matched element.
-		this.filter("table:not(.ui-pgrid-table)").each(function() {
+		this.filter("table").not(".ui-pgrid-table").each(function() {
 			var pgrid = $(this);
 			pgrid.pgrid_version = "1.0.0";
 
@@ -358,9 +358,9 @@
 				pgrid.do_sort();
 				pgrid.do_col_hiding();
 				if (pgrid.pgrid_footer && pgrid.pgrid_filtering)
-					pgrid.footer.children("div.ui-pgrid-footer-filter-container").find("span:first-child input").val(pgrid.pgrid_filter);
+					pgrid.footer.children(".ui-pgrid-footer-filter-container").find("span:first-child input").val(pgrid.pgrid_filter);
 				if (pgrid.pgrid_footer && pgrid.pgrid_paginate)
-					pgrid.footer.children("div.ui-pgrid-footer-pager-container").find("span:first-child input").val(pgrid.pgrid_perpage);
+					pgrid.footer.children(".ui-pgrid-footer-pager-container").find("span:first-child input").val(pgrid.pgrid_perpage);
 			};
 
 			// When the grid's state changes, call the provided function, passing the current state.
@@ -419,12 +419,12 @@
 
 			pgrid.hide_children = function(jq_rows) {
 				// For each row, hide its children.
-				var parents = jq_rows.filter("tr.parent");
+				var parents = jq_rows.filter(".parent");
 				if (!parents.length) return;
-				parents.children("td.ui-pgrid-table-expander").children("span.ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-e");
+				parents.children(".ui-pgrid-table-expander").children(".ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-e");
 				parents.each(function() {
 					var cur_row = $(this);
-					cur_row.siblings("tr."+cur_row.attr("title")+".ui-pgrid-table-row-visible").removeClass("ui-pgrid-table-row-visible").filter("tr.parent").each(function(){
+					cur_row.siblings("tr."+cur_row.attr("title")+".ui-pgrid-table-row-visible").removeClass("ui-pgrid-table-row-visible").filter(".parent").each(function(){
 						// And its descendants, if it's a parent.
 						pgrid.hide_children($(this));
 					});
@@ -433,13 +433,13 @@
 
 			pgrid.show_children = function(jq_rows) {
 				// For each row, unhide its children. (If it's expanded.)
-				var parents = jq_rows.filter("tr.parent.ui-pgrid-table-row-expanded");
+				var parents = jq_rows.filter(".parent.ui-pgrid-table-row-expanded");
 				if (!parents.length) return;
-				parents.children("td.ui-pgrid-table-expander").children("span.ui-icon").removeClass("ui-icon-triangle-1-e").addClass("ui-icon-triangle-1-s");
+				parents.children(".ui-pgrid-table-expander").children(".ui-icon").removeClass("ui-icon-triangle-1-e").addClass("ui-icon-triangle-1-s");
 				parents.each(function() {
 					var cur_row = $(this);
 					// If this row is expanded, its children should be shown.
-					cur_row.siblings("tr."+cur_row.attr("title")).addClass("ui-pgrid-table-row-visible").filter("tr.parent.ui-pgrid-table-row-expanded").each(function(){
+					cur_row.siblings("tr."+cur_row.attr("title")).addClass("ui-pgrid-table-row-visible").filter(".parent.ui-pgrid-table-row-expanded").each(function(){
 						// And its descendants, if it's a parent.
 						pgrid.show_children($(this));
 					});
@@ -448,7 +448,7 @@
 
 			pgrid.place_children = function(jq_rows) {
 				// For each row, place its children.
-				var parents = jq_rows.filter("tr.parent");
+				var parents = jq_rows.filter(".parent");
 				if (!parents.length) return;
 				parents.each(function(){
 					var cur_row = $(this);
@@ -480,7 +480,7 @@
 			};
 
 			pgrid.delete_marked = function() {
-				pgrid.children("tbody").children("tr.ui-pgrid-table-row-marked-for-deletion").remove();
+				pgrid.children("tbody").children(".ui-pgrid-table-row-marked-for-deletion").remove();
 				pgrid.do_sort(false, true);
 				pgrid.do_filter(false, true);
 				pgrid.paginate(true);
@@ -607,7 +607,7 @@
 						}, 1);
 					} else {
 						// If the user enters nothing, all records should be shown.
-						pgrid.children("tbody").children("tr.ui-helper-hidden").removeClass("ui-helper-hidden");
+						pgrid.children("tbody").children(".ui-helper-hidden").removeClass("ui-helper-hidden");
 						if (pgrid.footer_input) {
 							pgrid.footer_input.removeClass("ui-state-highlight");
 							pgrid.animate_filter(true);
@@ -625,7 +625,7 @@
 
 			pgrid.enable_parents = function(jq_rows) {
 				// For each row, enable all the row's ancestors.
-				jq_rows.filter("tr.child").each(function() {
+				jq_rows.filter(".child").each(function() {
 					var cur_row = $(this);
 					// Go through each parent to check if it's the row's parent.
 					cur_row.siblings("tr.parent").each(function(){
@@ -664,18 +664,18 @@
 
 					// Stylize the currently sorted column header. (According to order.)
 					var headers = pgrid.children("thead").children().children();
-					headers.children("span.ui-pgrid-table-header-sorted-asc, span.ui-pgrid-table-header-sorted-desc")
+					headers.children(".ui-pgrid-table-header-sorted-asc, .ui-pgrid-table-header-sorted-desc")
 					.removeClass("ui-pgrid-table-header-sorted-asc ui-pgrid-table-header-sorted-desc ui-icon-triangle-1-s ui-icon-triangle-1-n");
 					if (pgrid.pgrid_sort_ord == "asc")
-						headers.filter("th.col_"+pgrid.pgrid_sort_col).children("span.ui-icon").addClass("ui-pgrid-table-header-sorted-desc ui-icon-triangle-1-n");
+						headers.filter(".col_"+pgrid.pgrid_sort_col).children(".ui-icon").addClass("ui-pgrid-table-header-sorted-desc ui-icon-triangle-1-n");
 					else
-						headers.filter("th.col_"+pgrid.pgrid_sort_col).children("span.ui-icon").addClass("ui-pgrid-table-header-sorted-asc ui-icon-triangle-1-s");
+						headers.filter(".col_"+pgrid.pgrid_sort_col).children(".ui-icon").addClass("ui-pgrid-table-header-sorted-asc ui-icon-triangle-1-s");
 
 					// Get all the rows.
 					var all_rows = pgrid.children("tbody").children();
-					all_rows.children("td.ui-pgrid-table-cell-sorted").removeClass("ui-pgrid-table-cell-sorted");
+					all_rows.children(".ui-pgrid-table-cell-sorted").removeClass("ui-pgrid-table-cell-sorted");
 					// Stylize the currently sorted column.
-					var cols = all_rows.children("td.col_"+pgrid.pgrid_sort_col).addClass("ui-pgrid-table-cell-sorted");
+					var cols = all_rows.children(".col_"+pgrid.pgrid_sort_col).addClass("ui-pgrid-table-cell-sorted");
 
 //					// Is this column only numbers, or is there a string?
 //					var is_str = false;
@@ -746,7 +746,7 @@
 						rows.reverse();
 					// Insert the rows into the tbody in the correct order.
 					// Place children under their parents, starting with top level parents.
-					pgrid.place_children($(rows).appendTo(pgrid.children("tbody")).filter("tr.parent:not(.child)"));
+					pgrid.place_children($(rows).appendTo(pgrid.children("tbody")).filter(".parent").not(".child"));
 					// Paginate, since we changed the order, but only if we're not loading, to speed up initialization.
 					if (!loading)
 						pgrid.paginate();
@@ -756,11 +756,11 @@
 			pgrid.update_selected = function() {
 				if (pgrid.pgrid_select) {
 					// Deselect any disabled rows. They shouldn't be selected.
-					pgrid.children("tbody").children("tr.ui-helper-hidden.ui-pgrid-table-row-selected").removeClass("ui-pgrid-table-row-selected").removeClass("ui-state-active");
+					pgrid.children("tbody").children(".ui-helper-hidden.ui-pgrid-table-row-selected").removeClass("ui-pgrid-table-row-selected ui-state-active");
 
 					// Update the table footer.
 					if (pgrid.pgrid_footer && pgrid.pgrid_count)
-						pgrid.footer.children("div.ui-pgrid-footer-count-container").find("span.ui-pgrid-footer-count-select").html(pgrid.children("tbody").children("tr.ui-pgrid-table-row-selected").length);
+						pgrid.footer.children(".ui-pgrid-footer-count-container").find("span.ui-pgrid-footer-count-select").html(pgrid.children("tbody").children(".ui-pgrid-table-row-selected").length);
 				}
 				pgrid.update_count();
 			};
@@ -774,7 +774,7 @@
 			pgrid.update_count = function() {
 				// Update the table footer.
 				if (pgrid.pgrid_footer && pgrid.pgrid_count)
-					pgrid.footer.children("div.ui-pgrid-footer-count-container").find("span.ui-pgrid-footer-count-total").html(pgrid.children("tbody").children("tr:not(.ui-helper-hidden)").length);
+					pgrid.footer.children(".ui-pgrid-footer-count-container").find("span.ui-pgrid-footer-count-total").html(pgrid.children("tbody").children().not(".ui-helper-hidden").length);
 			};
 
 			pgrid.do_col_hiding = function(loading) {
@@ -782,9 +782,9 @@
 				var b_rows = pgrid.children("tbody").children();
 				if (!loading) {
 					// First unhide all hidden columns.
-					h_rows.children("th:hidden").each(function(){
+					h_rows.children(":hidden").each(function(){
 						var cur_header = $(this).show();
-						b_rows.children("td.col_"+cur_header.prevAll().length).show();
+						b_rows.children(".col_"+cur_header.prevAll().length).show();
 					});
 				}
 				var checkboxes = pgrid.pgrid_header_select.children().children();
@@ -792,8 +792,8 @@
 				for (var cur_col in pgrid.pgrid_hidden_cols) {
 					if (isNaN(cur_col)) continue;
 					checkboxes.filter(".ui-pgrid-table-col-hider-"+pgrid.pgrid_hidden_cols[cur_col]).removeAttr("checked");
-					h_rows.children("th.col_"+pgrid.pgrid_hidden_cols[cur_col]).hide();
-					b_rows.children("td.col_"+pgrid.pgrid_hidden_cols[cur_col]).hide();
+					h_rows.children(".col_"+pgrid.pgrid_hidden_cols[cur_col]).hide();
+					b_rows.children(".col_"+pgrid.pgrid_hidden_cols[cur_col]).hide();
 				}
 				// The grid's state has probably changed.
 				if (!loading) pgrid.state_changed();
@@ -803,8 +803,8 @@
 				if (pgrid.pgrid_hidden_cols.indexOf(number) == -1) {
 					pgrid.pgrid_hidden_cols.push(number);
 					pgrid.pgrid_header_select.children().children(".ui-pgrid-table-col-hider-"+number).removeAttr("checked");
-					pgrid.children("thead").children().children("th.col_"+number).hide();
-					pgrid.children("tbody").children().children("td.col_"+number).hide();
+					pgrid.children("thead").children().children(".col_"+number).hide();
+					pgrid.children("tbody").children().children(".col_"+number).hide();
 					pgrid.state_changed();
 				}
 			};
@@ -813,8 +813,8 @@
 				if (pgrid.pgrid_hidden_cols.indexOf(number) != -1) {
 					pgrid.pgrid_hidden_cols.splice(pgrid.pgrid_hidden_cols.indexOf(number), 1);
 					pgrid.pgrid_header_select.children().children(".ui-pgrid-table-col-hider-"+number).attr("checked", true);
-					pgrid.children("thead").children().children("th.col_"+number).show();
-					pgrid.children("tbody").children().children("td.col_"+number).show();
+					pgrid.children("thead").children().children(".col_"+number).show();
+					pgrid.children("tbody").children().children(".col_"+number).show();
 					pgrid.state_changed();
 				}
 			};
@@ -829,7 +829,7 @@
 				else
 					new_classes = "ui-pgrid-table-cell-text";
 				var col_count = jq_rows.eq(0).children().length;
-				var cur_children = jq_rows.children("td:first-child");
+				var cur_children = jq_rows.children(":first-child");
 				for (var i=1; i<=col_count; i++) {
 					cur_children.addClass(new_classes+" col_"+i);
 					cur_children = cur_children.next();
@@ -839,7 +839,7 @@
 				// Add some styling.
 				jq_rows.addClass("ui-state-default");
 				// Style children.
-				pgrid.init_children(jq_rows.filter("tr.parent:not(.child)"));
+				pgrid.init_children(jq_rows.filter(".parent").not(".child"));
 			};
 
 			pgrid.init_children = function(jq_rows) {
@@ -847,11 +847,11 @@
 				jq_rows.each(function(){
 					// Indent children.
 					var cur_row = $(this);
-					var cur_padding = parseInt(cur_row.children("td:last-child").css("padding-left"));
+					var cur_padding = parseInt(cur_row.children(":last-child").css("padding-left"));
 					pgrid.init_children(cur_row.siblings("."+cur_row.attr("title")).each(function(){
-						$(this).children("td:not(.ui-pgrid-table-expander)").css("padding-left", (cur_padding+10)+"px");
-					}).filter("tr.parent"));
-				}).children("td.ui-pgrid-table-expander").append($("<span />").addClass("ui-icon ui-icon-triangle-1-e"));
+						$(this).children().not(".ui-pgrid-table-expander").css("padding-left", (cur_padding+10)+"px");
+					}).filter(".parent"));
+				}).children(".ui-pgrid-table-expander").append($("<span />").addClass("ui-icon ui-icon-triangle-1-e"));
 			};
 
 			pgrid.children("tbody").delegate("tr.parent td.ui-pgrid-table-expander", "click", function(){
@@ -881,7 +881,7 @@
 					if ($(e.target).parent().andSelf().hasClass("ui-pgrid-table-expander")) return;
 					var cur_row = $(this);
 					if (!pgrid.pgrid_multi_select || (!e.ctrlKey && !e.shiftKey))
-						cur_row.siblings().removeClass("ui-pgrid-table-row-selected").removeClass("ui-state-active");
+						cur_row.siblings().removeClass("ui-pgrid-table-row-selected ui-state-active");
 					else if (e.shiftKey)
 						cur_row.prevUntil(".ui-pgrid-table-row-selected").addClass("ui-pgrid-table-row-selected ui-state-active");
 					if (e.ctrlKey)
@@ -893,7 +893,7 @@
 					if ($(e.target).hasClass("ui-pgrid-table-expander")) return;
 					$(this).addClass("ui-pgrid-table-row-selected ui-state-active");
 					if (pgrid.pgrid_double_click)
-						pgrid.pgrid_double_click(e, pgrid.children("tbody").children("tr.ui-pgrid-table-row-selected"));
+						pgrid.pgrid_double_click(e, pgrid.children("tbody").children(".ui-pgrid-table-row-selected"));
 					if (pgrid.pgrid_double_click_tb)
 						pgrid.pgrid_double_click_tb();
 				}).delegate("tr", "mousedown", function(e){
@@ -934,7 +934,7 @@
 			var cur_text = $("<div />").addClass("ui-pgrid-table-header-text");
 			// Add a "sortable" class for custom styling.
 			if (pgrid.pgrid_sortable) cur_text.addClass("ui-pgrid-table-header-sortable");
-			var h_headers = h_rows.children("th:not(.ui-pgrid-table-expander)")
+			var h_headers = h_rows.children().not(".ui-pgrid-table-expander")
 			.mouseup(function(){
 				// Bind to mouseup (not click) on the header to sort it.
 				// If we bind to click, resizing_header will always be false.
@@ -959,9 +959,9 @@
 					pgrid.resizing_tempX = e.pageX;
 					// If the user selected the left edge of this box, they want to resize the previous box.
 					if (relx < 4)
-						pgrid.resizing_cur = cur_header.prev().children("div.ui-pgrid-table-header-text");
+						pgrid.resizing_cur = cur_header.prev().children(".ui-pgrid-table-header-text");
 					else
-						pgrid.resizing_cur = cur_header.children("div.ui-pgrid-table-header-text");
+						pgrid.resizing_cur = cur_header.children(".ui-pgrid-table-header-text");
 					// Prevent the browser from selecting text while the user is resizing a header.
 					return false;
 				});
@@ -1053,7 +1053,7 @@
 						).click(function(e){
 							if (e.button == 2)
 								return true;
-							var selected_rows = (val.return_all_rows ? pgrid.children("tbody").children("tr:not(.ui-helper-hidden)") : pgrid.children("tbody").children("tr.ui-pgrid-table-row-selected"));
+							var selected_rows = (val.return_all_rows ? pgrid.children("tbody").children().not(".ui-helper-hidden") : pgrid.children("tbody").children(".ui-pgrid-table-row-selected"));
 							if (!val.selection_optional && !val.select_all && !val.select_none && selected_rows.length === 0) {
 								alert("Please make a selection before performing this operation.");
 								return false;
@@ -1081,13 +1081,13 @@
 							}
 							if (val.select_all) {
 								if (pgrid.pgrid_select && pgrid.pgrid_multi_select) {
-									pgrid.children("tbody").children("tr:not(.ui-helper-hidden)").addClass("ui-pgrid-table-row-selected ui-state-active");
+									pgrid.children("tbody").children().not(".ui-helper-hidden").addClass("ui-pgrid-table-row-selected ui-state-active");
 									pgrid.update_selected();
 								}
 							}
 							if (val.select_none) {
 								if (pgrid.pgrid_select) {
-									pgrid.children("tbody").children().removeClass("ui-pgrid-table-row-selected").removeClass("ui-state-active");
+									pgrid.children("tbody").children().removeClass("ui-pgrid-table-row-selected ui-state-active");
 									pgrid.update_selected();
 								}
 							}
@@ -1099,7 +1099,7 @@
 										selected_rows = pgrid.children("thead").children().add(selected_rows);
 									selected_rows.each(function() {
 										// Turn each cell into a CSV cell.
-										$(this).children("th:not(.ui-pgrid-table-expander), td:not(.ui-pgrid-table-expander)").each(function(){
+										$(this).children().not(".ui-pgrid-table-expander").each(function(){
 											var cur_cell = $(this);
 											row_data += "\""+cur_cell.contents().text().replace("\"", "\"\"")+"\"";
 											// Add a comma, if there is another cell.
@@ -1120,7 +1120,7 @@
 								var cur_cols_text = [];
 								selected_rows.each(function(){
 									var cur_row = $(this);
-									var cur_cells = cur_row.children("td:not(.ui-pgrid-table-expander)");
+									var cur_cells = cur_row.children().not(".ui-pgrid-table-expander");
 									cur_title += (cur_title.length ? val.delimiter : "") + pgrid_encode_uri(cur_row.attr("title"));
 									cur_cells.each(function(i){
 										if (!cur_cols_text[i+1])
