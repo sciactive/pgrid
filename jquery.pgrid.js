@@ -490,7 +490,7 @@
 			pgrid.paginate = function(loading) {
 				if (pgrid.pgrid_paginate) {
 					var all_rows = pgrid.children("tbody").children().not(".ui-helper-hidden, .child");
-					
+
 					// Calculate the total number of pages.
 					pgrid.pgrid_pages = Math.ceil(all_rows.length / pgrid.pgrid_perpage);
 
@@ -1095,10 +1095,11 @@
 									if (isNaN(i)) continue;
 									parsed_url = parsed_url.replace("__col_"+i+"__", cur_cols_text[i]);
 								}
-								if (e.button == 1 || (val.target && val.target != "_self")) {
+								if (e.button == 1 || pgrid.pgrid_toolbar_target != "_self" || (val.target && val.target != "_self")) {
+									var target = val.target ? val.target : pines.pgrid_toolbar_target;
 									if (val.window_features)
-										return window.open(parsed_url, val.target, val.window_features);
-									return window.open(parsed_url, val.target);
+										return window.open(parsed_url, target, val.window_features);
+									return window.open(parsed_url, target);
 								} else {
 									// If Pines is loaded, use its get method instead of setting location.
 									if (typeof pines != "undefined" && pines.get)
@@ -1340,6 +1341,8 @@
 		pgrid_toolbar: false,
 		// Contents of the toolbar.
 		pgrid_toolbar_contents: [],
+		// Default toolbar target.
+		pgrid_toolbar_target: "_self",
 		// Show a footer.
 		pgrid_footer: true,
 		// Include a record count in the footer.
