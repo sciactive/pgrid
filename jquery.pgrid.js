@@ -1095,8 +1095,8 @@
 									if (isNaN(i)) continue;
 									parsed_url = parsed_url.replace("__col_"+i+"__", cur_cols_text[i]);
 								}
-								if (e.button == 1 || pgrid.pgrid_toolbar_target != "_self" || (val.target && val.target != "_self")) {
-									var target = val.target ? val.target : pines.pgrid_toolbar_target;
+								if (e.button == 1 || (!val.target && pgrid.pgrid_toolbar_target != "_self") || (val.target && val.target != "_self")) {
+									var target = val.target ? val.target : pgrid.pgrid_toolbar_target;
 									if (val.window_features)
 										return window.open(parsed_url, target, val.window_features);
 									return window.open(parsed_url, target);
