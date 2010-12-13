@@ -3,12 +3,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<title>Pines Grid</title>
+		<!-- Dev Notice -->
+		<link href="devnote.css" rel="stylesheet" type="text/css" />
 		<!-- jQuery -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
 		<!-- jQuery UI -->
 		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
-		<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.js"></script>
-		Theme Switcher Widget -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.js"></script>
+		<!-- Theme Switcher Widget -->
 		<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 		<!-- Oxygen Icons -->
 		<link href="oxygen/icons.css" rel="stylesheet" type="text/css" />
@@ -110,6 +112,15 @@
 			var saved_state;
 
 			$(document).ready(function(){
+
+				$(".wrapper :button").button();
+
+				if ($.fn.themeswitcher) {
+					$('#switcher').themeswitcher();
+				} else {
+					$('#switcher').html("Couldn't load theme switcher widget.")
+				}
+
 				// This is how to change the default settings for the entire page.
 				//$.fn.pgrid.defaults.pgrid_view_height = "290px";
 
@@ -235,13 +246,11 @@
 					}
 				]);
 
-				$(":button.ui-state-default").hover(function(){
-					$(this).addClass('ui-state-hover');
-				}, function(){
-					$(this).removeClass('ui-state-hover');
-				});
-
-				$('#switcher').themeswitcher();
+//				$(":button.ui-state-default").hover(function(){
+//					$(this).addClass('ui-state-hover');
+//				}, function(){
+//					$(this).removeClass('ui-state-hover');
+//				});
 			});
 
 			function save_state() {
@@ -273,6 +282,9 @@
 					<img class="header" src="includes/default_logo.png" alt="Pines Logo" />
 					<h1 class="header">Pines Grid jQuery Plugin</h1>
 				</div>
+				<p style="float: right;">
+					<a href="http://sourceforge.net/projects/pines"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=264165&amp;type=15" width="150" height="40" alt="Get Pines at SourceForge.net. Fast, secure and Free Open Source software downloads" style="border: none;" /></a>
+				</p>
 				<p class="main-description">
 					Pines Grid is a JavaScript data grid plugin for the jQuery
 					JavaScript library, developed by Hunter Perrin as part
@@ -283,6 +295,22 @@
 					still being easy to use and easy to implement. Try out
 					different themes using the selector in the top right corner
 					of this page.
+				</p>
+				<p class="dev-note" style="display: none; color: red;">
+					This is the development site. It is a showcase of bleeding
+					edge features and code that may work only partially or not
+					at all. If you are looking for a stable version, please
+					visit the
+					<a href="http://pines.sourceforge.net/pgrid/">main site</a>.
+				</p>
+				<p class="stable-note" style="display: none;">
+					This is the stable site. You can download code here that's
+					tested and proven to work. However, if you like to live
+					dangerously, you can also check out the
+					<a href="http://pines.hg.sourceforge.net/hgweb/pines/pgrid/raw-file/tip/index.html">development site</a>.
+				</p>
+				<p style="text-align: center;">
+					<button type="button" onclick="window.location='https://sourceforge.net/projects/pines/files/pgrid/1.0/pgrid-1.0.0.zip/download';"><strong style="font-size: large;">Download Pines Grid</strong></button>
 				</p>
 				<h2>Features</h2>
 				<div class="ui-helper-clearfix">
@@ -583,6 +611,19 @@
 						</tbody>
 					</table>
 				</div>
+				<h2>Installation</h2>
+				<p>Installation is simple. Include jQuery 1.4 and jQuery UI (only the CSS is required). Then include the following files:</p>
+				<div class="ui-helper-clearfix">
+					<div class="featurelist">
+						<ul>
+							<li><span class="ui-icon ui-icon-bullet"></span>jquery.pgrid.js or jquery.pgrid.min.js (Minified)</li>
+							<li><span class="ui-icon ui-icon-bullet"></span>jquery.pgrid.default.css or jquery.pgrid.touch.css (Touch Screen Styling)</li>
+						</ul>
+					</div>
+				</div>
+				<p style="text-align: center;">
+					<button type="button" onclick="window.location='https://sourceforge.net/projects/pines/files/pgrid/1.0/pgrid-1.0.0.zip/download';"><strong style="font-size: large;">Download Pines Grid</strong></button>
+				</p>
 			</div>
 		</div>
 	</body>
