@@ -339,19 +339,19 @@
 
 			// Return the grid to a provided state.
 			pgrid.import_state = function(state) {
-				if (typeof state.pgrid_page !== undefined)
+				if (typeof state.pgrid_page == "number")
 					pgrid.pgrid_page = state.pgrid_page;
-				if (typeof state.pgrid_perpage !== undefined)
+				if (typeof state.pgrid_perpage == "number")
 					pgrid.pgrid_perpage = state.pgrid_perpage;
-				if (typeof state.pgrid_filter !== undefined)
+				if (typeof state.pgrid_filter == "string")
 					pgrid.pgrid_filter = state.pgrid_filter;
-				if (typeof state.pgrid_hidden_cols !== undefined)
+				if (typeof state.pgrid_hidden_cols == "object")
 					pgrid.pgrid_hidden_cols = state.pgrid_hidden_cols.slice(0);
-				if (typeof state.pgrid_sort_col !== undefined)
+				if (typeof state.pgrid_sort_col == "number")
 					pgrid.pgrid_sort_col = state.pgrid_sort_col;
-				if (typeof state.pgrid_sort_ord !== undefined)
+				if (typeof state.pgrid_sort_ord == "string")
 					pgrid.pgrid_sort_ord = (state.pgrid_sort_ord != "desc" ? "asc" : "desc");
-				if (typeof state.pgrid_view_height !== undefined)
+				if (typeof state.pgrid_view_height == "string")
 					pgrid.pgrid_table_viewport.css("height", state.pgrid_view_height);
 				// Filter need to come first, because pagination ignores disabled records.
 				pgrid.do_filter(pgrid.pgrid_filter);
