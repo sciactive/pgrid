@@ -358,9 +358,9 @@
 				pgrid.do_sort();
 				pgrid.do_col_hiding();
 				if (pgrid.pgrid_footer && pgrid.pgrid_filtering)
-					pgrid.footer.children(".ui-pgrid-footer-filter-container").find("span:first-child input").val(pgrid.pgrid_filter);
+					pgrid.footer.children(".ui-pgrid-footer-filter-container").find("input.ui-pgrid-footer-filter-input").val(pgrid.pgrid_filter);
 				if (pgrid.pgrid_footer && pgrid.pgrid_paginate)
-					pgrid.footer.children(".ui-pgrid-footer-pager-container").find("span:first-child input").val(pgrid.pgrid_perpage);
+					pgrid.footer.children(".ui-pgrid-footer-pager-container").find("input.ui-pgrid-per-page").val(pgrid.pgrid_perpage);
 			};
 
 			// When the grid's state changes, call the provided function, passing the current state.
@@ -490,6 +490,10 @@
 			pgrid.paginate = function(loading) {
 				if (pgrid.pgrid_paginate) {
 					var all_rows = pgrid.children("tbody").children().not(".ui-helper-hidden, .child");
+
+					// Make sure per page value is valid.
+					if (isNaN(pgrid.pgrid_perpage) || pgrid.pgrid_perpage < 1)
+						pgrid.pgrid_perpage = $.fn.pgrid.defaults.pgrid_perpage;
 
 					// Calculate the total number of pages.
 					pgrid.pgrid_pages = Math.ceil(all_rows.length / pgrid.pgrid_perpage);
