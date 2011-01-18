@@ -536,7 +536,7 @@
 					pgrid_sortable: false,
 					pgrid_sort_col: false,
 					pgrid_sort_ord: 'asc',
-					pgrid_stripe_rows: false,
+					pgrid_child_prefix: 'ch_',
 					pgrid_row_hover_effect: false,
 					pgrid_view_height: 'auto',
 					pgrid_resize: false
@@ -551,12 +551,12 @@
 						<tr title="steve"><td>Steve</td><td>steve@example.com</td><td>Baker</td><td>$23,000.00</td><td>3</td><td>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr>
 						<tr title="jane"><td>Jane</td><td>jane@example.com</td><td>Mailman</td><td>$23,000.00</td><td>4</td><td>Nunc ut urna ac neque malesuada tempus sit amet at felis. Nulla facilisi. Nullam varius ornare lacus id vestibulum.</td></tr>
 						<tr title="willie" class="parent"><td>Willie</td><td>willie@example.com</td><td>Retired</td><td>$0.00</td><td>5</td><td>Pellentesque ornare tellus nulla, quis rhoncus lorem.</td></tr>
-						<tr title="bobo" class="willie child parent"><td>Bobo</td><td>bobo@example.com</td><td>Salesman</td><td>$40,000.00</td><td>7</td><td>Duis ut augue tellus. Fusce nisl nulla, blandit vel rutrum vel, commodo quis felis.</td></tr>
-						<tr title="chris" class="bobo child"><td>Chris</td><td>chris@example.com</td><td>Student</td><td>$0.00</td><td>10</td><td>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque iaculis pharetra turpis.</td></tr>
-						<tr title="steph" class="bobo child"><td>Steph</td><td>steph@example.com</td><td>Student</td><td>$0.00</td><td>11</td><td>Sed suscipit quam ut arcu iaculis pretium.</td></tr>
-						<tr title="karen" class="willie child"><td>Karen</td><td>karen@example.com</td><td>Singer</td><td>$30,000.00</td><td>9</td><td>Nam et sem quam, eu iaculis risus.</td></tr>
+						<tr title="bobo" class="ch_willie child parent"><td>Bobo</td><td>bobo@example.com</td><td>Salesman</td><td>$40,000.00</td><td>7</td><td>Duis ut augue tellus. Fusce nisl nulla, blandit vel rutrum vel, commodo quis felis.</td></tr>
+						<tr title="chris" class="ch_bobo child"><td>Chris</td><td>chris@example.com</td><td>Student</td><td>$0.00</td><td>10</td><td>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque iaculis pharetra turpis.</td></tr>
+						<tr title="steph" class="ch_bobo child"><td>Steph</td><td>steph@example.com</td><td>Student</td><td>$0.00</td><td>11</td><td>Sed suscipit quam ut arcu iaculis pretium.</td></tr>
+						<tr title="karen" class="ch_willie child"><td>Karen</td><td>karen@example.com</td><td>Singer</td><td>$30,000.00</td><td>9</td><td>Nam et sem quam, eu iaculis risus.</td></tr>
 						<tr title="arnold" class="parent"><td>Arnold</td><td>arnold@example.com</td><td>Governor</td><td>$60,000.00</td><td>6</td><td>Nulla at orci leo, id egestas felis.</td></tr>
-						<tr title="bach" class="arnold child"><td>Bach</td><td>bach@example.com</td><td>I'll be</td><td>$18,000.00</td><td>8</td><td>In enim lectus, tincidunt quis dapibus nec, feugiat ac enim.</td></tr>
+						<tr title="bach" class="ch_arnold child"><td>Bach</td><td>bach@example.com</td><td>I'll be</td><td>$18,000.00</td><td>8</td><td>In enim lectus, tincidunt quis dapibus nec, feugiat ac enim.</td></tr>
 						<tr title="james"><td>James</td><td>james@example.com</td><td>Teacher</td><td>$33,000.00</td><td>12</td><td>Mauris ac odio mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</td></tr>
 						<tr title="billy"><td>Billy</td><td>billy@example.com</td><td>Judge</td><td>$28,000.01</td><td>13</td><td>Nullam gravida velit sed leo viverra venenatis. Morbi vulputate nibh dui. Sed tincidunt ligula nulla, sit amet adipiscing quam.</td></tr>
 						<tr title="rick"><td>Rick</td><td>rick@example.com</td><td>Sheriff</td><td>$28,000.00</td><td>14</td><td>Nam dolor nisl, accumsan a cursus et, blandit ac dolor. Morbi dui ligula, pulvinar nec malesuada id, blandit et eros. Pellentesque ut elit nulla, a ultricies tellus.</td></tr>
@@ -564,7 +564,7 @@
 						<tr title="buck"><td>Buck</td><td>buck@example.com</td><td>Pilot</td><td>$26,000.00</td><td>16</td><td>Vestibulum fringilla cursus nulla, vitae euismod nulla laoreet non. Sed tincidunt facilisis hendrerit. Nulla facilisi. Aliquam laoreet vestibulum tempus.</td></tr>
 						<tr title="jason"><td>Jason</td><td>jason@example.com</td><td>King</td><td>$70,000.00</td><td>17</td><td>Ut faucibus gravida mauris, in auctor elit gravida sit amet.</td></tr>
 						<tr title="geoffrey" class="parent"><td>Geoffrey</td><td>geoffrey@example.com</td><td>Undertaker</td><td>$19,000.00</td><td>18</td><td>Proin a mi vulputate arcu ultricies sodales. Aliquam nec turpis lacus, ac lobortis nunc. In leo justo, varius non dignissim in, pellentesque non velit.</td></tr>
-						<tr title="nate" class="geoffrey child"><td>Nate</td><td>nate@example.com</td><td>Worker</td><td>$17,000.00</td><td>19</td><td>Sed id turpis ante. Mauris ac massa dui. Fusce consectetur magna quis dui mattis in fermentum sem commodo. Quisque semper pellentesque dictum.</td></tr>
+						<tr title="nate" class="ch_geoffrey child"><td>Nate</td><td>nate@example.com</td><td>Worker</td><td>$17,000.00</td><td>19</td><td>Sed id turpis ante. Mauris ac massa dui. Fusce consectetur magna quis dui mattis in fermentum sem commodo. Quisque semper pellentesque dictum.</td></tr>
 						<tr title="alex"><td>Alex</td><td>alex@example.com</td><td>Fisherman</td><td>$18,000.00</td><td>20</td><td>Donec sed sem vitae urna commodo porttitor ut sit amet neque. Cras massa lectus, fringilla id varius in, mollis vel tellus. Quisque mollis neque vel metus laoreet pellentesque. Praesent ornare cursus convallis.</td></tr>
 						<tr title="barbara"><td>Barbara</td><td>barbara@example.com</td><td>Engineer</td><td>$38,000.00</td><td>21</td><td>Nunc ut lectus diam. Duis feugiat nulla quis metus sagittis in semper libero tincidunt. Vivamus pulvinar suscipit sagittis.</td></tr>
 						<tr title="gerald"><td>Gerald</td><td>gerald@example.com</td><td>Librarian</td><td>$18,000.00</td><td>22</td><td>Nullam volutpat mi vitae velit luctus ultrices vel in felis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr>

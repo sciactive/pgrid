@@ -232,9 +232,15 @@
 	};
 	$.fn.pgrid_add_descendent_rows = function() {
 		var rows = $(this);
+		var pgrid = null;
+		pgrid = rows.closest("table.ui-pgrid-table").get(0);
+		if (pgrid && pgrid.pines_grid)
+			pgrid = pgrid.pines_grid;
+		if (!pgrid)
+			return this;
 		this.filter(".parent").each(function(){
 			var cur_row = $(this);
-			var children = cur_row.siblings("."+cur_row.attr("title"));
+			var children = cur_row.siblings("."+pgrid.pgrid_child_prefix+cur_row.attr("title"));
 			rows = rows.add(children.pgrid_add_descendent_rows());
 		});
 		return rows;
@@ -424,7 +430,7 @@
 				parents.children(".ui-pgrid-table-expander").children(".ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-e");
 				parents.each(function() {
 					var cur_row = $(this);
-					cur_row.siblings("tr."+cur_row.attr("title")+".ui-pgrid-table-row-visible").removeClass("ui-pgrid-table-row-visible").filter(".parent").each(function(){
+					cur_row.siblings("tr."+pgrid.pgrid_child_prefix+cur_row.attr("title")+".ui-pgrid-table-row-visible").removeClass("ui-pgrid-table-row-visible").filter(".parent").each(function(){
 						// And its descendants, if it's a parent.
 						pgrid.hide_children($(this));
 					});
@@ -439,7 +445,7 @@
 				parents.each(function() {
 					var cur_row = $(this);
 					// If this row is expanded, its children should be shown.
-					cur_row.siblings("tr."+cur_row.attr("title")).addClass("ui-pgrid-table-row-visible").filter(".parent.ui-pgrid-table-row-expanded").each(function(){
+					cur_row.siblings("tr."+pgrid.pgrid_child_prefix+cur_row.attr("title")).addClass("ui-pgrid-table-row-visible").filter(".parent.ui-pgrid-table-row-expanded").each(function(){
 						// And its descendants, if it's a parent.
 						pgrid.show_children($(this));
 					});
@@ -452,7 +458,7 @@
 				if (!parents.length) return;
 				parents.each(function(){
 					var cur_row = $(this);
-					var children = cur_row.siblings("."+cur_row.attr("title"));
+					var children = cur_row.siblings("."+pgrid.pgrid_child_prefix+cur_row.attr("title"));
 					cur_row.after(children);
 					// And its descendants, if it's a parent.
 					pgrid.place_children(children.filter(".parent"));
@@ -465,7 +471,7 @@
 					var cur_row = $(this);
 					var cur_title = cur_row.attr("title");
 					if (typeof cur_title != "undefined" && cur_title != "") {
-						cur_row.siblings("."+cur_title).each(function(){
+						cur_row.siblings("."+pgrid.pgrid_child_prefix+cur_title).each(function(){
 							// And its descendants, if it's a parent.
 							var this_row = $(this);
 							if (this_row.hasClass("parent"))
@@ -634,7 +640,7 @@
 					// Go through each parent to check if it's the row's parent.
 					cur_row.siblings("tr.parent").each(function(){
 						var cur_test_row = $(this);
-						if (cur_row.hasClass(cur_test_row.attr("title"))) {
+						if (cur_row.hasClass(pgrid.pgrid_child_prefix+cur_test_row.attr("title"))) {
 							cur_test_row.removeClass("ui-helper-hidden");
 							// Enable this row's ancestors too.
 							pgrid.enable_parents(cur_test_row);
@@ -817,7 +823,7 @@
 					// Indent children.
 					var cur_row = $(this);
 					var cur_padding = parseInt(cur_row.children(":last-child").css("padding-left"));
-					pgrid.init_children(cur_row.siblings("."+cur_row.attr("title")).each(function(){
+					pgrid.init_children(cur_row.siblings("."+pgrid.pgrid_child_prefix+cur_row.attr("title")).each(function(){
 						$(this).children().not(".ui-pgrid-table-expander").css("padding-left", (cur_padding+10)+"px");
 					}).filter(".parent"));
 				}).children(".ui-pgrid-table-expander").append($("<span />").addClass("ui-icon ui-icon-triangle-1-e"));
@@ -1379,6 +1385,8 @@
 		pgrid_sort_ord: "asc",
 		// Decimal seperator. (Used during sorting of numbers.)
 		pgrid_decimal_sep: ".",
+		// The prefix used on child class names. (Children should have a class equal to prefix+title of parent.)
+		pgrid_child_prefix: "",
 		// Add a hover effect to the rows.
 		pgrid_row_hover_effect: true,
 		// Height of the box (viewport) containing the grid. (Not including the toolbar and footer.)
