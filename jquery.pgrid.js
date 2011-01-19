@@ -823,6 +823,8 @@
 					// Indent children.
 					var cur_row = $(this);
 					var cur_padding = parseInt(cur_row.children(":last-child").css("padding-left"));
+					if (isNaN(cur_padding))
+						cur_padding = 0;
 					pgrid.init_children(cur_row.siblings("."+pgrid.pgrid_child_prefix+cur_row.attr("title")).each(function(){
 						$(this).children().not(".ui-pgrid-table-expander").css("padding-left", (cur_padding+10)+"px");
 					}).filter(".parent"));
