@@ -1040,14 +1040,20 @@
 									if (!val.confirm(e, selected_rows))
 										return false;
 								} else {
+									var text = "";
+									if (typeof val.text != "undefined") {
+										text = " \""+val.text+"\"";
+									} else if (typeof val.title != "undefined") {
+										text = " \""+val.title+"\"";
+									}
 									if (val.return_all_rows) {
-										if (!confirm("Are you sure you want to perform the operation \""+val.text+"\" on all items?"))
+										if (!confirm("Are you sure you want to perform the operation"+text+" on all items?"))
 											return false;
 									} else if (selected_rows.length === 0) {
-										if (!confirm("Are you sure you want to perform the operation \""+val.text+"\"?"))
+										if (!confirm("Are you sure you want to perform the operation"+text+"?"))
 											return false;
 									} else {
-										if (!confirm("Are you sure you want to perform the operation \""+val.text+"\" on the "+selected_rows.length+" currently selected item(s)?"))
+										if (!confirm("Are you sure you want to perform the operation"+text+" on the "+selected_rows.length+" currently selected item(s)?"))
 											return false;
 									}
 								}
