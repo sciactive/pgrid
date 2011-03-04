@@ -1080,7 +1080,7 @@
 										// Turn each cell into a CSV cell.
 										$(this).children().not(".ui-pgrid-table-expander").each(function(){
 											var cur_cell = $(this);
-											row_data += "\""+cur_cell.contents().text().replace("\"", "\"\"")+"\"";
+											row_data += '"'+cur_cell.contents().text().replace(/"/g, '""')+'"';
 											// Add a comma, if there is another cell.
 											if (cur_cell.next())
 												row_data += ",";
