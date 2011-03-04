@@ -1,7 +1,7 @@
 /*
- * jQuery Pines Grid (pgrid) Plugin 1.0.0
+ * jQuery Pines Grid (pgrid) Plugin 1.0.1
  *
- * Copyright (c) 2010 Hunter Perrin
+ * Copyright (c) 2010-2011 Hunter Perrin
  *
  * Licensed (along with all of Pines) under the GNU Affero GPL:
  *	  http://www.gnu.org/licenses/agpl.html
@@ -276,7 +276,7 @@
 		// Iterate and gridify each matched element.
 		this.filter("table").not(".ui-pgrid-table").each(function() {
 			var pgrid = $(this);
-			pgrid.pgrid_version = "1.0.0";
+			pgrid.pgrid_version = "1.0.1";
 
 			pgrid.extend(pgrid, opts);
 
