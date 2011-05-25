@@ -387,6 +387,51 @@
 					</tbody>
 				</table>
 				<br /><br />
+				<button class="ui-state-default ui-corner-all" onclick="set_up_selector();">Try out a selector.</button><span style="margin-left: 2em;" id="selected">Nothing selected.</span>
+				<script type="text/javascript">
+					// <![CDATA[
+					function set_up_selector() {
+						$('#selector').pgrid({
+							pgrid_multi_select: false,
+							pgrid_click: function(e, rows){
+								if (rows.length < 1) {
+									$("#selected").html("Nothing selected.");
+									return;
+								}
+								$("#selected").html(rows.pgrid_get_value(1)+" is selected. They can be reached at "+rows.pgrid_get_value(2)+".");
+							}
+						});
+					}
+					// ]]>
+				</script>
+				<br />
+				<table id="selector">
+					<thead>
+						<tr><th>Name</th><th>E-Mail</th></tr>
+					</thead>
+					<tbody>
+						<tr title="bob"><td>Bob</td><td>bob@example.com</td></tr>
+						<tr title="joe"><td>Joe</td><td>joe@example.com</td></tr>
+						<tr title="steve"><td>Steve</td><td>steve@example.com</td></tr>
+						<tr title="jane"><td>Jane</td><td>jane@example.com</td></tr>
+						<tr title="willie" class="parent"><td>Willie</td><td>willie@example.com</td></tr>
+						<tr title="bobo" class="willie child parent"><td>Bobo</td><td>bobo@example.com</td></tr>
+						<tr title="chris" class="bobo child"><td>Chris</td><td>chris@example.com</td></tr>
+						<tr title="steph" class="bobo child"><td>Steph</td><td>steph@example.com</td></tr>
+						<tr title="karen" class="willie child"><td>Karen</td><td>karen@example.com</td></tr>
+						<tr title="arnold" class="parent"><td>Arnold</td><td>arnold@example.com</td></tr>
+						<tr title="bach" class="arnold child"><td>Bach</td><td>bach@example.com</td></tr>
+						<tr title="james"><td>James</td><td>james@example.com</td></tr>
+						<tr title="billy"><td>Billy</td><td>billy@example.com</td></tr>
+						<tr title="rick"><td>Rick</td><td>rick@example.com</td></tr>
+						<tr title="josh"><td>Josh</td><td>josh@example.com</td></tr>
+						<tr title="buck"><td>Buck</td><td>buck@example.com</td></tr>
+						<tr title="jason"><td>Jason</td><td>jason@example.com</td></tr>
+						<tr title="geoffrey" class="parent"><td>Geoffrey</td><td>geoffrey@example.com</td></tr>
+						<tr title="nate" class="geoffrey child"><td>Nate</td><td>nate@example.com</td></tr>
+					</tbody>
+				</table>
+				<br style="clear: both;" /><br />
 				<div>
 					<button class="ui-state-default ui-corner-all" onclick="set_up_switcher();">Try out a list switcher.</button>
 					<script type="text/javascript">

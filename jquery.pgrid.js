@@ -1,5 +1,5 @@
 /*
- * jQuery Pines Grid (pgrid) Plugin 1.0.1
+ * jQuery Pines Grid (pgrid) Plugin 1.1.0
  *
  * Copyright (c) 2010-2011 Hunter Perrin
  *
@@ -276,7 +276,7 @@
 		// Iterate and gridify each matched element.
 		this.filter("table").not(".ui-pgrid-table").each(function() {
 			var pgrid = $(this);
-			pgrid.pgrid_version = "1.0.1";
+			pgrid.pgrid_version = "1.1.0";
 
 			pgrid.extend(pgrid, opts);
 
@@ -866,6 +866,8 @@
 					else
 						cur_row.addClass("ui-pgrid-table-row-selected ui-state-active");
 					pgrid.update_selected();
+					if (pgrid.pgrid_click)
+						pgrid.pgrid_click(e, pgrid.children("tbody").children(".ui-pgrid-table-row-selected"));
 				}).delegate("tr", "dblclick", function(e){
 					if ($(e.target).hasClass("ui-pgrid-table-expander")) return;
 					$(this).addClass("ui-pgrid-table-row-selected ui-state-active");
@@ -1369,7 +1371,9 @@
 		pgrid_select: true,
 		// Allow selecting multiple records.
 		pgrid_multi_select: true,
-		// Double click action.
+		// Click action. It is passed the click event and the currently selected rows.
+		pgrid_click: null,
+		// Double click action. It is passed the click event and the currently selected rows.
 		pgrid_double_click: null,
 		// Paginate the grid.
 		pgrid_paginate: true,
