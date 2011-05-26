@@ -6,10 +6,10 @@
 		<!-- Dev Notice -->
 		<link href="devnote.css" rel="stylesheet" type="text/css" />
 		<!-- jQuery -->
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
 		<!-- jQuery UI -->
-		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.8/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.8/jquery-ui.js"></script>
+		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.js"></script>
 		<!-- Theme Switcher Widget -->
 		<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 		<!-- Oxygen Icons -->
@@ -621,30 +621,66 @@
 				<br /><br />
 				<script type="text/javascript">
 					// <![CDATA[
+					var test_grid;
 					function make_table() {
 						var row_count = parseInt($("#test4_rows").val());
 						if (isNaN(row_count) || row_count < 0) {
 							alert("Please enter a positive whole number for the row count.");
 							return;
 						}
+						test_grid = null;
 						var test_div = $("#test4").empty().html($("#test4_skel").html());
-						var tbody = test_div.find("tbody");
-						var row = tbody.children("tr").remove();
-						for (var i=1; i<=row_count; i++)
-							row.clone().find("td.row").html("#"+i).end().appendTo(tbody);
+						var tbody = test_div.find("tbody").empty();
+						var rows = "";
+						for (var i = 1; i <= row_count; i++) {
+							rows += "<tr><td class=\"row\">"+i+"</td><td>I'm in cell 1.</td><td>I'm in cell 2.</td><td>I'm in cell 3.</td><td>I'm in cell 4.</td><td>I'm in cell 5.</td><td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non lobortis nisl. Sed at nunc odio, vitae lacinia est.</td></tr>";
+						}
+						tbody.append(rows);
 					}
 
 					function gridify_table() {
 						var table = $('#test4').children('table');
 						var start_time = new Date().getTime();
 						var end_time;
-						table.pgrid();
+						test_grid = table.pgrid();
+						end_time = new Date().getTime();
+						alert("Complete:\n\nTime: "+(end_time - start_time)+"ms ("+((end_time - start_time) / 1000)+"s)");
+					}
+					
+					function add_rows() {
+						if (typeof test_grid == "undefined" || test_grid == null) {
+							alert("You need to make a grid first.");
+							return;
+						}
+						var row_count = parseInt($("#test4_rows").val());
+						if (isNaN(row_count) || row_count < 0) {
+							alert("Please enter a positive whole number for the row count.");
+							return;
+						}
+						var rows = [];
+						for (var i = 1; i <= row_count; i++) {
+							rows.push({
+								classes: "row",
+								values: [
+									"n"+i,
+									"I'm in cell 1.",
+									"I'm in cell 2.",
+									"I'm in cell 3.",
+									"I'm in cell 4.",
+									"I'm in cell 5.",
+									"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non lobortis nisl. Sed at nunc odio, vitae lacinia est."
+								]
+							});
+						}
+						var start_time = new Date().getTime();
+						var end_time;
+						test_grid.pgrid_add(rows);
 						end_time = new Date().getTime();
 						alert("Complete:\n\nTime: "+(end_time - start_time)+"ms ("+((end_time - start_time) / 1000)+"s)");
 					}
 					// ]]>
 				</script>
-				Insert <input type="text" id="test4_rows" value="500" size="5" /> rows. <button type="button" class="ui-state-default ui-corner-all" onclick="make_table();">Make a table.</button> <button type="button" class="ui-state-default ui-corner-all" onclick="gridify_table();">Gridify and time it.</button>
+				Insert <input type="text" id="test4_rows" value="500" size="5" /> rows. <button type="button" class="ui-state-default ui-corner-all" onclick="make_table();">Make a table.</button> <button type="button" class="ui-state-default ui-corner-all" onclick="gridify_table();">Gridify and time it.</button> <button type="button" class="ui-state-default ui-corner-all" onclick="add_rows();">Add rows and time it.</button>
 				<div id="test4"></div>
 				<div id="test4_skel" style="display: none;">
 					<table>
@@ -652,7 +688,7 @@
 							<tr><th>Row</th><th>Header 1</th><th>Header 2</th><th>Header 3</th><th>Header 4</th><th>Header 5</th><th>Data</th></tr>
 						</thead>
 						<tbody>
-							<tr><td class="row"></td><td>I'm in cell 1.</td><td>I'm in cell 2.</td><td>I'm in cell 3.</td><td>I'm in cell 4.</td><td>I'm in cell 5.</td><td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non lobortis nisl. Sed at nunc odio, vitae lacinia est.</td></tr>
+							<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 						</tbody>
 					</table>
 				</div>

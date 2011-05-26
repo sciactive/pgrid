@@ -15,30 +15,23 @@
 			if (!this.pines_grid)
 				return;
 			var pgrid = this.pines_grid;
-			var new_rows = false;
+			var new_html = "";
 			$.each(rows, function(){
 				var cur_row = this;
-				var jq_row = $("<tr />").attr("title", String(cur_row.key)).addClass(cur_row.classes ? cur_row.classes : "").each(function(){
-					var this_row = $(this);
-					if (!cur_row.values)
-						return;
-					$.each(cur_row.values, function(){
-						this_row.append($("<td>"+String(this)+"</td>"));
-					});
-				});
-				pgrid.children("tbody").append(jq_row);
-				// Gather all the rows.
-				if (new_rows)
-					new_rows = new_rows.add(jq_row);
-				else
-					new_rows = jq_row;
+				new_html += "<tr"+(typeof cur_row.key != "undefined" ? " title=\""+String(cur_row.key)+"\"" : "")+(typeof cur_row.classes != "undefined" ? " class=\""+String(cur_row.classes)+"\"" : "")+">";
+				new_html += "<td>"+cur_row.values.join("</td><td>")+"</td></tr>";
 			});
+			// Detach the grid from the DOM.
+			var tbody = pgrid.children("tbody").detach();
+			var new_rows = $(new_html).appendTo(tbody);
 			// The rows need to be initialized after they've all been added, for child indentation.
 			pgrid.init_rows(new_rows);
 
 			pgrid.do_col_hiding(true);
 			pgrid.do_sort(false, true);
 			pgrid.do_filter(false, true);
+			// Reattach the grid.
+			pgrid.append(tbody);
 			pgrid.paginate(true);
 			pgrid.update_selected();
 
@@ -681,8 +674,12 @@
 					else
 						headers.filter(":nth-child("+(pgrid.pgrid_sort_col+1)+")").children(".ui-icon").addClass("ui-pgrid-table-header-sorted-asc ui-icon-triangle-1-s");
 
+					// Detach the grid from the DOM.
+					var tbody = pgrid.children("tbody").detach();
+
 					// Get all the rows.
-					var all_rows = pgrid.children("tbody").children();
+					var all_rows = tbody.children();
+					// Remove styling from current sorted rows.
 					all_rows.children(".ui-pgrid-table-cell-sorted").removeClass("ui-pgrid-table-cell-sorted");
 					// Stylize the currently sorted column.
 					all_rows.children(":nth-child("+(pgrid.pgrid_sort_col+1)+")").addClass("ui-pgrid-table-cell-sorted");
@@ -734,8 +731,12 @@
 					if (pgrid.pgrid_sort_ord == "desc")
 						rows.reverse();
 					// Insert the rows into the tbody in the correct order.
+					var jq_rows = $(rows);
+					tbody.append(jq_rows);
 					// Place children under their parents, starting with top level parents.
-					pgrid.place_children($(rows).appendTo(pgrid.children("tbody")).filter(".parent").not(".child"));
+					pgrid.place_children(jq_rows.filter(".parent").not(".child"));
+					// Reattach the grid.
+					pgrid.append(tbody);
 					// Paginate, since we changed the order, but only if we're not loading, to speed up initialization.
 					if (!loading)
 						pgrid.paginate();
