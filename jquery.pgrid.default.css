@@ -146,11 +146,33 @@
 .ui-pgrid-table.ui-pgrid-selectable tr {
 	cursor: pointer;
 }
-.ui-pgrid-table.ui-pgrid-selectable tr td.ui-pgrid-table-expander {
+/*.ui-pgrid-table tr td:first-child:before, .ui-pgrid-table tr th:first-child:before {*/
+.ui-pgrid-table tr:before {
+	/*content: " ";
+	text-align: center;
+	display: inline-block;
+	float: left;
+	width: 1.5em;
+	height: 0;
+	overflow: visible;
+	border: 2px blue solid;
+	margin: 0;
+	padding: 0;
+	background: purple;*/
+	content: "\2003";
+	text-align: center;
+	display: table-cell;
+	border-width: 0 1px 1px 0;
+	border-style: solid;
+	padding: 2px 4px 2px 2px;
 	cursor: default;
 }
 .ui-pgrid-table thead tr {
 	position: relative;
+}
+/*.ui-pgrid-table thead tr:hover td:first-child:before {*/
+.ui-pgrid-table thead tr:hover:before {
+	content: "...";
 }
 .ui-pgrid-table thead th {
 	border-width: 0 1px 1px 0;
@@ -175,10 +197,6 @@
 	top: -6px;
 	cursor: pointer;
 }
-.ui-pgrid-table thead th.ui-pgrid-table-expander .ui-icon {
-	float: none;
-	visibility: visible;
-}
 .ui-pgrid-table thead th .ui-icon.ui-pgrid-table-header-sorted-desc {
 	visibility: visible;
 }
@@ -195,6 +213,14 @@
 .ui-pgrid-table tbody tr.child, .ui-pgrid-table.ui-pgrid-paginated tbody tr, .ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible.ui-helper-hidden {
 	display: none;
 }
+/*.ui-pgrid-table tbody tr.parent.ui-pgrid-table-row-visible td:first-child:before {*/
+.ui-pgrid-table tbody tr.parent.ui-pgrid-table-row-visible:before {
+	content: "+";
+}
+/*.ui-pgrid-table tbody tr.parent.ui-pgrid-table-row-visible.ui-pgrid-table-row-expanded td:first-child:before {*/
+.ui-pgrid-table tbody tr.parent.ui-pgrid-table-row-visible.ui-pgrid-table-row-expanded:before {
+	content: "\2013";
+}
 .ui-pgrid-table tbody tr.child.ui-pgrid-table-row-visible, .ui-pgrid-table.ui-pgrid-paginated tbody tr.ui-pgrid-table-row-visible {
 	display: table-row;
 }
@@ -206,12 +232,4 @@
 	border-style: solid;
 	padding: 2px 4px 2px 2px;
 	text-align: left;
-}
-.ui-pgrid-table tbody td.ui-pgrid-table-expander, .ui-pgrid-table thead th.ui-pgrid-table-expander {
-	min-width: 16px;
-	min-height: 16px;
-	width: auto;
-	height: auto;
-	display: table-cell;
-	padding: 0;
 }
