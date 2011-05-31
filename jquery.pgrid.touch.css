@@ -209,6 +209,9 @@
 	padding: 4px 2px;
 	text-align: left;
 }
+.ui-pgrid-table tbody tr.ui-state-default a, .ui-pgrid-table tbody tr.ui-state-default a:link, .ui-pgrid-table tbody tr.ui-state-default a:visited {
+	text-decoration: underline;
+}
 .ui-pgrid-table tbody td.ui-pgrid-table-expander, .ui-pgrid-table thead th.ui-pgrid-table-expander {
 	min-width: 24px;
 	min-height: 24px;
