@@ -27,7 +27,7 @@
 			// The rows need to be initialized after they've all been added, for child indentation.
 			pgrid.init_rows(new_rows);
 
-			pgrid.do_col_hiding(true);
+			pgrid.do_col_hiding(true, new_rows);
 			pgrid.do_sort(false, true);
 			pgrid.do_filter(false, true);
 			// Reattach the grid.
@@ -767,9 +767,10 @@
 					pgrid.footer.children(".ui-pgrid-footer-count-container").find("span.ui-pgrid-footer-count-total").html(pgrid.children("tbody").children().not(".ui-helper-hidden").length);
 			};
 
-			pgrid.do_col_hiding = function(loading) {
+			pgrid.do_col_hiding = function(loading, b_rows) {
 				var h_rows = pgrid.children("thead").children();
-				var b_rows = pgrid.children("tbody").children();
+				if (!b_rows)
+					b_rows = pgrid.children("tbody").children();
 				if (!loading) {
 					// First unhide all hidden columns.
 					h_rows.children(":hidden").each(function(){
