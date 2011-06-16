@@ -392,6 +392,10 @@
 					// <![CDATA[
 					function set_up_selector() {
 						$('#selector').pgrid({
+							pgrid_toolbar: true,
+							pgrid_toolbar_contents: [
+								{type: 'label', extra_class: 'picon picon-mail-message-new', label: 'Choose an employee to message:'}
+							],
 							pgrid_multi_select: false,
 							pgrid_click: function(e, rows){
 								if (rows.length < 1) {

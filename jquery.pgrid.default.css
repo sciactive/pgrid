@@ -50,7 +50,7 @@
 	margin: 0;
 	font-weight: normal;
 }
-.ui-pgrid-toolbar .ui-pgrid-toolbar-sep, .ui-pgrid-toolbar .ui-pgrid-toolbar-button, .ui-pgrid-toolbar .ui-pgrid-toolbar-text {
+.ui-pgrid-toolbar .ui-pgrid-toolbar-sep, .ui-pgrid-toolbar .ui-pgrid-toolbar-button, .ui-pgrid-toolbar .ui-pgrid-toolbar-text, .ui-pgrid-toolbar .ui-pgrid-toolbar-label {
 	display: inline-block;
 	padding: .4em;
 	margin: .1em;

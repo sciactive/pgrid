@@ -1173,6 +1173,15 @@
 						pgrid.toolbar.append(wrapper);
 						if (val.load)
 							val.load(cur_text);
+					} else if (val.type == "label") {
+						var label = $("<div>"+val.label+"</div>").addClass("ui-pgrid-toolbar-label");
+						if (val.extra_class)
+							label.addClass(val.extra_class);
+						if (typeof val.title != "undefined")
+							label.attr("title", val.title);
+						pgrid.toolbar.append(label);
+						if (val.load)
+							val.load(label);
 					} else if (val.type == "separator") {
 						pgrid.toolbar.append(
 							$("<div />").addClass("ui-pgrid-toolbar-sep ui-state-default").append(
