@@ -28,8 +28,8 @@
 			pgrid.init_rows(new_rows);
 
 			pgrid.do_col_hiding(true, new_rows);
-			pgrid.do_sort(false, true);
-			pgrid.do_filter(false, true);
+			pgrid.do_sort(false, true, tbody);
+			pgrid.do_filter(false, true, tbody);
 			// Reattach the grid.
 			pgrid.append(tbody);
 			pgrid.paginate(true);
@@ -542,7 +542,7 @@
 					pgrid.footer_input.fadeTo(1000, .7).fadeTo(1000, .8, pgrid.animate_filter);
 			};
 
-			pgrid.do_filter = function(filter, loading) {
+			pgrid.do_filter = function(filter, loading, tbody) {
 				// Filter if filtering is allowed, or if this is an initial filter.
 				if (pgrid.pgrid_filtering || loading) {
 					if (pgrid.footer_input) {
@@ -557,7 +557,9 @@
 						var filter_arr = pgrid.pgrid_filter.toLowerCase().split(" ");
 						// Find any rows that might match using a simple DOM search.
 						var cur_index = 0;
-						var rows = pgrid.children("tbody").children();
+						if (!tbody)
+							tbody = pgrid.children("tbody");
+						var rows = tbody.children();
 						pgrid.filter_timer = window.setInterval(function(){
 							var cur_row, cur_row_dom, cur_text, i;
 							// This loop does 25 rows at a time.
@@ -642,7 +644,7 @@
 				});
 			};
 
-			pgrid.do_sort = function(column_class, loading) {
+			pgrid.do_sort = function(column_class, loading, tbody) {
 				if (pgrid.pgrid_sortable) {
 					if (column_class) {
 						// If the column class is like "col_1", filter it to an int.
@@ -675,7 +677,11 @@
 						headers.filter(":nth-child("+(pgrid.pgrid_sort_col+1)+")").children(".ui-icon").addClass("ui-pgrid-table-header-sorted-asc ui-icon-triangle-1-s");
 
 					// Detach the grid from the DOM.
-					var tbody = pgrid.children("tbody").detach();
+					var reattach = false;
+					if (!tbody) {
+						tbody = pgrid.children("tbody").detach();
+						reattach = true;
+					}
 
 					// Get all the rows.
 					var all_rows = tbody.children();
@@ -736,7 +742,8 @@
 					// Place children under their parents, starting with top level parents.
 					pgrid.place_children(jq_rows.filter(".parent").not(".child"));
 					// Reattach the grid.
-					pgrid.append(tbody);
+					if (reattach)
+						pgrid.append(tbody);
 					// Paginate, since we changed the order, but only if we're not loading, to speed up initialization.
 					if (!loading)
 						pgrid.paginate();
