@@ -1,5 +1,5 @@
 /*
- * jQuery Pines Grid (pgrid) Plugin 1.1.0
+ * jQuery Pines Grid (pgrid) Plugin 1.1.1
  *
  * Copyright (c) 2010-2011 Hunter Perrin
  *
@@ -325,15 +325,17 @@
 
 			// Export the current state of the grid.
 			pgrid.export_state = function() {
-				return {
+				var state = {
 					pgrid_page: pgrid.pgrid_page,
 					pgrid_perpage: pgrid.pgrid_perpage,
 					pgrid_filter: pgrid.pgrid_filter,
 					pgrid_hidden_cols: pgrid.pgrid_hidden_cols.slice(),
 					pgrid_sort_col: pgrid.pgrid_sort_col,
-					pgrid_sort_ord: pgrid.pgrid_sort_ord,
-					pgrid_view_height: pgrid.pgrid_table_viewport.height()+"px"
+					pgrid_sort_ord: pgrid.pgrid_sort_ord
 				};
+				if (pgrid.pgrid_stateful_height)
+					state.pgrid_view_height = pgrid.pgrid_table_viewport.css("height");
+				return state;
 			};
 
 			// Return the grid to a provided state.
@@ -350,7 +352,7 @@
 					pgrid.pgrid_sort_col = state.pgrid_sort_col;
 				if (typeof state.pgrid_sort_ord == "string")
 					pgrid.pgrid_sort_ord = (state.pgrid_sort_ord != "desc" ? "asc" : "desc");
-				if (typeof state.pgrid_view_height == "string")
+				if (pgrid.pgrid_stateful_height && typeof state.pgrid_view_height == "string")
 					pgrid.pgrid_table_viewport.css("height", state.pgrid_view_height);
 				// Filter need to come first, because pagination ignores disabled records.
 				pgrid.do_filter(pgrid.pgrid_filter);
@@ -1424,6 +1426,8 @@
 		// Allow the table to be resized. (Only height.)
 		pgrid_resize: true,
 		// State change. Gets called whenever the user changes the state of the grid. The state from export_state() will be passed.
-		pgrid_state_change: null
+		pgrid_state_change: null,
+		// Let the height be exported and imported with state.
+		pgrid_stateful_height: true
 	};
 })(jQuery);
