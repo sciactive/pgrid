@@ -1,10 +1,12 @@
 /*
- * jQuery Pines Grid (pgrid) Plugin 1.1.1
+ * jQuery Pines Grid (pgrid) Plugin 1.1.2
  *
  * Copyright (c) 2010-2011 Hunter Perrin
  *
- * Licensed (along with all of Pines) under the GNU Affero GPL:
- *	  http://www.gnu.org/licenses/agpl.html
+ * Triple license under the GPL, LGPL, and MPL:
+ *	  http://www.gnu.org/licenses/gpl.html
+ *	  http://www.gnu.org/licenses/lgpl.html
+ *	  http://www.mozilla.org/MPL/MPL-1.1.html
  */
 
 (function($) {
@@ -269,7 +271,7 @@
 		// Iterate and gridify each matched element.
 		this.filter("table").not(".ui-pgrid-table").each(function() {
 			var pgrid = $(this);
-			pgrid.pgrid_version = "1.1.0";
+			pgrid.pgrid_version = "1.1.2";
 
 			pgrid.extend(pgrid, opts);
 
