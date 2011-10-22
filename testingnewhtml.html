@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<style type="text/css">
+			table.in-cell {
+				table-layout: fixed;
+				border: 4px black solid;
+				width: 100%;
+			}
+			table.in-cell td:first-child:before {
+				content: " ";
+				display: inline-block;
+				float: left;
+				width: 16px;
+				height: 0;
+				overflow: visible;
+				border: 2px blue solid;
+				margin: 0;
+				padding: 0;
+			}
+			table.in-cell tr:first-child td:first-child:before {
+				content: "+";
+			}
+			/*table.in-cell td:first-child {
+				margin-left: 18px;
+			}*/
+			table.in-cell td {
+				border: 2px blue solid;
+			}
+			
+			table.in-row {
+				table-layout: fixed;
+				border: 4px black solid;
+				width: 100%;
+			}
+			table.in-row tr:before {
+				content: " ";
+				display: table-cell;
+				border: 2px blue solid;
+				z-index: 2000;
+			}
+			table.in-row td {
+				border: 2px blue solid;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			In Cell Style
+			<table class="in-cell">
+				<thead>
+					<tr><th>Col 1</th><th>Col 2</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>Lorum</td><td>Ipsum</td></tr>
+					<tr><td>Dolor Sit</td><td>Amet</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<div>
+			In Row Style
+			<table class="in-row">
+				<thead>
+					<tr><th>Col 1</th><th>Col 2</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>Lorum</td><td>Ipsum</td></tr>
+					<tr><td>Dolor Sit</td><td>Amet</td></tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
