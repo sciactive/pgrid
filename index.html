@@ -170,8 +170,8 @@
 						// IE needs this.
 						if (text.toString) {
 							text = text.toString();
-							if (text.match(/^function (onclick|anonymous)[\n ]*\([^\)]*\)[\n ]*\{\n/))
-								text = text.replace(/^function (onclick|anonymous)[\n ]*\([^\)]*\)[\n ]*\{\n/, "").replace(/\n}$/, "");
+							if (text.match(/^function (onclick|anonymous)[\n ]*\([^\)]*\)[\n ]*\{[\n\t ]*/))
+								text = text.replace(/^function (onclick|anonymous)[\n ]*\([^\)]*\)[\n ]*\{[\n\t ]*/, "").replace(/[\n\t ]*}[\n\t ]*$/, "");
 						}
 						var dialog = $("<div title=\""+button.text()+" - Source\" class=\"source-dialog\"></div>");
 						if (button.hasClass("make_stateful_grid"))
