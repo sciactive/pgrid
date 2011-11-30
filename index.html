@@ -14,6 +14,13 @@
 		<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 		<!-- Oxygen Icons -->
 		<link href="oxygen/icons.css" rel="stylesheet" type="text/css" />
+		<!-- JavaScript Source Formatting -->
+		<script type="text/javascript" src="includes/beautify.js"></script>
+		<!--[if !IE]>-->
+		<script type="text/javascript" src="includes/shCore.js"></script>
+		<script type="text/javascript" src="includes/shBrushJScript.js"></script>
+		<link href="includes/shCoreDefault.css" rel="stylesheet" type="text/css" />
+		<!--<![endif]-->
 		<!-- Pines Grid -->
 		<script type="text/javascript" src="jquery.pgrid.js"></script>
 		<link href="jquery.pgrid.default.css" rel="stylesheet" type="text/css" />
@@ -82,6 +89,36 @@
 			.ui-pgrid tbody td.col_4, .ui-pgrid tbody td.col_5 {
 				padding-left: 2px !important;
 			}
+
+			/* Source View */
+			.source-dialog pre {
+				border: 1px solid black;
+				margin: .5em .5em 1em;
+				padding: 1em;
+				background: beige;
+				color: midnightblue;
+				display:-moz-inline-stack;
+				display:inline-block;
+				zoom:1;
+				*display:inline;
+			}
+			.source-dialog > div {
+				border-top: 1px solid black;
+				border-bottom: 1px solid black;
+				margin-bottom: 1em;
+				display:-moz-inline-stack;
+				display:inline-block;
+				zoom:1;
+				*display:inline;
+			}
+			.source-dialog > div div.syntaxhighlighter {
+				overflow: visible !important;
+				width: auto !important;
+				display:-moz-inline-stack;
+				display:inline-block;
+				zoom:1;
+				*display:inline;
+			}
 			/* ]]> */
 		</style>
 		<!--[if lt IE 8]>
@@ -113,7 +150,53 @@
 
 			$(document).ready(function(){
 
-				$(".wrapper :button").button();
+				// This creates all those source buttons.
+				$(".wrapper :button").each(function(){
+					var button = $(this);
+					if (button.text() == "Download Pines Grid") {
+						button.button();
+						return;
+					}
+					// Wrap the button in a container.
+					var contain = $("<span />");
+					contain = button.wrap(contain).parent();
+					// Add a source button.
+					$("<button type=\"button\" title=\"Show source code.\">{}</button>").click(function(){
+						var text = button.attr("onclick");
+						if (!text && button.attr("onmouseover"))
+							text = "// Mouse Over:\n"+button.attr("onmouseover")+"\n\n// Mouse Move:\n"+button.attr("onmousemove")+"\n\n// Mouse Out:\n"+button.attr("onmouseout");
+						if (button.hasClass("make_stateful_grid"))
+							text = make_stateful_grid.toString();
+						// IE needs this.
+						if (text.toString) {
+							text = text.toString();
+							if (text.match(/^function (onclick|anonymous)\(\)\n\{\n/))
+								text = text.replace(/^function (onclick|anonymous)\(\)\n\{\n/, "").replace(/\n}$/, "");
+						}
+						var dialog = $("<div title=\""+button.text()+" - Source\" class=\"source-dialog\"></div>");
+						if (button.hasClass("make_stateful_grid"))
+							dialog.attr("title", "Stateful Grid With Toolbar - Source");
+						$("<pre class=\"brush: js; toolbar: false;\" />").text(js_beautify(text)).appendTo(dialog);
+						if (text.match(/^\w*\([^\)]*\);$/) || text.match(/^save_state\(\);/)) {
+							var f_name = text.replace(/\(.*/g, "");
+							text = window[f_name].toString();
+							$("<pre class=\"brush: js; toolbar: false;\" />").text(js_beautify(text)).appendTo(dialog);
+						}
+						dialog.dialog({width: "auto"});
+						// Make sure the dialog isn't more than 800x600.
+						// Can't just add max-height cause that means it can't be resized beyond.
+						if (dialog.width() > 800)
+							dialog.dialog("option", "width", 800).dialog("option", "position", "center");
+						if (dialog.height() > 600)
+							dialog.dialog("option", "height", 600).dialog("option", "position", "center");
+						// Can't call .all(), it doesn't  work.
+						if (typeof SyntaxHighlighter != "undefined")
+							SyntaxHighlighter.highlight();
+					}).appendTo(contain);
+					if (button.hasClass("make_stateful_grid"))
+						button.detach();
+					contain.buttonset();
+				});
 
 				if ($.fn.themeswitcher) {
 					$('#switcher').themeswitcher();
@@ -121,136 +204,134 @@
 					$('#switcher').html("Couldn't load theme switcher widget.")
 				}
 
-				// This is how to change the default settings for the entire page.
-				//$.fn.pgrid.defaults.pgrid_view_height = "290px";
+				// I put it in a function so I could show the source easily.
+				var make_stateful_grid = function(){
+					// This is how to change the default settings for the entire page.
+					//$.fn.pgrid.defaults.pgrid_view_height = "290px";
 
-				stateful_grid = $("#test1").pgrid({
-					pgrid_toolbar: true,
-					pgrid_toolbar_contents: [
-						{type: 'button', text: 'New', extra_class: 'picon picon-document-new', selection_optional: true, url: 'includes/new.html', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
-						{type: 'button', text: 'View', extra_class: 'picon picon-document-open', url: 'includes/view.html?username=__title__', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
-						{type: 'button', text: 'Edit', extra_class: 'picon picon-document-edit', double_click: true, click: function(e, rows){
-							alert('Editing '+rows.attr('title')+'.');
-						}},
-						{type: 'separator'},
-						{type: 'button', text: 'Google', extra_class: 'picon picon-internet-web-browser', multi_select: true, url: 'http://google.com/search?q=__col_1__', delimiter: '+', target: "_blank"},
-						{type: 'button', text: 'Email', extra_class: 'picon picon-mail-message', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
-						{type: 'button', text: 'All', extra_class: 'picon picon-mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
-						{type: 'separator'},
-						{type: 'text', label: 'SMS: ', title: 'Send a Text Message', extra_class: 'picon picon-phone', attributes: {size: 15}, load: function(textbox){
-							textbox.focus(function(){
-								textbox.select();
-							}).keydown(function(e){
-								if (e.keyCode == 13) {
-									var rows = stateful_grid.pgrid_get_selected_rows().pgrid_export_rows();
-									var people = [];
-									$.each(rows, function(){
-										people.push(this.values[0]);
-									});
-									if (!people[0]) {
-										alert("Please select recipients.");
-									} else {
-										alert("Sending SMS...\nTo: "+people.join(", ")+"\nMessage: "+textbox.val());
+					stateful_grid = $("#test1").pgrid({
+						pgrid_toolbar: true,
+						pgrid_toolbar_contents: [
+							{type: 'button', text: 'New', extra_class: 'picon picon-document-new', selection_optional: true, url: 'includes/new.html', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
+							{type: 'button', text: 'View', extra_class: 'picon picon-document-open', url: 'includes/view.html?username=__title__', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
+							{type: 'button', text: 'Edit', extra_class: 'picon picon-document-edit', double_click: true, click: function(e, rows){
+								alert('Editing '+rows.attr('title')+'.');
+							}},
+							{type: 'separator'},
+							{type: 'button', text: 'Google', extra_class: 'picon picon-internet-web-browser', multi_select: true, url: 'http://google.com/search?q=__col_1__', delimiter: '+', target: "_blank"},
+							{type: 'button', text: 'Email', extra_class: 'picon picon-mail-message', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
+							{type: 'button', text: 'All', extra_class: 'picon picon-mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
+							{type: 'separator'},
+							{type: 'text', label: 'SMS: ', title: 'Send a Text Message', extra_class: 'picon picon-phone', attributes: {size: 15}, load: function(textbox){
+								textbox.focus(function(){
+									textbox.select();
+								}).keydown(function(e){
+									if (e.keyCode == 13) {
+										var rows = stateful_grid.pgrid_get_selected_rows().pgrid_export_rows();
+										var people = [];
+										$.each(rows, function(){
+											people.push(this.values[0]);
+										});
+										if (!people[0]) {
+											alert("Please select recipients.");
+										} else {
+											alert("Sending SMS...\nTo: "+people.join(", ")+"\nMessage: "+textbox.val());
+										}
 									}
-								}
-							});
-						}},
-						{type: 'text', label: 'Raise: ', title: 'Raise Salary', extra_class: 'picon picon-office-chart-bar', attributes: {size: 10}, load: function(textbox){
-							textbox.css("text-align", "right").keydown(function(e){
-								if (e.keyCode == 13) {
-									var rows = stateful_grid.pgrid_get_selected_rows();
-									if (!rows.length) {
-										alert("Please select at least one person.");
-										return;
-									}
-									rows.each(function(){
-										var cur_row = $(this);
-										var cur_salary = cur_row.pgrid_get_value(4);
-										if (!cur_salary)
+								});
+							}},
+							{type: 'text', label: 'Raise: ', title: 'Raise Salary', extra_class: 'picon picon-office-chart-bar', attributes: {size: 10}, load: function(textbox){
+								textbox.css("text-align", "right").keydown(function(e){
+									if (e.keyCode == 13) {
+										var rows = stateful_grid.pgrid_get_selected_rows();
+										if (!rows.length) {
+											alert("Please select at least one person.");
 											return;
-										cur_salary = parseFloat(cur_salary.replace(/[^0-9.-]/g, ""));
-										var cur_raise = parseFloat(textbox.val());
-										cur_raise = isNaN(cur_raise) ? 0 : cur_raise;
-										var new_salary = new String((cur_salary+cur_raise).toFixed(2));
-										while (new_salary.match(/\d+\d{3}/))
-											new_salary = new_salary.replace(/(\d+)(\d{3})/, "$1,$2");
-										cur_row.pgrid_set_value(4, "$"+new_salary);
-									});
-								}
-							}).change(function(){
-								var value = parseFloat(textbox.val());
-								textbox.val(isNaN(value) ? "" : value);
-							});
-						}},
-						{type: 'separator'},
-						{type: 'button', text: 'Delete', extra_class: 'picon picon-edit-delete', confirm: true, multi_select: true, click: function(e, rows){
-							rows.pgrid_delete();
-						}},
-						{type: 'button', text: 'Clear All', extra_class: 'picon picon-edit-clear', multi_select: true, return_all_rows: true, confirm: function(e, rows){
-							return confirm("This will delete all "+rows.length+" rows! Are you sure you want to do this?");
-						}, click: function(e, rows){
-							rows.pgrid_delete();
-						}},
-						{type: 'separator'},
-						{type: 'button', title: 'Expand All', extra_class: 'picon picon-arrow-down', selection_optional: true, return_all_rows: true, click: function(e, rows){
-							rows.pgrid_expand_rows();
-						}},
-						{type: 'button', title: 'Collapse All', extra_class: 'picon picon-arrow-right', selection_optional: true, return_all_rows: true, click: function(e, rows){
-							rows.pgrid_collapse_rows();
-						}},
-						{type: 'separator'},
-						{type: 'button', title: 'Select All', extra_class: 'picon picon-document-multiple', select_all: true},
-						{type: 'button', title: 'Select None', extra_class: 'picon picon-document-close', select_none: true},
-						{type: 'separator'},
-						{type: 'button', title: 'Make a Spreadsheet', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
-							window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
-						}}
-					],
-					pgrid_double_click: function(e, rows) {
-						alert("Hey, you "+(e.ctrlKey ? "control " : "")+(e.shiftKey ? "shift " : "")+"doubleclicked "+rows.length+" item(s). I assume you want to edit...");
-					},
-					pgrid_sort_col: 5,
-					pgrid_state_change: function(state) {
-						if (auto_save.attr("checked")) {
-							saved_state = state;
-							saved_notice.show().fadeOut('slow');
+										}
+										rows.each(function(){
+											var cur_row = $(this);
+											var cur_salary = cur_row.pgrid_get_value(4);
+											if (!cur_salary)
+												return;
+											cur_salary = parseFloat(cur_salary.replace(/[^0-9.-]/g, ""));
+											var cur_raise = parseFloat(textbox.val());
+											cur_raise = isNaN(cur_raise) ? 0 : cur_raise;
+											var new_salary = new String((cur_salary+cur_raise).toFixed(2));
+											while (new_salary.match(/\d+\d{3}/))
+												new_salary = new_salary.replace(/(\d+)(\d{3})/, "$1,$2");
+											cur_row.pgrid_set_value(4, "$"+new_salary);
+										});
+									}
+								}).change(function(){
+									var value = parseFloat(textbox.val());
+									textbox.val(isNaN(value) ? "" : value);
+								});
+							}},
+							{type: 'separator'},
+							{type: 'button', text: 'Delete', extra_class: 'picon picon-edit-delete', confirm: true, multi_select: true, click: function(e, rows){
+								rows.pgrid_delete();
+							}},
+							{type: 'button', text: 'Clear All', extra_class: 'picon picon-edit-clear', multi_select: true, return_all_rows: true, confirm: function(e, rows){
+								return confirm("This will delete all "+rows.length+" rows! Are you sure you want to do this?");
+							}, click: function(e, rows){
+								rows.pgrid_delete();
+							}},
+							{type: 'separator'},
+							{type: 'button', title: 'Expand All', extra_class: 'picon picon-arrow-down', selection_optional: true, return_all_rows: true, click: function(e, rows){
+								rows.pgrid_expand_rows();
+							}},
+							{type: 'button', title: 'Collapse All', extra_class: 'picon picon-arrow-right', selection_optional: true, return_all_rows: true, click: function(e, rows){
+								rows.pgrid_collapse_rows();
+							}},
+							{type: 'separator'},
+							{type: 'button', title: 'Select All', extra_class: 'picon picon-document-multiple', select_all: true},
+							{type: 'button', title: 'Select None', extra_class: 'picon picon-document-close', select_none: true},
+							{type: 'separator'},
+							{type: 'button', title: 'Make a Spreadsheet', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
+								window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
+							}}
+						],
+						pgrid_double_click: function(e, rows) {
+							alert("Hey, you "+(e.ctrlKey ? "control " : "")+(e.shiftKey ? "shift " : "")+"doubleclicked "+rows.length+" item(s). I assume you want to edit...");
+						},
+						pgrid_sort_col: 5,
+						pgrid_state_change: function(state) {
+							if (auto_save.attr("checked")) {
+								saved_state = state;
+								saved_notice.show().fadeOut('slow');
+							}
 						}
-					}
-				});
+					});
+
+					$("#test1").pgrid_add([
+						{
+							key: "giovanni",
+							values: [
+								"Giovanni",
+								"giovanni@example.com",
+								"Athlete",
+								"$28,000.00",
+								"-1",
+								"I was added dynamically after this table was loaded."
+							]
+						},
+						{
+							key: "edward",
+							values: [
+								"Edward",
+								"edward@example.com",
+								"Anchorman",
+								"$35,000.00",
+								"-2",
+								"I was added dynamically after this table was loaded."
+							]
+						}
+					]);
+				};
+				make_stateful_grid();
 
 				var auto_save = $('#auto-save');
 				var saved_notice = $('#saved-notice');
-
-				$("#test1").pgrid_add([
-					{
-						key: "giovanni",
-						values: [
-							"Giovanni",
-							"giovanni@example.com",
-							"Athlete",
-							"$28,000.00",
-							"-1",
-							"I was added dynamically after this table was loaded."
-						]
-					},
-					{
-						key: "edward",
-						values: [
-							"Edward",
-							"edward@example.com",
-							"Anchorman",
-							"$35,000.00",
-							"-2",
-							"I was added dynamically after this table was loaded."
-						]
-					}
-				]);
-
-//				$(":button.ui-state-default").hover(function(){
-//					$(this).addClass('ui-state-hover');
-//				}, function(){
-//					$(this).removeClass('ui-state-hover');
-//				});
 			});
 
 			function save_state() {
@@ -343,7 +424,7 @@
 					</div>
 				</div>
 				<h2>Demos</h2>
-				<p>This table was gridified on $(document).ready() with a toolbar:</p>
+				<p>This table was gridified on $(document).ready() with a toolbar: <button type="button" class="make_stateful_grid">{}</button></p>
 				<p>
 					<label><input type="checkbox" id="auto-save" />Auto Save</label>
 					<button class="ui-state-default ui-corner-all" onclick="save_state(); $('#saved-notice').show().fadeOut('slow');">Save State</button>
@@ -535,7 +616,7 @@
 					</table>
 				</div>
 				<br style="clear: both;" /><br />
-				<button class="ui-state-default ui-corner-all" onclick="$('#test2').pgrid();">Gridify this table with default options.</button> <pre>$('#test2').pgrid();</pre>
+				<button class="ui-state-default ui-corner-all" onclick="$('#test2').pgrid();">Gridify this table with default options.</button>
 				<table id="test2">
 					<thead>
 						<tr><th>Name</th><th>E-Mail</th><th>Occupation</th><th>Salary</th><th>Number</th><th>Description</th></tr>
@@ -643,8 +724,7 @@
 
 					function gridify_table() {
 						var table = $('#test4').children('table');
-						var start_time = new Date().getTime();
-						var end_time;
+						var end_time, start_time = new Date().getTime();
 						test_grid = table.pgrid();
 						end_time = new Date().getTime();
 						alert("Complete:\n\nTime: "+(end_time - start_time)+"ms ("+((end_time - start_time) / 1000)+"s)");
@@ -675,8 +755,7 @@
 								]
 							});
 						}
-						var start_time = new Date().getTime();
-						var end_time;
+						var end_time, start_time = new Date().getTime();
 						test_grid.pgrid_add(rows);
 						end_time = new Date().getTime();
 						alert("Complete:\n\nTime: "+(end_time - start_time)+"ms ("+((end_time - start_time) / 1000)+"s)");
