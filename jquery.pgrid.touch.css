@@ -2,7 +2,7 @@
 	Document   : jquery.pgrid.touch.css
 	Created on : Jun 11, 2010, 5:33:30 PM
 	Author     : Hunter Perrin
-	Version    : 1.0.0
+	Version    : 1.2.0dev
 	Link       : http://pinesframework.org/pgrid/
 	Description:
 		Touch friendly styling for Pines Grid jQuery plugin.
@@ -137,6 +137,7 @@
 	border-spacing: 0;
 	width: auto;
 	table-layout: fixed;
+	border-collapse: separate;
 }
 .ui-pgrid-table tbody {
 	overflow: auto;

@@ -1,5 +1,5 @@
 /*
- * jQuery Pines Grid (pgrid) Plugin 1.1.2
+ * jQuery Pines Grid (pgrid) Plugin 1.2.0dev
  *
  * http://pinesframework.org/pgrid/
  * Copyright (c) 2009-2012 Hunter Perrin
@@ -226,7 +226,7 @@
 		});
 		return return_rows;
 	};
-	$.fn.pgrid_add_descendent_rows = function() {
+	$.fn.pgrid_add_descendant_rows = function() {
 		var rows = $(this);
 		var pgrid = null;
 		pgrid = rows.closest("table.ui-pgrid-table").get(0);
@@ -237,7 +237,7 @@
 		this.filter(".parent").each(function(){
 			var cur_row = $(this);
 			var children = cur_row.siblings("."+pgrid.pgrid_child_prefix+cur_row.attr("title"));
-			rows = rows.add(children.pgrid_add_descendent_rows());
+			rows = rows.add(children.pgrid_add_descendant_rows());
 		});
 		return rows;
 	};
@@ -272,7 +272,7 @@
 		// Iterate and gridify each matched element.
 		this.filter("table").not(".ui-pgrid-table").each(function() {
 			var pgrid = $(this);
-			pgrid.pgrid_version = "1.1.2";
+			pgrid.pgrid_version = "1.2.0dev";
 
 			pgrid.extend(pgrid, opts);
 
@@ -896,10 +896,10 @@
 			}
 
 			// Select the thead rows.
-			var h_rows = pgrid.children("thead").children();
+			pgrid.h_rows = pgrid.children("thead").children();
 
 			// Iterate column headers and make a checkbox to hide each one.
-			h_rows.children().each(function(index){
+			pgrid.h_rows.children().each(function(index){
 				var cur_header = $(this);
 				pgrid.pgrid_header_select.append($("<label></label>")
 					.addClass("ui-state-default ui-corner-all")
@@ -927,7 +927,7 @@
 			var cur_text = $("<div />").addClass("ui-pgrid-table-header-text");
 			// Add a "sortable" class for custom styling.
 			if (pgrid.pgrid_sortable) cur_text.addClass("ui-pgrid-table-header-sortable");
-			var h_headers = h_rows.children().not(".ui-pgrid-table-expander")
+			pgrid.h_headers = pgrid.h_rows.children().not(".ui-pgrid-table-expander")
 			.mouseup(function(){
 				// Bind to mouseup (not click) on the header to sort it.
 				// If we bind to click, resizing_header will always be false.
@@ -942,7 +942,7 @@
 			// Provide column resizing, if set. The header's text div will actually size the entire column.
 			if (pgrid.pgrid_resize_cols) {
 				// Add a "resizeable" class for custom styling.
-				h_headers.addClass("ui-pgrid-table-header-resizeable").mousedown(function(e){
+				pgrid.h_headers.addClass("ui-pgrid-table-header-resizeable").mousedown(function(e){
 					var cur_header = $(this);
 					var relx = e.pageX - cur_header.offset().left;
 					// Only start resizing if the user grabs the edge of the box. (And don't resize the expander column.)
@@ -959,7 +959,7 @@
 					return false;
 				});
 			}
-			delete h_headers;
+			delete pgrid.h_headers;
 			// When the mouse moves over the pgrid, and a column is being resized, set its width.
 			if (pgrid.pgrid_resize_cols) {
 				pgrid.pgrid_widget.mousemove(function(e){
@@ -977,7 +977,7 @@
 			}
 
 			// Add an expander column to the header.
-			h_rows.addClass("ui-widget-header").prepend($("<th class=\"ui-icon ui-pgrid-table-icon-hidden ui-pgrid-table-expander\"><div style=\"width: 16px; visibility: hidden;\">+</div></th>").click(function(e){
+			pgrid.h_rows.addClass("ui-widget-header").prepend($("<th class=\"ui-icon ui-pgrid-table-icon-hidden ui-pgrid-table-expander\"><div style=\"width: 16px; visibility: hidden;\">+</div></th>").click(function(e){
 				// Show the header selector.
 				var offset = pgrid.pgrid_widget.offset();
 				pgrid.pgrid_header_select.css({
@@ -991,7 +991,7 @@
 				$(this).addClass("ui-pgrid-table-icon-hidden").removeClass("ui-icon-triangle-1-s");
 			}));
 
-			delete h_rows;
+			delete pgrid.h_rows;
 
 			// Initialize the rows.
 			pgrid.init_rows(pgrid.children("tbody").children());
