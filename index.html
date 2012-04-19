@@ -1,441 +1,665 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<title>Pines Grid</title>
-		<!-- Dev Notice -->
-		<link href="devnote.css" rel="stylesheet" type="text/css" />
-		<!-- jQuery -->
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
-		<!-- jQuery UI -->
-		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
-		<!-- Theme Switcher Widget -->
-		<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
-		<!-- Oxygen Icons -->
-		<link href="oxygen/icons.css" rel="stylesheet" type="text/css" />
-		<!-- JavaScript Source Formatting -->
-		<script type="text/javascript" src="includes/beautify.js"></script>
-		<!--[if !IE]>-->
-		<script type="text/javascript" src="includes/shCore.js"></script>
-		<script type="text/javascript" src="includes/shBrushJScript.js"></script>
-		<link href="includes/shCoreDefault.css" rel="stylesheet" type="text/css" />
-		<!--<![endif]-->
-		<!-- Pines Grid -->
-		<script type="text/javascript" src="jquery.pgrid.js"></script>
-		<link href="jquery.pgrid.default.css" rel="stylesheet" type="text/css" />
-		<link href="jquery.pgrid.default.icons.css" rel="stylesheet" type="text/css" />
-		<style type="text/css">
-			/* <![CDATA[ */
-			html, body {
-				font-family: Arial,sans-serif;
-				font-size: 12px;
+<!DOCTYPE html>
+<html lang="en" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+<head>
+	<meta charset="utf-8"/>
+	<title>Pines Grid</title>
+	<meta name="HandheldFriendly" content="true" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="JavaScript (jQuery) data grid plugin." />
+	<meta property="og:title" content="Pines Grid" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="http://pinesframework.org/pgrid/" />
+	<meta property="og:image" content="http://pinesframework.org/pgrid/includes/pines-logo.png" />
+	<meta property="og:site_name" content="Pines Grid" />
+	<meta property="fb:admins" content="508999194" />
+	<meta property="og:description" content="JavaScript (jQuery) data grid plugin." />
+	<!-- Dev Notice -->
+	<link href="devnote.css" rel="stylesheet" type="text/css" />
+	<!-- jQuery -->
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+	<!-- jQuery UI -->
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
+	<!-- Theme Switcher Widget -->
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+	<!-- Bootstrap -->
+	<link href="includes/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="includes/bootstrap/js/bootstrap.min.js"></script>
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<!-- Oxygen Icons -->
+	<link href="oxygen/icons.css" rel="stylesheet" type="text/css" />
+	<!-- JavaScript Source Formatting -->
+	<link href="includes/google-code-prettify/prettify.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="includes/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript" src="includes/beautify.js"></script>
+	<!-- Pines Grid -->
+	<script type="text/javascript" src="jquery.pgrid.js"></script>
+	<link href="jquery.pgrid.default.css" rel="stylesheet" type="text/css" />
+	<link href="jquery.pgrid.default.icons.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		/* Not pgrid specific, just make this page a little more presentable. */
+		body {
+			padding: 40px 1em 1em;
+		}
+		#wrapper {
+			max-width: 1140px;
+			margin: 0 auto;
+		}
+		.page-banner {
+			padding: 130px 0 170px;
+			text-align: center;
+		}
+		.page-banner h1 {
+			font-size: 65px;
+			line-height: 65px;
+		}
+		.page-banner p {
+			font-size: 30px;
+			line-height: 36px;
+		}
+		.page-banner .btn-large {
+			margin-top: 20px;
+			font-size: 26px;
+		}
+		.page-banner .right-button {
+			margin-left: 20px;
+		}
+		.quick-links {
+			list-style: none outside none;
+			margin: 0;
+			min-height: 30px;
+			padding: 5px 20px;
+			text-align: center;
+		}
+		.quick-links:first-child {
+			min-height: 0;
+		}
+		.quick-links li {
+			position: relative;
+			top: 5px;
+			color: #999999;
+			display: inline;
+			margin: 0 5px;
+		}
+		.quick-links .fb-btn {
+			top: 1px;
+		}
+		.quick-links .fb_iframe_widget iframe {
+			left: 0;
+		}
+		.page-points .row-fluid {
+			margin-bottom: 30px;
+		}
+		body .pf-form .pf-heading * {
+			margin-top: .1em !important;
+			margin-bottom: .1em !important;
+		}
+		#copyright {
+			text-align: center;
+			margin-top: 40px;
+		}
+		/* Mobile */
+		@media (max-width: 768px) {
+			body {
+				padding: 0;
 			}
-			.wrapper {
-				background: transparent url(includes/watermark-small.png) no-repeat fixed bottom right;
-				padding: 10px;
+			.page-banner {
+				padding: 20px 0;
 			}
-			#header {
-				height: 68px;
-				position: relative;
+			.page-banner h1 {
+				font-size: 35px;
+				line-height: 35px;
 			}
+			.page-banner p {
+				font-size: 16px;
+				line-height: 30px;
+			}
+			.page-banner .btn-large {
+				font-size: 16px;
+			}
+			.page-banner .right-button {
+				margin-left: 0;
+			}
+			.page-points .row-fluid {
+				margin-bottom: 0;
+			}
+			#sections {
+				padding: 0 .4em;
+			}
+			#sections .container-fluid {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+		/* Tablet */
+		@media (min-width: 768px) and (max-width: 980px) {
+			body {
+				padding: 0 1em 1em;
+			}
+			.navbar-fixed-top {
+				margin: 0 -1em 18px;
+			}
+			.page-banner {
+				float: left;
+				width: 20%;
+				padding: 5px 0;
+			}
+			.page-banner h1 {
+				font-size: 25px;
+				line-height: 25px;
+			}
+			.page-banner p {
+				font-size: 14px;
+				line-height: 16px;
+				margin-top: 10px;
+			}
+			.page-banner .btn-large {
+				margin-top: 30px;
+				font-size: 14px;
+			}
+			.page-banner .right-button {
+				margin-left: 0;
+			}
+			.page-points {
+				float: right;
+				width: 80%;
+			}
+			.page-points .row-fluid {
+				margin-bottom: 10px;
+			}
+			#sections {
+				clear: both;
+			}
+		}
+
+		#switcher-container {
+			position: fixed;
+			top: 45px;
+			right: 5px;
+			z-index: 100;
+		}
+		@media (max-width: 980px) {
 			#switcher-container {
 				position: absolute;
-				top: 5px;
-				right: 5px;
+				top: 55px;
 			}
-			#header img.header {
-				position: absolute;
-			}
-			#header h1.header {
-				text-align: center;
-			}
-			.main-description {
-				font-size: 1.2em;
-			}
-			h2 {
-				margin: .83em 0 .1em 0;
-			}
-			p {
-				margin: 1em 0 .5em 0;
-			}
-			.featurelist {
-				background: transparent none no-repeat 0 0 !important;
-				margin: .5em 10px .5em 0;
-				padding: .5em;
-				float: left;
-			}
-			.featurelist ul {
-				margin: 0;
-				padding: 0;
-				list-style-type: none;
-			}
-			.featurelist ul a {
-				text-decoration: underline !important;
-			}
-			.featurelist ul .ui-icon {
-				display: inline-block;
-				position: relative;
-				top: 4px;
-				margin-right: .3em;
-			}
-			.featurelist ul img {
-				vertical-align: middle;
-				border: none 0;
-			}
-			.ui-widget {
-				font-size: .9em !important;
-			}
-			.ui-pgrid tbody td.col_4, .ui-pgrid tbody td.col_5 {
-				padding-left: 2px !important;
-			}
+		}
+		.pf-group {
+			background: transparent none no-repeat 0 0 !important;
+			padding: 4px;
+			margin: 5px auto;
+		}
+		.ui-widget {
+			font-size: 100% !important;
+		}
+		.pf-group input.ui-button {
+			padding: 2px !important;
+			font-size: .92em !important;
+			margin-bottom: 3px;
+		}
+		.btn-toolbar {
+			line-height: 28px;
+		}
+		.btn-toolbar h4 {
+			margin: 1em 0 .3em;
+		}
+		.btn-toolbar .btn-group {
+			vertical-align: middle;
+		}
 
-			/* Source View */
-			.source-dialog pre {
-				border: 1px solid black;
-				margin: .5em .5em 1em;
-				padding: 1em;
-				background: beige;
-				color: midnightblue;
-				display:-moz-inline-stack;
-				display:inline-block;
-				zoom:1;
-				*display:inline;
-			}
-			.source-dialog > div {
-				border-top: 1px solid black;
-				border-bottom: 1px solid black;
-				margin-bottom: 1em;
-				display:-moz-inline-stack;
-				display:inline-block;
-				zoom:1;
-				*display:inline;
-			}
-			.source-dialog > div div.syntaxhighlighter {
-				overflow: visible !important;
-				width: auto !important;
-				display:-moz-inline-stack;
-				display:inline-block;
-				zoom:1;
-				*display:inline;
-			}
-			/* ]]> */
-		</style>
-		<!--[if lt IE 8]>
-		<style type="text/css">
-			.featurelist ul {
-				padding-left: 1em;
-				list-style-type: disc;
-			}
-			.featurelist ul .ui-icon {
-				display: none;
-			}
-		</style>
-		<![endif]-->
-		<!--[if lt IE 8]>
-		<style type="text/css">
-			.pgrid {
-				border-collapse: collapse;
-			}
-		</style>
-		<![endif]-->
-		<script type="text/javascript">
-			// <![CDATA[
+		/* Source View */
+		pre.prettyprint {
+			display: table;
+		}
 
+		.ui-pgrid tbody td.col_4, .ui-pgrid tbody td.col_5 {
+			padding-left: 2px !important;
+		}
+
+		/* Fix Bootstrap Styles */
+		.ui-pgrid input {
+			margin-bottom: 0;
+			width: auto;
+		}
+	</style>
+	<!--[if lt IE 8]>
+	<style type="text/css">
+		.pgrid {
+			border-collapse: collapse;
+		}
+	</style>
+	<![endif]-->
+	<script type="text/javascript">
+		var stateful_grid, saved_state;
+		$(function(){
 			// Change defaults like this:
 			//$.fn.pgrid.defaults.pgrid_perpage = 12;
 
-			var stateful_grid;
-			var saved_state;
-
-			$(document).ready(function(){
-
-				// This creates all those source buttons.
-				$(".wrapper :button").each(function(){
-					var button = $(this);
-					if (button.text() == "Download Pines Grid" || button.text() == "Main Site") {
-						button.button();
-						return;
-					}
-					// Wrap the button in a container.
-					var contain = $("<span />");
-					contain = button.wrap(contain).parent();
-					// Add a source button.
-					$("<button type=\"button\" title=\"Show source code.\">{}</button>").click(function(){
-						var text = button.attr("onclick");
-						if (!text && button.attr("onmouseover"))
-							text = "// Mouse Over:\n"+button.attr("onmouseover")+"\n\n// Mouse Move:\n"+button.attr("onmousemove")+"\n\n// Mouse Out:\n"+button.attr("onmouseout");
-						if (button.hasClass("make_stateful_grid"))
-							text = make_stateful_grid.toString();
-						// IE needs this.
-						if (text.toString) {
-							text = text.toString();
-							if (text.match(/^function (onclick|anonymous)[\n ]*\([^\)]*\)[\n ]*\{[\n\t ]*/))
-								text = text.replace(/^function (onclick|anonymous)[\n ]*\([^\)]*\)[\n ]*\{[\n\t ]*/, "").replace(/[\n\t ]*}[\n\t ]*$/, "");
-						}
-						var dialog = $("<div title=\""+button.text()+" - Source\" class=\"source-dialog\"></div>");
-						if (button.hasClass("make_stateful_grid"))
-							dialog.attr("title", "Stateful Grid With Toolbar - Source");
-						$("<pre class=\"brush: js; toolbar: false;\" />").text(js_beautify(text)).appendTo(dialog);
-						if (text.match(/^\w*\([^\)]*\);$/) || text.match(/^save_state\(\);/)) {
-							var f_name = text.replace(/\(.*/g, "");
-							text = window[f_name].toString();
-							$("<pre class=\"brush: js; toolbar: false;\" />").text(js_beautify(text)).appendTo(dialog);
-						}
-						dialog.dialog({width: "auto"});
-						// Make sure the dialog isn't more than 800x600.
-						// Can't just add max-height cause that means it can't be resized beyond.
-						if (dialog.width() > 800)
-							dialog.dialog("option", "width", 800).dialog("option", "position", "center");
-						if (dialog.height() > 600)
-							dialog.dialog("option", "height", 600).dialog("option", "position", "center");
-						// Can't call .all(), it doesn't  work.
-						if (typeof SyntaxHighlighter != "undefined")
-							SyntaxHighlighter.highlight();
-					}).appendTo(contain);
+			// This creates all those source buttons.
+			$(".source").each(function(){
+				var button = $(this);
+				// Wrap the button in a container.
+				var contain = $('<div class="btn-group" />');
+				contain = button.wrap(contain).parent();
+				// Add a source button.
+				$('<button class="btn" title="Show source code.">{}</button>').click(function(){
+					$(this).blur();
+					var text = button.attr("onclick");
+					if (!text && button.attr("onmouseover"))
+						text = "// Mouse Over:\n"+button.attr("onmouseover")+"\n\n// Mouse Move:\n"+button.attr("onmousemove")+"\n\n// Mouse Out:\n"+button.attr("onmouseout");
 					if (button.hasClass("make_stateful_grid"))
-						button.detach();
-					contain.buttonset();
-				});
-
-				if ($.fn.themeswitcher) {
-					$('#switcher').themeswitcher();
-				} else {
-					$('#switcher').html("Couldn't load theme switcher widget.")
-				}
-
-				// I put it in a function so I could show the source easily.
-				var make_stateful_grid = function(){
-					// This is how to change the default settings for the entire page.
-					//$.fn.pgrid.defaults.pgrid_view_height = "290px";
-
-					stateful_grid = $("#test1").pgrid({
-						pgrid_toolbar: true,
-						pgrid_toolbar_contents: [
-							{type: 'button', text: 'New', extra_class: 'picon picon-document-new', selection_optional: true, url: 'includes/new.html', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
-							{type: 'button', text: 'View', extra_class: 'picon picon-document-open', url: 'includes/view.html?username=__title__', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
-							{type: 'button', text: 'Edit', extra_class: 'picon picon-document-edit', double_click: true, click: function(e, rows){
-								alert('Editing '+rows.attr('title')+'.');
-							}},
-							{type: 'separator'},
-							{type: 'button', text: 'Google', extra_class: 'picon picon-internet-web-browser', multi_select: true, url: 'http://google.com/search?q=__col_1__', delimiter: '+', target: "_blank"},
-							{type: 'button', text: 'Email', extra_class: 'picon picon-mail-message', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
-							{type: 'button', text: 'All', extra_class: 'picon picon-mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
-							{type: 'separator'},
-							{type: 'text', label: 'SMS: ', title: 'Send a Text Message', extra_class: 'picon picon-phone', attributes: {size: 15}, load: function(textbox){
-								textbox.focus(function(){
-									textbox.select();
-								}).keydown(function(e){
-									if (e.keyCode == 13) {
-										var rows = stateful_grid.pgrid_get_selected_rows().pgrid_export_rows();
-										var people = [];
-										$.each(rows, function(){
-											people.push(this.values[0]);
-										});
-										if (!people[0]) {
-											alert("Please select recipients.");
-										} else {
-											alert("Sending SMS...\nTo: "+people.join(", ")+"\nMessage: "+textbox.val());
-										}
-									}
-								});
-							}},
-							{type: 'text', label: 'Raise: ', title: 'Raise Salary', extra_class: 'picon picon-office-chart-bar', attributes: {size: 10}, load: function(textbox){
-								textbox.css("text-align", "right").keydown(function(e){
-									if (e.keyCode == 13) {
-										var rows = stateful_grid.pgrid_get_selected_rows();
-										if (!rows.length) {
-											alert("Please select at least one person.");
-											return;
-										}
-										rows.each(function(){
-											var cur_row = $(this);
-											var cur_salary = cur_row.pgrid_get_value(4);
-											if (!cur_salary)
-												return;
-											cur_salary = parseFloat(cur_salary.replace(/[^0-9.-]/g, ""));
-											var cur_raise = parseFloat(textbox.val());
-											cur_raise = isNaN(cur_raise) ? 0 : cur_raise;
-											var new_salary = new String((cur_salary+cur_raise).toFixed(2));
-											while (new_salary.match(/\d+\d{3}/))
-												new_salary = new_salary.replace(/(\d+)(\d{3})/, "$1,$2");
-											cur_row.pgrid_set_value(4, "$"+new_salary);
-										});
-									}
-								}).change(function(){
-									var value = parseFloat(textbox.val());
-									textbox.val(isNaN(value) ? "" : value);
-								});
-							}},
-							{type: 'separator'},
-							{type: 'button', text: 'Delete', extra_class: 'picon picon-edit-delete', confirm: true, multi_select: true, click: function(e, rows){
-								rows.pgrid_delete();
-							}},
-							{type: 'button', text: 'Clear All', extra_class: 'picon picon-edit-clear', multi_select: true, return_all_rows: true, confirm: function(e, rows){
-								return confirm("This will delete all "+rows.length+" rows! Are you sure you want to do this?");
-							}, click: function(e, rows){
-								rows.pgrid_delete();
-							}},
-							{type: 'separator'},
-							{type: 'button', title: 'Expand All', extra_class: 'picon picon-arrow-down', selection_optional: true, return_all_rows: true, click: function(e, rows){
-								rows.pgrid_expand_rows();
-							}},
-							{type: 'button', title: 'Collapse All', extra_class: 'picon picon-arrow-right', selection_optional: true, return_all_rows: true, click: function(e, rows){
-								rows.pgrid_collapse_rows();
-							}},
-							{type: 'separator'},
-							{type: 'button', title: 'Select All', extra_class: 'picon picon-document-multiple', select_all: true},
-							{type: 'button', title: 'Select None', extra_class: 'picon picon-document-close', select_none: true},
-							{type: 'separator'},
-							{type: 'button', title: 'Make a Spreadsheet', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
-								window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
-							}}
-						],
-						pgrid_double_click: function(e, rows) {
-							alert("Hey, you "+(e.ctrlKey ? "control " : "")+(e.shiftKey ? "shift " : "")+"doubleclicked "+rows.length+" item(s). I assume you want to edit...");
-						},
-						pgrid_sort_col: 5,
-						pgrid_state_change: function(state) {
-							if (auto_save.attr("checked")) {
-								saved_state = state;
-								saved_notice.show().fadeOut('slow');
-							}
-						}
-					});
-
-					$("#test1").pgrid_add([
-						{
-							key: "giovanni",
-							values: [
-								"Giovanni",
-								"giovanni@example.com",
-								"Athlete",
-								"$28,000.00",
-								"-1",
-								"I was added dynamically after this table was loaded."
-							]
-						},
-						{
-							key: "edward",
-							values: [
-								"Edward",
-								"edward@example.com",
-								"Anchorman",
-								"$35,000.00",
-								"-2",
-								"I was added dynamically after this table was loaded."
-							]
-						}
-					]);
-				};
-				make_stateful_grid();
-
-				var auto_save = $('#auto-save');
-				var saved_notice = $('#saved-notice');
+						text = make_stateful_grid.toString();
+					// IE needs this.
+					if (text.toString) {
+						text = text.toString();
+						if (text.match(/^function (onclick|anonymous)[\n ]*\([^\)]*\)[\n ]*\{[\n\t ]*/))
+							text = text.replace(/^function (onclick|anonymous)[\n ]*\([^\)]*\)[\n ]*\{[\n\t ]*/, "").replace(/[\n\t ]*}[\n\t ]*$/, "");
+					}
+					var dialog = $("<div title=\""+button.text()+" - Source\" class=\"source-dialog\"></div>");
+					if (button.hasClass("make_stateful_grid"))
+						dialog.attr("title", "Stateful Grid With Toolbar - Source");
+					$("<pre class=\"prettyprint\" />").text(js_beautify(text)).appendTo(dialog);
+					if (text.match(/^\w*\([^\)]*\);$/) || text.match(/^save_state\(\);/)) {
+						var f_name = text.replace(/\(.*/g, "");
+						text = window[f_name].toString();
+						$("<pre class=\"prettyprint\" />").text(js_beautify(text)).appendTo(dialog);
+					}
+					dialog.dialog({width: "auto"});
+					// Make sure the dialog isn't more than 800x600.
+					// Can't just add max-height cause that means it can't be resized beyond.
+					if (dialog.width() > 800)
+						dialog.dialog("option", "width", 800).dialog("option", "position", "center");
+					if (dialog.height() > 600)
+						dialog.dialog("option", "height", 600).dialog("option", "position", "center");
+					prettyPrint();
+				}).appendTo(contain);
+				if (button.hasClass("make_stateful_grid"))
+					button.detach();
 			});
 
-			function save_state() {
-				saved_state = stateful_grid.pgrid_export_state();
-			}
+			if ($.fn.themeswitcher)
+				$('#switcher').themeswitcher();
+			else
+				$('#switcher').html("Couldn't load theme switcher widget.");
+			// Navbar scrollspy.
+			$('#navbar').scrollspy();
 
-			function load_state() {
-				stateful_grid.pgrid_import_state(saved_state);
-			}
+			// I put it in a function so I could show the source easily.
+			var make_stateful_grid = function(){
+				// This is how to change the default settings for the entire page.
+				//$.fn.pgrid.defaults.pgrid_view_height = "290px";
 
-			function toggle_touch_css() {
-				if (typeof touch_css == "undefined") {
-					touch_css = $("<link href=\"jquery.pgrid.touch.css\" rel=\"stylesheet\" type=\"text/css\" /><link href=\"jquery.pgrid.touch.icons.css\" rel=\"stylesheet\" type=\"text/css\" />");
-					touch_css.appendTo("head");
-				} else {
-					touch_css.remove();
-					delete touch_css;
-				}
-			}
+				stateful_grid = $("#test1").pgrid({
+					pgrid_toolbar: true,
+					pgrid_toolbar_contents: [
+						{type: 'button', text: 'New', extra_class: 'picon picon-document-new', selection_optional: true, url: 'includes/new.html', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
+						{type: 'button', text: 'View', extra_class: 'picon picon-document-open', url: 'includes/view.html?username=__title__', target: 'pgridwin', window_features: 'status=0,toolbar=0,menubar=0,directories=0,height=240,width=540'},
+						{type: 'button', text: 'Edit', extra_class: 'picon picon-document-edit', double_click: true, click: function(e, rows){
+							alert('Editing '+rows.attr('title')+'.');
+						}},
+						{type: 'separator'},
+						{type: 'button', text: 'Google', extra_class: 'picon picon-internet-web-browser', multi_select: true, url: 'http://google.com/search?q=__col_1__', delimiter: '+', target: "_blank"},
+						{type: 'button', text: 'Email', extra_class: 'picon picon-mail-message', multi_select: true, url: 'mailto:__col_2__', delimiter: ','},
+						{type: 'button', text: 'All', extra_class: 'picon picon-mail-message-new', multi_select: true, return_all_rows: true, url: 'mailto:__col_2__', delimiter: ','},
+						{type: 'separator'},
+						{type: 'text', label: 'SMS: ', title: 'Send a Text Message', extra_class: 'picon picon-phone', attributes: {size: 15}, load: function(textbox){
+							textbox.focus(function(){
+								textbox.select();
+							}).keydown(function(e){
+								if (e.keyCode == 13) {
+									var rows = stateful_grid.pgrid_get_selected_rows().pgrid_export_rows();
+									var people = [];
+									$.each(rows, function(){
+										people.push(this.values[0]);
+									});
+									if (!people[0]) {
+										alert("Please select recipients.");
+									} else {
+										alert("Sending SMS...\nTo: "+people.join(", ")+"\nMessage: "+textbox.val());
+									}
+								}
+							});
+						}},
+						{type: 'text', label: 'Raise: ', title: 'Raise Salary', extra_class: 'picon picon-office-chart-bar', attributes: {size: 10}, load: function(textbox){
+							textbox.css("text-align", "right").keydown(function(e){
+								if (e.keyCode == 13) {
+									var rows = stateful_grid.pgrid_get_selected_rows();
+									if (!rows.length) {
+										alert("Please select at least one person.");
+										return;
+									}
+									rows.each(function(){
+										var cur_row = $(this);
+										var cur_salary = cur_row.pgrid_get_value(4);
+										if (!cur_salary)
+											return;
+										cur_salary = parseFloat(cur_salary.replace(/[^0-9.-]/g, ""));
+										var cur_raise = parseFloat(textbox.val());
+										cur_raise = isNaN(cur_raise) ? 0 : cur_raise;
+										var new_salary = new String((cur_salary+cur_raise).toFixed(2));
+										while (new_salary.match(/\d+\d{3}/))
+											new_salary = new_salary.replace(/(\d+)(\d{3})/, "$1,$2");
+										cur_row.pgrid_set_value(4, "$"+new_salary);
+									});
+								}
+							}).change(function(){
+								var value = parseFloat(textbox.val());
+								textbox.val(isNaN(value) ? "" : value);
+							});
+						}},
+						{type: 'separator'},
+						{type: 'button', text: 'Delete', extra_class: 'picon picon-edit-delete', confirm: true, multi_select: true, click: function(e, rows){
+							rows.pgrid_delete();
+						}},
+						{type: 'button', text: 'Clear All', extra_class: 'picon picon-edit-clear', multi_select: true, return_all_rows: true, confirm: function(e, rows){
+							return confirm("This will delete all "+rows.length+" rows! Are you sure you want to do this?");
+						}, click: function(e, rows){
+							rows.pgrid_delete();
+						}},
+						{type: 'separator'},
+						{type: 'button', title: 'Expand All', extra_class: 'picon picon-arrow-down', selection_optional: true, return_all_rows: true, click: function(e, rows){
+							rows.pgrid_expand_rows();
+						}},
+						{type: 'button', title: 'Collapse All', extra_class: 'picon picon-arrow-right', selection_optional: true, return_all_rows: true, click: function(e, rows){
+							rows.pgrid_collapse_rows();
+						}},
+						{type: 'separator'},
+						{type: 'button', title: 'Select All', extra_class: 'picon picon-document-multiple', select_all: true},
+						{type: 'button', title: 'Select None', extra_class: 'picon picon-document-close', select_none: true},
+						{type: 'separator'},
+						{type: 'button', title: 'Make a Spreadsheet', extra_class: 'picon picon-x-office-spreadsheet', multi_select: true, pass_csv_with_headers: true, click: function(e, rows){
+							window.open("data:text/csv;charset=utf8," + encodeURIComponent(rows));
+						}}
+					],
+					pgrid_double_click: function(e, rows) {
+						alert("Hey, you "+(e.ctrlKey ? "control " : "")+(e.shiftKey ? "shift " : "")+"doubleclicked "+rows.length+" item(s). I assume you want to edit...");
+					},
+					pgrid_sort_col: 5,
+					pgrid_state_change: function(state) {
+						if (auto_save.attr("checked")) {
+							saved_state = state;
+							saved_notice.show().fadeOut('slow');
+						}
+					}
+				});
 
-			// ]]>
-		</script>
-	</head>
-	<body>
-		<div class="ui-widget-content ui-corner-all ui-helper-clearfix">
-			<div class="wrapper">
-				<div id="header" class="ui-widget-header ui-corner-all">
-					<div id="switcher-container"><div id="switcher"></div></div>
-					<img class="header" src="includes/default_logo.png" alt="Pines Logo" />
-					<h1 class="header">Pines Grid jQuery Plugin</h1>
+				$("#test1").pgrid_add([
+					{
+						key: "giovanni",
+						values: [
+							"Giovanni",
+							"giovanni@example.com",
+							"Athlete",
+							"$28,000.00",
+							"-1",
+							"I was added dynamically after this table was loaded."
+						]
+					},
+					{
+						key: "edward",
+						values: [
+							"Edward",
+							"edward@example.com",
+							"Anchorman",
+							"$35,000.00",
+							"-2",
+							"I was added dynamically after this table was loaded."
+						]
+					}
+				]);
+			};
+			make_stateful_grid();
+
+			var auto_save = $('#auto-save');
+			var saved_notice = $('#saved-notice');
+		});
+
+		function save_state() {
+			saved_state = stateful_grid.pgrid_export_state();
+		}
+
+		function load_state() {
+			stateful_grid.pgrid_import_state(saved_state);
+		}
+
+		function toggle_touch_css() {
+			if (typeof touch_css == "undefined") {
+				touch_css = $("<link href=\"jquery.pgrid.touch.css\" rel=\"stylesheet\" type=\"text/css\" /><link href=\"jquery.pgrid.touch.icons.css\" rel=\"stylesheet\" type=\"text/css\" />");
+				touch_css.appendTo("head");
+			} else {
+				touch_css.remove();
+				delete touch_css;
+			}
+		}
+	</script>
+</head>
+<body id="page" data-spy="scroll">
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=231372466970244";
+		fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
+	<div id="navbar" class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="http://pinesframework.org/pgrid/" style="height: 40px; padding-top: 0; padding-bottom: 0;">
+					<img id="logo" alt="Pines Logo" src="includes/pines-logo.png" style="padding: 0; border: 0; vertical-align: middle;" />
+					<span style="line-height: 40px;">Pines Grid</span>
+				</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li class="active"><a href="#page">Overview</a></li>
+						<li><a href="#demos">Demos</a></li>
+						<li><a href="#benchmarking">Benchmarking</a></li>
+						<li><a href="#installation">Installation</a></li>
+						<li><a href="#comments">Comments</a></li>
+					</ul>
+					<ul class="nav pull-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								Beyond Pines Grid <b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="http://pinesframework.org/" target="_blank">Pines Framework</a></li>
+								<li><a href="http://pinescms.org/" target="_blank">Pines CMS</a></li>
+								<li class="divider"></li>
+								<li><a href="http://pinesframework.org/pform/" target="_blank">Pines Form</a></li>
+								<li><a href="http://pinesframework.org/pnotify/" target="_blank">Pines Notify</a></li>
+								<li><a href="http://pinesframework.org/ptags/" target="_blank">Pines Tags</a></li>
+								<li class="divider"></li>
+								<li>
+									<a href="http://sourceforge.net/projects/pines" target="_blank"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=264165&amp;type=13" width="120" height="30" alt="Get Pines at SourceForge.net. Fast, secure and Free Open Source software downloads" style="border: none;" /></a>
+								</li>
+							</ul>
+						</li>
+					</ul>
 				</div>
-				<p style="float: right;">
-					<a href="http://sourceforge.net/projects/pines"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=264165&amp;type=15" width="150" height="40" alt="Get Pines at SourceForge.net. Fast, secure and Free Open Source software downloads" style="border: none;" /></a>
-				</p>
-				<p class="main-description">
-					Pines Grid is a JavaScript data grid plugin for the jQuery
-					JavaScript library, developed by Hunter Perrin as part
-					of <a href="http://pinesframework.org/">Pines</a>.
-					It is designed to provide maximum flexibility, while
-					still being easy to use and easy to implement. Try out
-					different themes using the selector in the top right corner
-					of this page.
-					Pines Grid is distributed under the <a href="http://www.gnu.org/licenses/gpl.html" onclick="window.open(this.href); return false;">GPL</a>, <a href="http://www.gnu.org/licenses/lgpl.html" onclick="window.open(this.href); return false;">LGPL</a>, and <a href="http://www.mozilla.org/MPL/MPL-1.1.html" onclick="window.open(this.href); return false;">MPL</a>. This triple copyleft licensing model avoids incompatibility with other open source licenses.
-				</p>
-				<div class="dev-note ui-state-error ui-corner-all" style="display: none; padding: 1em; text-align: center;">
-					<h3 style="margin: 0;">Caution warning danger attention!</h3>
-					<p style="margin: .5em 0 0;">
-						This is the development site. It's a playground for
-						bleeding edge features and code that probably won't
-						work. You should head over to the
-						<a href="http://pinesframework.org/pgrid/"><button type="button" style="text-decoration: none !important; font-weight: bold !important;">Main Site</button></a>
-					</p>
-				</div>
-				<p class="stable-note" style="display: none;">
-					This is the stable site. You can download code here that's
-					tested and proven to work. However, if you like to live
-					dangerously, you can also check out the
-					<a href="http://pines.hg.sourceforge.net/hgweb/pines/pgrid/raw-file/tip/index.html">development site</a>.
-				</p>
-				<p style="text-align: center;">
-					<button type="button" onclick="window.location='https://sourceforge.net/projects/pines/files/pgrid/1.1/pgrid-1.1.2.zip/download';"><strong style="font-size: large;">Download Pines Grid</strong></button>
-				</p>
-				<h2>Features</h2>
-				<div class="ui-helper-clearfix">
-					<div class="featurelist ui-widget-content ui-corner-all">
-						<ul>
-							<li><span class="ui-icon ui-icon-bullet"></span>Pagination.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Filtering.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Sorting.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Customizeable toolbar.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Column resizing.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Column hiding.</li>
-						</ul>
-					</div>
-					<div class="featurelist ui-widget-content ui-corner-all">
-						<ul>
-							<li><span class="ui-icon ui-icon-bullet"></span>Hierarchical data.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Selecting.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Saving and loading state. (Current page, filter, etc.)</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Adding and removing items dynamically.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Selecting and deselecting items dynamically.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span><a href="http://validator.w3.org/check?uri=referer">XHTML 1.0 Strict compliance.</a></li>
-						</ul>
-					</div>
-					<div class="featurelist ui-widget-content ui-corner-all">
-						<ul>
-							<li><span class="ui-icon ui-icon-bullet"></span>Clean, sensible, easy markup.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>Population either statically or dynamically.</li>
-							<li><span class="ui-icon ui-icon-bullet"></span><a href="javascript:void(0);" onclick="toggle_touch_css(); $(this).prev().toggleClass('ui-icon-bullet').toggleClass('ui-icon-check'); return false;" title="Toggle Touch Styling">Touch styling, for touch-screen friendly operation.</a></li>
-							<li><span class="ui-icon ui-icon-bullet"></span><a href="http://jqueryui.com/themeroller/"><img src="includes/themeroller-ready.png" alt="ThemeRoller Ready" /></a></li>
-						</ul>
+			</div>
+		</div>
+	</div>
+	<div id="switcher-container"><div id="switcher"></div></div>
+	<div class="wrapper">
+		<div class="page-banner">
+			<h1>Pines Grid</h1>
+			<p id="description">JavaScript (jQuery) data grid plugin.</p>
+			<div>
+				<a class="btn btn-primary btn-large" href="https://sourceforge.net/projects/pines/files/pgrid/1.1/pgrid-1.1.2.zip/download" target="_blank">Download Pines Grid 1.1.2</a>
+				<a class="right-button btn btn-large" href="http://github.com/sciactive/pgrid" target="_blank" title="Fork me on GitHub">Pines Grid on GitHub <img src="includes/github-icon.png" alt="GitHub Icon" /></a>
+				<br /><br />
+				<ul class="quick-links">
+					<li class="fb-btn">
+						<div class="fb-like" data-href="http://pinesframework.org/pgrid/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div>
+					</li>
+					<li class="follow-btn">
+						<a href="https://twitter.com/pinesframework" class="twitter-follow-button" data-show-count="false">Follow @pinesframework</a>
+					</li>
+					<li class="tweet-btn">
+						<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://pinesframework.org/pgrid/">Tweet</a>
+					</li>
+				</ul>
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+			</div>
+		</div>
+		<div class="page-points">
+			<div class="container-fluid">
+				<div class="row-fluid dev-note" style="display: none;">
+					<div class="span3">&nbsp;</div>
+					<div class="span6 offset3">
+						<div class="alert alert-error">
+							<h3><i class="icon-exclamation-sign" style="position: relative; top: 3px;"></i> Caution warning danger attention!</h3>
+							<p>
+								This is the development site. It's a playground for
+								bleeding edge features and code that probably won't
+								work. You should head over to the
+								<a href="http://pinesframework.org/pgrid/" class="btn btn-success">Main Site</a>
+							</p>
+						</div>
 					</div>
 				</div>
-				<h2>Demos</h2>
-				<p>This table was gridified on $(document).ready() with a toolbar: <button type="button" class="make_stateful_grid">{}</button></p>
-				<p>
-					<label><input type="checkbox" id="auto-save" />Auto Save</label>
-					<button class="ui-state-default ui-corner-all" onclick="save_state(); $('#saved-notice').show().fadeOut('slow');">Save State</button>
-					<button class="ui-state-default ui-corner-all" onclick="load_state();">Load State</button>
-					<span id="saved-notice" class="ui-state-highlight ui-corner-all" style="display: none;">State saved.</span>
+				<div class="row-fluid">
+					<div class="span8">
+						<div class="alert-block">
+							<h3><i class="icon-book" style="position: relative; top: 3px;"></i> About</h3>
+							<p>
+								Pines Grid is a JavaScript data grid plugin for the jQuery
+								JavaScript library, developed by Hunter Perrin as part
+								of <a href="http://pinesframework.org/">Pines</a>.
+								It is designed to provide maximum flexibility, while
+								still being easy to use and easy to implement.
+							</p>
+						</div>
+					</div>
+					<div class="span4">
+						<div class="alert-block">
+							<h3><i class="icon-list-alt" style="position: relative; top: 3px;"></i> Cross-Browser</h3>
+							<p>
+								Pines Grid works in all modern browsers and provides
+								a consistent interface. It is tested thoroughly for
+								consistency. No love for legacy browsers.
+								<i style="display: inline-block; width: 16px; height: 16px; vertical-align: text-top;" class="picon picon-face-sad"></i>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="span4">
+						<div class="alert-block">
+							<h3><i class="icon-asterisk" style="position: relative; top: 3px;"></i> Touch Friendly</h3>
+							<p>
+								Pines Grid can be styled specifically for touch screens.
+								<button class="btn" onclick="toggle_touch_css(); $(this).children('i').toggleClass('icon-star-empty icon-star');"><i class="icon-star-empty"></i> Toggle Touch Styling</button>
+							</p>
+							<p>
+								<a class="btn" data-toggle="modal" href="#feature-modal" >See All Features</a>
+							</p>
+						</div>
+					</div>
+					<div class="span4">
+						<div class="alert-block">
+							<h3><i class="icon-picture" style="position: relative; top: 3px;"></i> Themeable</h3>
+							<p>
+								Pines Grid uses the jQuery UI CSS library for styling, which
+								means it is fully and easily themeable. Try out some of the
+								readymade themes using the selector in the top right corner
+								of this page.
+							</p>
+							<p style="text-align: right;">
+								<a href="http://jqueryui.com/themeroller/"><img src="includes/themeroller-ready.png" alt="ThemeRoller Ready" /></a>
+							</p>
+						</div>
+					</div>
+					<div class="span4">
+						<div class="alert-block">
+							<h3><i class="icon-gift" style="position: relative; top: 3px;"></i> Completely Open</h3>
+							<p>
+								Pines Grid is distributed under the
+								<a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL</a>,
+								<a href="http://www.gnu.org/licenses/lgpl.html" target="_blank">LGPL</a>,
+								and
+								<a href="http://www.mozilla.org/MPL/MPL-1.1.html" target="_blank">MPL</a>.
+								This triple copyleft licensing model avoids
+								incompatibility with other open source licenses.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="row-fluid stable-note" style="display: none;">
+					<div class="span3">&nbsp;</div>
+					<div class="span6 offset3">
+						<div class="alert alert-success">
+							<h3><i class="icon-info-sign" style="position: relative; top: 3px;"></i> Did you know?</h3>
+							<p>
+								This is the stable site. You can download code here that's
+								tested and proven to work. However, if you like to live
+								dangerously, you can also check out the
+								<a href="http://sciactive.github.com/pgrid">development site</a>.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal hide fade" id="feature-modal">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Pines Grid Features</h3>
+			</div>
+			<div class="modal-body">
+				<ul class="unstyled">
+					<li>Highly customizable UI.
+						<ul>
+							<li>Pagination.</li>
+							<li>Filtering.</li>
+							<li>Sorting.</li>
+							<li>Customizeable toolbar.</li>
+							<li>Column resizing.</li>
+							<li>Column hiding.</li>
+							<li>Selecting.</li>
+						</ul>
+					</li>
+					<li>Feature rich API.
+						<ul>
+							<li>Hierarchical data.</li>
+							<li>Saving and loading state. (Current page, filter, etc.)</li>
+							<li>Adding and removing items dynamically.</li>
+							<li>Selecting and deselecting items dynamically.</li>
+							<li>Population either statically or dynamically.</li>
+							<li>XHTML 1.0 Strict compliance.</li>
+						</ul>
+					</li>
+					<li>Clean, sensible, easy markup.</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<a data-dismiss="modal" class="btn">Close</a>
+			</div>
+		</div>
+		<div id="sections">
+			<div id="demos">
+				<div class="page-header">
+					<h2>Demos</h2>
+				</div>
+				<div class="btn-toolbar">This table was gridified on $(document).ready() with a toolbar: <button type="button" class="btn source make_stateful_grid">{}</button></div>
+				<div class="btn-toolbar">
+					<label style="display: inline;"><input style="display: inline;" type="checkbox" id="auto-save" /> Auto Save</label>
+					<button class="btn source" onclick="save_state(); $('#saved-notice').show().fadeOut('slow');">Save State</button>
+					<button class="btn source" onclick="load_state();">Load State</button>
+					<span id="saved-notice" class="alert-info" style="display: none;">State saved.</span>
 					<br /><br />
-					<button class="ui-state-default ui-corner-all" onclick="stateful_grid.pgrid_get_all_rows().filter('[title=bob]').pgrid_select_rows();">Select Bob</button>
-					<button class="ui-state-default ui-corner-all" onclick="stateful_grid.pgrid_get_all_rows().filter('.parent').pgrid_select_rows();">Select Parents</button>
-				</p>
+					<button class="btn source" onclick="stateful_grid.pgrid_get_all_rows().filter('[title=bob]').pgrid_select_rows();">Select Bob</button>
+					<button class="btn source" onclick="stateful_grid.pgrid_get_all_rows().filter('.parent').pgrid_select_rows();">Select Parents</button>
+				</div>
 				<table id="test1">
 					<thead>
 						<tr><th>Name</th><th>E-Mail</th><th>Occupation</th><th>Salary</th><th>Number</th><th>Description</th></tr>
@@ -469,9 +693,11 @@
 					</tbody>
 				</table>
 				<br /><br />
-				<button class="ui-state-default ui-corner-all" onclick="set_up_selector();">Try out a selector.</button><span style="margin-left: 2em;" id="selected">Nothing selected.</span>
+				<div class="btn-toolbar">
+					<button class="btn source" onclick="set_up_selector();">Try out a selector.</button>
+					<span style="margin-left: 2em;" id="selected">Nothing selected.</span>
+				</div>
 				<script type="text/javascript">
-					// <![CDATA[
 					function set_up_selector() {
 						$('#selector').pgrid({
 							pgrid_toolbar: true,
@@ -488,9 +714,7 @@
 							}
 						});
 					}
-					// ]]>
 				</script>
-				<br />
 				<table id="selector">
 					<thead>
 						<tr><th>Name</th><th>E-Mail</th></tr>
@@ -518,107 +742,109 @@
 					</tbody>
 				</table>
 				<br style="clear: both;" /><br />
-				<div>
-					<button class="ui-state-default ui-corner-all" onclick="set_up_switcher();">Try out a list switcher.</button>
-					<script type="text/javascript">
-						// <![CDATA[
-						function set_up_switcher() {
-							var switcher_left = $('#switcher_left').pgrid({
-								pgrid_toolbar: true,
-								pgrid_toolbar_contents: [
-									{
-										type: 'button',
-										text: 'Transfer &gt;&gt;',
-										multi_select: true,
-										double_click: true,
-										click: function(e, rows) {
-											switcher_right.pgrid_add(rows.pgrid_add_descendant_rows().pgrid_export_rows());
-											rows.pgrid_delete();
-										}
-									}
-								],
-								pgrid_paginate: false,
-								pgrid_filtering: false,
-								pgrid_resize: false
-							});
-							var switcher_right = $('#switcher_right').pgrid({
-								pgrid_toolbar: true,
-								pgrid_toolbar_contents: [
-									{
-										type: 'button',
-										text: '&lt;&lt; Transfer',
-										multi_select: true,
-										double_click: true,
-										click: function(e, rows) {
-											switcher_left.pgrid_add(rows.pgrid_add_descendant_rows().pgrid_export_rows());
-											rows.pgrid_delete();
-										}
-									},
-									{
-										type: 'button',
-										text: 'Export Selected',
-										multi_select: true,
-										click: function() {
-											// Possible to use the arguments of this function, instead.
-											alert(JSON.stringify(switcher_right.pgrid_get_selected_rows().pgrid_export_rows()));
-										}
-									},
-									{
-										type: 'button',
-										text: 'Export All',
-										selection_optional: true,
-										click: function() {
-											alert(JSON.stringify(switcher_right.pgrid_get_all_rows().pgrid_export_rows()));
-										}
-									}
-								],
-								pgrid_paginate: false,
-								pgrid_filtering: false,
-								pgrid_resize: false
-							});
-						}
-						// ]]>
-					</script>
+				<div class="btn-toolbar">
+					<button class="btn source" onclick="set_up_switcher();">Try out a list switcher.</button>
 				</div>
-				<div style="clear: left; float: left; width: 49%;">
-					<table id="switcher_left">
-						<thead>
-							<tr><th>Name</th><th>E-Mail</th></tr>
-						</thead>
-						<tbody>
-							<tr title="bob"><td>Bob</td><td>bob@example.com</td></tr>
-							<tr title="joe"><td>Joe</td><td>joe@example.com</td></tr>
-							<tr title="steve"><td>Steve</td><td>steve@example.com</td></tr>
-							<tr title="jane"><td>Jane</td><td>jane@example.com</td></tr>
-							<tr title="willie" class="parent"><td>Willie</td><td>willie@example.com</td></tr>
-							<tr title="bobo" class="willie child parent"><td>Bobo</td><td>bobo@example.com</td></tr>
-							<tr title="chris" class="bobo child"><td>Chris</td><td>chris@example.com</td></tr>
-							<tr title="steph" class="bobo child"><td>Steph</td><td>steph@example.com</td></tr>
-							<tr title="karen" class="willie child"><td>Karen</td><td>karen@example.com</td></tr>
-							<tr title="arnold" class="parent"><td>Arnold</td><td>arnold@example.com</td></tr>
-							<tr title="bach" class="arnold child"><td>Bach</td><td>bach@example.com</td></tr>
-							<tr title="james"><td>James</td><td>james@example.com</td></tr>
-							<tr title="billy"><td>Billy</td><td>billy@example.com</td></tr>
-							<tr title="rick"><td>Rick</td><td>rick@example.com</td></tr>
-							<tr title="josh"><td>Josh</td><td>josh@example.com</td></tr>
-							<tr title="buck"><td>Buck</td><td>buck@example.com</td></tr>
-							<tr title="jason"><td>Jason</td><td>jason@example.com</td></tr>
-						</tbody>
-					</table>
-				</div>
-				<div style="float: left; width: 49%;">
-					<table id="switcher_right">
-						<thead>
-							<tr><th>Name</th><th>E-Mail</th></tr>
-						</thead>
-						<tbody>
-							<tr title="geoffrey" class="parent"><td>Geoffrey</td><td>geoffrey@example.com</td></tr>
-							<tr title="nate" class="geoffrey child"><td>Nate</td><td>nate@example.com</td></tr>
-						</tbody>
-					</table>
+				<script type="text/javascript">
+					function set_up_switcher() {
+						var switcher_left = $('#switcher_left').pgrid({
+							pgrid_toolbar: true,
+							pgrid_toolbar_contents: [
+								{
+									type: 'button',
+									text: 'Transfer &gt;&gt;',
+									multi_select: true,
+									double_click: true,
+									click: function(e, rows) {
+										switcher_right.pgrid_add(rows.pgrid_add_descendant_rows().pgrid_export_rows());
+										rows.pgrid_delete();
+									}
+								}
+							],
+							pgrid_paginate: false,
+							pgrid_filtering: false,
+							pgrid_resize: false
+						});
+						var switcher_right = $('#switcher_right').pgrid({
+							pgrid_toolbar: true,
+							pgrid_toolbar_contents: [
+								{
+									type: 'button',
+									text: '&lt;&lt; Transfer',
+									multi_select: true,
+									double_click: true,
+									click: function(e, rows) {
+										switcher_left.pgrid_add(rows.pgrid_add_descendant_rows().pgrid_export_rows());
+										rows.pgrid_delete();
+									}
+								},
+								{
+									type: 'button',
+									text: 'Export Selected',
+									multi_select: true,
+									click: function() {
+										// Possible to use the arguments of this function, instead.
+										alert(JSON.stringify(switcher_right.pgrid_get_selected_rows().pgrid_export_rows()));
+									}
+								},
+								{
+									type: 'button',
+									text: 'Export All',
+									selection_optional: true,
+									click: function() {
+										alert(JSON.stringify(switcher_right.pgrid_get_all_rows().pgrid_export_rows()));
+									}
+								}
+							],
+							pgrid_paginate: false,
+							pgrid_filtering: false,
+							pgrid_resize: false
+						});
+					}
+				</script>
+				<div class="row-fluid">
+					<div class="span6">
+						<table id="switcher_left">
+							<thead>
+								<tr><th>Name</th><th>E-Mail</th></tr>
+							</thead>
+							<tbody>
+								<tr title="bob"><td>Bob</td><td>bob@example.com</td></tr>
+								<tr title="joe"><td>Joe</td><td>joe@example.com</td></tr>
+								<tr title="steve"><td>Steve</td><td>steve@example.com</td></tr>
+								<tr title="jane"><td>Jane</td><td>jane@example.com</td></tr>
+								<tr title="willie" class="parent"><td>Willie</td><td>willie@example.com</td></tr>
+								<tr title="bobo" class="willie child parent"><td>Bobo</td><td>bobo@example.com</td></tr>
+								<tr title="chris" class="bobo child"><td>Chris</td><td>chris@example.com</td></tr>
+								<tr title="steph" class="bobo child"><td>Steph</td><td>steph@example.com</td></tr>
+								<tr title="karen" class="willie child"><td>Karen</td><td>karen@example.com</td></tr>
+								<tr title="arnold" class="parent"><td>Arnold</td><td>arnold@example.com</td></tr>
+								<tr title="bach" class="arnold child"><td>Bach</td><td>bach@example.com</td></tr>
+								<tr title="james"><td>James</td><td>james@example.com</td></tr>
+								<tr title="billy"><td>Billy</td><td>billy@example.com</td></tr>
+								<tr title="rick"><td>Rick</td><td>rick@example.com</td></tr>
+								<tr title="josh"><td>Josh</td><td>josh@example.com</td></tr>
+								<tr title="buck"><td>Buck</td><td>buck@example.com</td></tr>
+								<tr title="jason"><td>Jason</td><td>jason@example.com</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="span6">
+						<table id="switcher_right">
+							<thead>
+								<tr><th>Name</th><th>E-Mail</th></tr>
+							</thead>
+							<tbody>
+								<tr title="geoffrey" class="parent"><td>Geoffrey</td><td>geoffrey@example.com</td></tr>
+								<tr title="nate" class="geoffrey child"><td>Nate</td><td>nate@example.com</td></tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<br style="clear: both;" /><br />
-				<button class="ui-state-default ui-corner-all" onclick="$('#test2').pgrid();">Gridify this table with default options.</button>
+				<div class="btn-toolbar">
+					<button class="btn source" onclick="$('#test2').pgrid();">Gridify this table with default options.</button>
+				</div>
 				<table id="test2">
 					<thead>
 						<tr><th>Name</th><th>E-Mail</th><th>Occupation</th><th>Salary</th><th>Number</th><th>Description</th></tr>
@@ -652,26 +878,28 @@
 					</tbody>
 				</table>
 				<br /><br />
-				<button class="ui-state-default ui-corner-all" onclick="$('#test3').pgrid({
-					pgrid_footer: false,
-					pgrid_count: false,
-					pgrid_select: false,
-					pgrid_multi_select: false,
-					pgrid_paginate: false,
-					pgrid_page: 2,
-					pgrid_perpage: 5,
-					pgrid_filtering: false,
-					pgrid_filter: '',
-					pgrid_hidden_cols: [2, 3],
-					pgrid_resize_cols: false,
-					pgrid_sortable: false,
-					pgrid_sort_col: false,
-					pgrid_sort_ord: 'asc',
-					pgrid_child_prefix: 'ch_',
-					pgrid_row_hover_effect: false,
-					pgrid_view_height: 'auto',
-					pgrid_resize: false
-				});">Gridify this table with custom options and disabled features.</button>
+				<div class="btn-toolbar">
+					<button class="btn source" onclick="$('#test3').pgrid({
+						pgrid_footer: false,
+						pgrid_count: false,
+						pgrid_select: false,
+						pgrid_multi_select: false,
+						pgrid_paginate: false,
+						pgrid_page: 2,
+						pgrid_perpage: 5,
+						pgrid_filtering: false,
+						pgrid_filter: '',
+						pgrid_hidden_cols: [2, 3],
+						pgrid_resize_cols: false,
+						pgrid_sortable: false,
+						pgrid_sort_col: false,
+						pgrid_sort_ord: 'asc',
+						pgrid_child_prefix: 'ch_',
+						pgrid_row_hover_effect: false,
+						pgrid_view_height: 'auto',
+						pgrid_resize: false
+					});">Gridify this table with custom options and disabled features.</button>
+				</div>
 				<table id="test3">
 					<thead>
 						<tr><th>Name</th><th>E-Mail</th><th>Occupation</th><th>Salary</th><th>Number</th><th>Description</th></tr>
@@ -704,9 +932,12 @@
 						<tr title="daniel"><td>Daniel</td><td>daniel@example.com</td><td>Flight Service Specialist</td><td>$32,000.00</td><td>25</td><td>Aenean neque quam, mollis vitae rhoncus non, sollicitudin vel quam. Donec lectus arcu, viverra eget tristique sed, venenatis id sem.</td></tr>
 					</tbody>
 				</table>
-				<br /><br />
+			</div>
+			<div id="benchmarking">
+				<div class="page-header">
+					<h2>Benchmarking</h2>
+				</div>
 				<script type="text/javascript">
-					// <![CDATA[
 					var test_grid;
 					function make_table() {
 						var row_count = parseInt($("#test4_rows").val());
@@ -731,7 +962,7 @@
 						end_time = new Date().getTime();
 						alert("Complete:\n\nTime: "+(end_time - start_time)+"ms ("+((end_time - start_time) / 1000)+"s)");
 					}
-					
+
 					function add_rows() {
 						if (typeof test_grid == "undefined" || test_grid == null) {
 							alert("You need to make a grid first.");
@@ -762,9 +993,13 @@
 						end_time = new Date().getTime();
 						alert("Complete:\n\nTime: "+(end_time - start_time)+"ms ("+((end_time - start_time) / 1000)+"s)");
 					}
-					// ]]>
 				</script>
-				Insert <input type="text" id="test4_rows" value="500" size="5" /> rows. <button type="button" class="ui-state-default ui-corner-all" onclick="make_table();">Make a table.</button> <button type="button" class="ui-state-default ui-corner-all" onclick="gridify_table();">Gridify and time it.</button> <button type="button" class="ui-state-default ui-corner-all" onclick="add_rows();">Add rows and time it.</button>
+				<div class="btn-toolbar">
+					Insert <input style="margin-bottom: 0; width: auto;" type="text" id="test4_rows" value="500" size="5" /> rows.
+					<button type="button" class="btn source" onclick="make_table();">Make a table.</button>
+					<button type="button" class="btn source" onclick="gridify_table();">Gridify and time it.</button>
+					<button type="button" class="btn source" onclick="add_rows();">Add rows and time it.</button>
+				</div>
 				<div id="test4"></div>
 				<div id="test4_skel" style="display: none;">
 					<table>
@@ -776,20 +1011,42 @@
 						</tbody>
 					</table>
 				</div>
-				<h2>Installation</h2>
+			</div>
+			<div id="installation">
+				<div class="page-header">
+					<h2>Installation</h2>
+				</div>
 				<p>Installation is simple. Include jQuery 1.4 (or higher) and jQuery UI (only the CSS is required). Then include the following files:</p>
 				<div class="ui-helper-clearfix">
 					<div class="featurelist">
 						<ul>
-							<li><span class="ui-icon ui-icon-bullet"></span>jquery.pgrid.js or jquery.pgrid.min.js (Minified)</li>
-							<li><span class="ui-icon ui-icon-bullet"></span>jquery.pgrid.default.css or jquery.pgrid.touch.css (Touch Screen Styling)</li>
+							<li>jquery.pgrid.js or jquery.pgrid.min.js (Minified)</li>
+							<li>jquery.pgrid.default.css or jquery.pgrid.touch.css (Touch Screen Styling)</li>
 						</ul>
 					</div>
 				</div>
-				<p style="text-align: center;">
-					<button type="button" onclick="window.location='https://sourceforge.net/projects/pines/files/pgrid/1.1/pgrid-1.1.2.zip/download';"><strong style="font-size: large;">Download Pines Grid</strong></button>
-				</p>
+			</div>
+			<div id="comments">
+				<div class="page-header">
+					<h2>Comments</h2>
+				</div>
+				<div id="disqus_thread"></div>
+				<script type="text/javascript">
+					/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+					var disqus_shortname = 'pgrid'; // required: replace example with your forum shortname
+
+					/* * * DON'T EDIT BELOW THIS LINE * * */
+					(function() {
+						var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+						dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+						(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+					})();
+				</script>
+				<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+				<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 			</div>
 		</div>
-	</body>
+		<p id="copyright">&copy; 2011-2012 SciActive.com. All Rights Reserved.</p>
+	</div>
+</body>
 </html>
