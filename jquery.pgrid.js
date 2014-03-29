@@ -1,7 +1,7 @@
 /*
- * jQuery Pines Grid (pgrid) Plugin 1.2.0dev
+ * jQuery PGrid Plugin 1.2.0dev
  *
- * http://pinesframework.org/pgrid/
+ * http://sciactive.com/pgrid/
  * Copyright (c) 2009-2012 Hunter Perrin
  *
  * Triple license under the GPL, LGPL, and MPL:
@@ -15,9 +15,9 @@
 		if (!rows)
 			return this;
 		this.each(function(){
-			if (!this.pines_grid)
+			if (!this._pgrid)
 				return;
-			var pgrid = this.pines_grid;
+			var pgrid = this._pgrid;
 			var new_html = "";
 			$.each(rows, function(){
 				var cur_row = this;
@@ -46,7 +46,7 @@
 	$.fn.pgrid_delete = function(keysorrows) {
 		if (keysorrows) {
 			this.each(function(){
-				var pgrid = this.pines_grid;
+				var pgrid = this._pgrid;
 				if (!pgrid)
 					return;
 				if (keysorrows.jquery)
@@ -72,7 +72,7 @@
 		} else {
 			var pgrid = this.closest("table.ui-pgrid-table").get(0);
 			if (pgrid)
-				pgrid = pgrid.pines_grid;
+				pgrid = pgrid._pgrid;
 			if (!pgrid)
 				return this;
 			this.each(function(){
@@ -107,12 +107,12 @@
 		if (!keysorrows) {
 			keysorrows = this;
 			pgrid = keysorrows.closest(".ui-pgrid-table").get(0);
-			if (pgrid && pgrid.pines_grid)
-				pgrid = pgrid.pines_grid;
+			if (pgrid && pgrid._pgrid)
+				pgrid = pgrid._pgrid;
 		} else {
 			pgrid = this.get(0);
-			if (pgrid && pgrid.pines_grid)
-				pgrid = pgrid.pines_grid;
+			if (pgrid && pgrid._pgrid)
+				pgrid = pgrid._pgrid;
 		}
 		if (!pgrid)
 			return this;
@@ -130,12 +130,12 @@
 		if (!keysorrows) {
 			keysorrows = this;
 			pgrid = keysorrows.closest(".ui-pgrid-table").get(0);
-			if (pgrid && pgrid.pines_grid)
-				pgrid = pgrid.pines_grid;
+			if (pgrid && pgrid._pgrid)
+				pgrid = pgrid._pgrid;
 		} else {
 			pgrid = this.get(0);
-			if (pgrid && pgrid.pines_grid)
-				pgrid = pgrid.pines_grid;
+			if (pgrid && pgrid._pgrid)
+				pgrid = pgrid._pgrid;
 		}
 		if (!pgrid)
 			return this;
@@ -153,12 +153,12 @@
 		if (!keysorrows) {
 			keysorrows = this;
 			pgrid = keysorrows.closest(".ui-pgrid-table").get(0);
-			if (pgrid && pgrid.pines_grid)
-				pgrid = pgrid.pines_grid;
+			if (pgrid && pgrid._pgrid)
+				pgrid = pgrid._pgrid;
 		} else {
 			pgrid = this.get(0);
-			if (pgrid && pgrid.pines_grid)
-				pgrid = pgrid.pines_grid;
+			if (pgrid && pgrid._pgrid)
+				pgrid = pgrid._pgrid;
 		}
 		if (!pgrid)
 			return this;
@@ -180,12 +180,12 @@
 		if (!keysorrows) {
 			keysorrows = this;
 			pgrid = keysorrows.closest("table.ui-pgrid-table").get(0);
-			if (pgrid && pgrid.pines_grid)
-				pgrid = pgrid.pines_grid;
+			if (pgrid && pgrid._pgrid)
+				pgrid = pgrid._pgrid;
 		} else {
 			pgrid = this.get(0);
-			if (pgrid && pgrid.pines_grid)
-				pgrid = pgrid.pines_grid;
+			if (pgrid && pgrid._pgrid)
+				pgrid = pgrid._pgrid;
 		}
 		if (!pgrid)
 			return this;
@@ -203,9 +203,9 @@
 	$.fn.pgrid_get_all_rows = function() {
 		var return_rows = false;
 		this.each(function(){
-			if (!this.pines_grid.jquery)
+			if (!this._pgrid.jquery)
 				return;
-			var pgrid = this.pines_grid;
+			var pgrid = this._pgrid;
 			if (return_rows)
 				return_rows = return_rows.add(pgrid.children("tbody").children());
 			else
@@ -216,9 +216,9 @@
 	$.fn.pgrid_get_selected_rows = function() {
 		var return_rows = false;
 		this.each(function(){
-			if (!this.pines_grid.jquery)
+			if (!this._pgrid.jquery)
 				return;
-			var pgrid = this.pines_grid;
+			var pgrid = this._pgrid;
 			if (return_rows)
 				return_rows = return_rows.add(pgrid.children("tbody").children(".ui-pgrid-table-row-selected"));
 			else
@@ -230,8 +230,8 @@
 		var rows = $(this);
 		var pgrid = null;
 		pgrid = rows.closest("table.ui-pgrid-table").get(0);
-		if (pgrid && pgrid.pines_grid)
-			pgrid = pgrid.pines_grid;
+		if (pgrid && pgrid._pgrid)
+			pgrid = pgrid._pgrid;
 		if (!pgrid)
 			return this;
 		this.filter(".parent").each(function(){
@@ -251,16 +251,16 @@
 	};
 	$.fn.pgrid_export_state = function() {
 		var pgrid = this.get(0);
-		if (pgrid && pgrid.pines_grid)
-			pgrid = pgrid.pines_grid;
+		if (pgrid && pgrid._pgrid)
+			pgrid = pgrid._pgrid;
 		if (pgrid.jquery)
 			return pgrid.export_state();
 		return false;
 	};
 	$.fn.pgrid_import_state = function(state) {
 		this.each(function(){
-			if (!this.pines_grid) return;
-			this.pines_grid.import_state(state);
+			if (!this._pgrid) return;
+			this._pgrid.import_state(state);
 		});
 		return this;
 	};
@@ -1135,9 +1135,9 @@
 										return window.open(parsed_url, target, val.window_features);
 									return window.open(parsed_url, target);
 								} else {
-									// If Pines is loaded, use its get method instead of setting location.
-									if (typeof pines != "undefined" && pines.get)
-										return pines.get(parsed_url);
+									// If 2be is loaded, use its get method instead of setting location.
+									if (typeof $_ != "undefined" && $_.get)
+										return $_.get(parsed_url);
 									return (window.location = parsed_url);
 								}
 							}
@@ -1366,7 +1366,7 @@
 			pgrid.pgrid_widget.append(pgrid.pgrid_header_select);
 
 			// Save the pgrid object in the DOM, so we can access it.
-			this.pines_grid = pgrid;
+			this._pgrid = pgrid;
 		});
 
 		return this;
